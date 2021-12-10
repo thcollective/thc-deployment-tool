@@ -1,0 +1,31 @@
+
+Greetings greets up to 42 names.
+It also greets John differently comparing to others.
+{% func Greetings(names []string) %}
+	{% if len(names) == 0 %}
+		Nobody to greet :(
+		{% return %}
+	{% endif %}
+
+	{% for i, name := range names %}
+		{% if i == 42 %}
+			I'm tired to greet so many people...
+			{% break %}
+		{% elseif name == "John" %}
+			{%= sayHi("Mr. " + name) %}
+			{% continue %}
+		{% else %}
+			{%= Hello(name) %}
+		{% endif %}
+	{% endfor %}
+{% endfunc %}
+
+sayHi is unexported, since it starts with lowercase letter.
+{% func sayHi(name string) %}
+	Hi, {%s name %}
+{% endfunc %}
+
+Note that every template file may contain an arbitrary number
+of template functions. For instance, this file contains Greetings and sayHi
+functions.
+
