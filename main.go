@@ -4,6 +4,8 @@ import (
 	"errors"
 	"firstdemo/templates"
 	"fmt"
+	"log"
+	"os"
 	"regexp"
 
 	"github.com/manifoldco/promptui"
@@ -21,24 +23,24 @@ func main() {
 	}
 
 	githubBranch := promptui.Prompt{
-		Label:    "Branch",
+		Label:    "What is your primary branch? Is it main or master?",
 		Validate: validate,
 		Default:  "master",
 	}
 
 	dockerImageName := promptui.Prompt{
-		Label:    "Docker Image Name",
+		Label:    "What project are you working on? *must be same as docker image name for consistency",
 		Validate: validate,
 		Default:  "my-app",
 	}
 
 	port := promptui.Prompt{
-		Label:   "Port Number",
+		Label:   "What port number do you expose on your dockerfile?",
 		Default: "8080",
 	}
 
 	region := promptui.Select{
-		Label: "Select Region",
+		Label: "Please select region that you want to deploy to",
 		// Default: "asia-southeast1-a",
 		Items: []string{"asia-east1-a", "asia-east1-b", "asia-east1-c", "asia-east2-a", "asia-east2-b", "asia-east2-c",
 			"asia-northeast1-a", "asia-northeast1-b", "asia-northeast1-c", "asia-northeast2-a", "asia-northeast2-b", "asia-northeast2-c",
@@ -57,14 +59,14 @@ func main() {
 	}
 
 	firebaseAuth := promptui.Select{
-		Label: "Select Day",
+		Label: "Are you using Firebase Authentication Service?",
 		Items: []string{"Yes", "No"},
 	}
 
-	answer1, err := githubBranch.Run()
-	answer2, err := dockerImageName.Run()
-	answer3, err := port.Run()
-	_, answer4, err := region.Run()
+	answer1, _ := githubBranch.Run()
+	answer2, _ := dockerImageName.Run()
+	answer3, _ := port.Run()
+	_, answer4, _ := region.Run()
 	_, answer5, err := firebaseAuth.Run()
 
 	// regex to get rid of *symbol
@@ -83,10 +85,27 @@ func main() {
 	}
 
 	// add this answer to the template && save this as cloud-run-action.yaml on the same directory
-	fmt.Printf("%s\n", templates.Gaction(answer1, answer2, answer3, answer4_final, answer5))
-	// fmt.Printf("answer1 %q\n", answer1)
-	// fmt.Printf("answer2 %q\n", answer2)
-	// fmt.Printf("answer3 %q\n", answer3)
-	// fmt.Printf("answer4 %q\n", answer4_final)
-	// fmt.Printf("answer4 %q\n", answer5)
+	// fmt.Printf("%s\n", templates.Gaction(answer1, answer2, answer3, answer4_final, answer5))
+
+	f, err := os.Create("cloud-run-action.yaml")
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	defer f.Close()
+
+	val := templates.Gaction(answer1, answer2, answer3, answer4_final, answer5)
+	data := []byte(val)
+
+	_, err2 := f.Write(data)
+
+	if err2 != nil {
+		log.Fatal(err2)
+	}
+
+	fmt.Printf("\ncloud run action file has successfully created and be sure to save this file on .github/workflows\n")
+
+	fmt.Printf("\np/s: Please reach out to Ming or Adri for the secrets, thank you!\n")
+
 }

@@ -38,5 +38,4 @@ prerequisite: Need to have Dockerfile
 
 ### Future Work
 
-1. save the template to file and called it cloud-run-action.yaml so the user can just c&p the file directly 
-2. authentication to run the script (thc-token) 
+1. authentication to run the script (thc-token) 
