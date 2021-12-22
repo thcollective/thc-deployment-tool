@@ -63,6 +63,7 @@ func main() {
 		Items: []string{"Yes", "No"},
 	}
 
+	// TODO: will call GCP api to create new project | use existing project + IAM roles automation + API services activation automation
 	answer1, _ := githubBranch.Run()
 	answer2, _ := dockerImageName.Run()
 	answer3, _ := port.Run()
@@ -83,9 +84,6 @@ func main() {
 		fmt.Printf("Opps, something wong with the tools, please try again. %v\n", err)
 		return
 	}
-
-	// add this answer to the template && save this as cloud-run-action.yaml on the same directory
-	// fmt.Printf("%s\n", templates.Gaction(answer1, answer2, answer3, answer4_final, answer5))
 
 	f, err := os.Create("cloud-run-action.yaml")
 
