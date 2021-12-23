@@ -50,7 +50,8 @@ No : allow-unauthenticate
 
 1. authentication to run the script (thc-token) 
 
-### How To Tag
+### How To push to releases
 
 1. git push 
-2. git tag -m "description of release" vx.x.x
+2. git tag -m "description of release" vx.x.x HEAD
+3. git push --tags
