@@ -21,15 +21,14 @@ var (
 func StreamGaction(qw422016 *qt422016.Writer, answer1 string, answer2 string, answer3 string, answer4 string, answer5 string) {
 //line gaction.qtpl:1
 	qw422016.N().S(`
-
 name: publish
 
 on:
   push:
     branches: [ `)
-//line gaction.qtpl:7
+//line gaction.qtpl:6
 	qw422016.E().S(answer1)
-//line gaction.qtpl:7
+//line gaction.qtpl:6
 	qw422016.N().S(` ]
 
 jobs:
@@ -56,73 +55,73 @@ jobs:
       - name: Build
         run: |
           docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/`)
-//line gaction.qtpl:32
+//line gaction.qtpl:31
 	qw422016.E().S(answer2)
-//line gaction.qtpl:32
+//line gaction.qtpl:31
 	qw422016.N().S(`:latest .
       - name: Push
         run: |
           docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/`)
-//line gaction.qtpl:35
+//line gaction.qtpl:34
 	qw422016.E().S(answer2)
-//line gaction.qtpl:35
+//line gaction.qtpl:34
 	qw422016.N().S(`:latest
       - name: Deploy
         run: |
           gcloud run deploy `)
-//line gaction.qtpl:38
+//line gaction.qtpl:37
 	qw422016.E().S(answer2)
-//line gaction.qtpl:38
+//line gaction.qtpl:37
 	qw422016.N().S(` \
           --port `)
-//line gaction.qtpl:39
+//line gaction.qtpl:38
 	qw422016.E().S(answer3)
-//line gaction.qtpl:39
+//line gaction.qtpl:38
 	qw422016.N().S(` \
           --region `)
-//line gaction.qtpl:40
+//line gaction.qtpl:39
 	qw422016.E().S(answer4)
-//line gaction.qtpl:40
+//line gaction.qtpl:39
 	qw422016.N().S(` \
           --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/`)
-//line gaction.qtpl:41
+//line gaction.qtpl:40
 	qw422016.E().S(answer2)
-//line gaction.qtpl:41
+//line gaction.qtpl:40
 	qw422016.N().S(` \
           --platform managed \
           --`)
-//line gaction.qtpl:43
+//line gaction.qtpl:42
 	qw422016.E().S(answer5)
-//line gaction.qtpl:43
+//line gaction.qtpl:42
 	qw422016.N().S(` \
           --project ${{ secrets.GCP_PROJECT_ID }}
           
 `)
-//line gaction.qtpl:46
+//line gaction.qtpl:45
 }
 
-//line gaction.qtpl:46
+//line gaction.qtpl:45
 func WriteGaction(qq422016 qtio422016.Writer, answer1 string, answer2 string, answer3 string, answer4 string, answer5 string) {
-//line gaction.qtpl:46
+//line gaction.qtpl:45
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line gaction.qtpl:46
+//line gaction.qtpl:45
 	StreamGaction(qw422016, answer1, answer2, answer3, answer4, answer5)
-//line gaction.qtpl:46
+//line gaction.qtpl:45
 	qt422016.ReleaseWriter(qw422016)
-//line gaction.qtpl:46
+//line gaction.qtpl:45
 }
 
-//line gaction.qtpl:46
+//line gaction.qtpl:45
 func Gaction(answer1 string, answer2 string, answer3 string, answer4 string, answer5 string) string {
-//line gaction.qtpl:46
+//line gaction.qtpl:45
 	qb422016 := qt422016.AcquireByteBuffer()
-//line gaction.qtpl:46
+//line gaction.qtpl:45
 	WriteGaction(qb422016, answer1, answer2, answer3, answer4, answer5)
-//line gaction.qtpl:46
+//line gaction.qtpl:45
 	qs422016 := string(qb422016.B)
-//line gaction.qtpl:46
+//line gaction.qtpl:45
 	qt422016.ReleaseByteBuffer(qb422016)
-//line gaction.qtpl:46
+//line gaction.qtpl:45
 	return qs422016
-//line gaction.qtpl:46
+//line gaction.qtpl:45
 }

@@ -13,8 +13,6 @@ import (
 
 func main() {
 
-	// create validate variable that not accepting number as first letter in the string
-
 	validate := func(input string) error {
 		if len(input) < 3 {
 			return errors.New("must have more than 3 characters")
@@ -63,12 +61,19 @@ func main() {
 		Items: []string{"Yes", "No"},
 	}
 
+	// authenticating service to service
+	s2s := promptui.Select{
+		Label: "Is your architecture using multiple services ? *authenticating service-to-service",
+		Items: []string{"Yes", "No"},
+	}
+
 	// TODO: will call GCP api to create new project | use existing project + IAM roles automation + API services activation automation
 	answer1, _ := githubBranch.Run()
 	answer2, _ := dockerImageName.Run()
 	answer3, _ := port.Run()
 	_, answer4, _ := region.Run()
 	_, answer5, err := firebaseAuth.Run()
+	_, answer6, err := s2s.Run()
 
 	// regex to get rid of *symbol
 	reg := regexp.MustCompile(`\*`)
@@ -80,12 +85,82 @@ func main() {
 		answer5 = "allow-unauthenticated"
 	}
 
+	if answer6 == "Yes" {
+		lang := promptui.Select{
+			Label: "What language are you using?",
+			Items: []string{
+				"Javascript", "Python", "Go",
+			},
+		}
+		_, answer7, _ := lang.Run()
+
+		extension := ""
+		// file extension
+		if answer7 == "Go" {
+			extension = "go"
+		} else if answer7 == "Javascript" {
+			extension = "js"
+		} else if answer7 == "Python" {
+			extension = "py"
+		}
+
+		filename := fmt.Sprintf("services.%s", extension)
+		fx, err := os.Create(filename)
+
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		if answer7 == "Javascript" {
+			answer7 = "js"
+			file := templates.JavascriptS2S(answer7)
+			data := []byte(file)
+
+			_, err2 := fx.Write(data)
+
+			if err2 != nil {
+				log.Fatal(err2)
+			}
+
+		}
+		if answer7 == "Python" {
+			answer7 = "py"
+			file := templates.PythonS2S(answer7)
+			data := []byte(file)
+
+			_, err2 := fx.Write(data)
+
+			if err2 != nil {
+				log.Fatal(err2)
+			}
+
+		}
+		if answer7 == "Go" {
+			answer7 = "go"
+			file := templates.GoS2S(answer7)
+			data := []byte(file)
+			_, err2 := fx.Write(data)
+
+			if err2 != nil {
+				log.Fatal(err2)
+			}
+
+		}
+
+		defer fx.Close()
+
+	}
+
 	if err != nil {
 		fmt.Printf("Opps, something wong with the tools, please try again. %v\n", err)
 		return
 	}
 
-	f, err := os.Create("cloud-run-action.yaml")
+	// create .github/workflows folder if not exist
+	folderPath := ".github/workflows"
+	os.MkdirAll(folderPath, os.ModePerm)
+
+	f, err := os.Create(".github/workflows/cloud-run-action.yaml")
 
 	if err != nil {
 		log.Fatal(err)
@@ -102,8 +177,27 @@ func main() {
 		log.Fatal(err2)
 	}
 
-	fmt.Printf("\ncloud run action file has successfully created and be sure to save this file on .github/workflows\n")
+	fmt.Printf("\nCICD file has successfully been created. Push the repo to your primary branch and you're good to go!\n")
 
 	fmt.Printf("\np/s: Please reach out to Ming or Adri for the secrets, thank you!\n")
 
+}
+
+func ensureDir(dirName string) error {
+	err := os.Mkdir(dirName, os.ModeDir)
+	if err == nil {
+		return nil
+	}
+	if os.IsExist(err) {
+		// check that the existing path is a directory
+		info, err := os.Stat(dirName)
+		if err != nil {
+			return err
+		}
+		if !info.IsDir() {
+			return errors.New("path exists but is not a directory")
+		}
+		return nil
+	}
+	return err
 }
