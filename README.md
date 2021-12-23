@@ -16,7 +16,7 @@ NOTE: make sure in the GCP projects, all API services + IAM roles are set based 
 
 The default API services are as follow:
 
-![gcloud services](https://github.com/ass77/deployment-automation-tool/img/gcloud-services.png)
+![gcloud services](https://github.com/ass77/deployment-automation-tool/blob/main/img/gcloud-services.png)
 
 
 The default IAM roles are as follow (iam.gserviceaccount.com):
