@@ -20,9 +20,8 @@ func main() {
 		return nil
 	}
 
-	// DOCKERFILE (get PORT, only preset for VUE as it is using nginx server)
-	fmt.Println("PHASE: DOCKERFILE FILE CREATION")
 	/* START DOCKERFILE FILE CREATION*/
+	fmt.Println("PHASE: DOCKERFILE FILE CREATION")
 
 	project := promptui.Select{
 		Label: "What project are you working on?",
@@ -171,14 +170,68 @@ func main() {
 	}
 	/* END DOCKERFILE FILE CREATION*/
 
-	// TODO: SONARCLOUD GITHUB ACTIONS
-	fmt.Println("PHASE: SONARCLOUD GITHUB ACTIONS FILE CREATION")
 	/* START SONARCLOUD GITHUB ACTIONS*/
+	fmt.Println("PHASE: SONARCLOUD GITHUB ACTIONS FILE CREATION")
+
+	scannerBranch := promptui.Prompt{
+		Label:   "Which branch would you like to run the code scanner?",
+		Default: "main",
+	}
+
+	sonarBranch, _ := scannerBranch.Run()
+
+	folderPathSonar := ".github/workflows"
+	os.MkdirAll(folderPathSonar, os.ModePerm)
+	fSonarcloud, fSonarErr := os.Create(".github/workflows/sonarcloud.yaml")
+
+	if fSonarErr != nil {
+		log.Fatal(fSonarErr)
+	}
+
+	defer fSonarcloud.Close()
+
+	valSonar := templates.Sonaraction(sonarBranch)
+	dataSonar := []byte(valSonar)
+
+	_, errSonar := fSonarcloud.Write(dataSonar)
+
+	if errSonar != nil {
+		log.Fatal(errSonar)
+	}
+
 	/* END SONARCLOUD GITHUB ACTIONS*/
 
-	// TODO: SENTRY GITHUB ACTIONS
-	fmt.Println("PHASE: SENTRY GITHUB ACTIONS FILE CREATION")
 	/* START SENTRY GITHUB ACTIONS*/
+	fmt.Println("PHASE: SENTRY GITHUB ACTIONS FILE CREATION")
+
+	sentry := promptui.Select{
+		Label: "Do you want to use sentry?",
+		Items: []string{"Yes", "No"},
+	}
+
+	_, ansSentry, _ := sentry.Run()
+
+	if ansSentry == "Yes" {
+		folderPathSentry := ".github/workflows"
+		os.MkdirAll(folderPathSentry, os.ModePerm)
+		fSentry, fSenErr := os.Create(".github/workflows/sentry.yaml")
+
+		if fSenErr != nil {
+			log.Fatal(fSenErr)
+		}
+
+		defer fSentry.Close()
+
+		valSentry := templates.Sentryaction()
+		dataSentry := []byte(valSentry)
+
+		_, errSentry := fSentry.Write(dataSentry)
+
+		if errSentry != nil {
+			log.Fatal(errSentry)
+		}
+	}
+
 	/* END SENTRY GITHUB ACTIONS*/
 
 	// TODO: GITHUB ACTIONS for CI/CD : for which actions runs first
@@ -203,12 +256,6 @@ func main() {
 		answer1 = "production"
 	}
 
-	// githubBranch := promptui.Prompt{
-	// 	Label:    "What is the branch you want to deploy to? (main, staging, production)",
-	// 	Validate: validate,
-	// 	Default:  "main",
-	// }
-
 	dockerImageName := promptui.Prompt{
 		Label:    "What is the name of your docker image?",
 		Validate: validate,
@@ -217,7 +264,7 @@ func main() {
 
 	port := promptui.Prompt{
 		Label:   "What port number did you exposed on your dockerfile?",
-		Default: "3000",
+		Default: "80",
 	}
 
 	region := promptui.Select{

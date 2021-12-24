@@ -10,6 +10,10 @@ a. Adri or Ming will provide the secrets to the user personally
 GCP_PROJECT_ID ---> project_id
 GCP_SA_EMAIl --> github action email
 GCP_SA_KEY ---> IAM secret key
+SONAR_TOKEN ---> sonar token for github action (organizations)
+SENTRY_AUTH_TOKEN --> sentry authentication token
+SENTRY_ORG --> sentry organization
+SENTRY_PROJECT --> sentry project
 ```
 
 NOTE: make sure in the GCP projects, all API services + IAM roles are set based on project requirements
@@ -43,6 +47,8 @@ IF Backend: gofiber, express
 ```
 
 c. Generate sonar cloud github action yaml file for code scanning
+
+1. Which branch would you like to run the code scanner? 
 
 d. Generate sentry github action yaml file for logging
 
