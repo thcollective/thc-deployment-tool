@@ -173,6 +173,38 @@ func main() {
 	/* START SONARCLOUD GITHUB ACTIONS*/
 	fmt.Println("PHASE: SONARCLOUD GITHUB ACTIONS FILE CREATION")
 
+	fSonarProps, fSonarPropsErr := os.Create("sonar-project.properties")
+
+	if fSonarPropsErr != nil {
+		log.Fatal(fSonarProps)
+	}
+
+	defer fSonarProps.Close()
+
+	fmt.Printf("Setting up sonar-project.properties file\n")
+
+	orgKey := promptui.Prompt{
+		Label:   "Seek from Adri or Ming for Sonar Cloud Organization Key",
+		Default: "",
+	}
+
+	projKey := promptui.Prompt{
+		Label:   "Seek from Adri or Ming for Sonar Cloud Project Key",
+		Default: "",
+	}
+
+	sonarOrgKey, _ := orgKey.Run()
+	sonarProjKey, _ := projKey.Run()
+
+	valSonarProps := templates.SonarProps(sonarOrgKey, sonarProjKey)
+	dataSonarProps := []byte(valSonarProps)
+
+	_, errSonarProps := fSonarProps.Write(dataSonarProps)
+
+	if errSonarProps != nil {
+		log.Fatal(errSonarProps)
+	}
+
 	scannerBranch := promptui.Prompt{
 		Label:   "Which branch would you like to run the code scanner?",
 		Default: "main",
@@ -435,12 +467,12 @@ func main() {
 		return
 	}
 
-	finalPrompt := promptui.Select{
-		Label: "All good? ",
-		Items: []string{"Yes", "No"},
-	}
+	// finalPrompt := promptui.Select{
+	// Label: "All good? ",
+	// Items: []string{"Yes", "No"},
+	// }
 
-	_, good, _ := finalPrompt.Run()
+	// _, good, _ := finalPrompt.Run()
 
 	// create .github/workflows folder if not exist
 	folderPath := ".github/workflows"
@@ -454,21 +486,18 @@ func main() {
 
 	defer f.Close()
 
-	if good == "Yes" {
+	val := templates.Gaction(answer1, answer2, answer3, answer4_final, answer5, answerEnv)
+	data := []byte(val)
 
-		val := templates.Gaction(answer1, answer2, answer3, answer4_final, answer5, answerEnv)
-		data := []byte(val)
+	_, err2 := f.Write(data)
 
-		_, err2 := f.Write(data)
-
-		if err2 != nil {
-			log.Fatal(err2)
-		}
-
-		fmt.Printf("\nDeployments file has successfully been created. Push the repo to your primary branch and you're good to go!\n")
-
-		fmt.Printf("\np/s: Please reach out to Adri or Ming for the secrets before you commit your code to your primary branch.\n")
+	if err2 != nil {
+		log.Fatal(err2)
 	}
+
+	fmt.Printf("\nDeployments file has successfully been created. Push the repo to your primary branch and you're good to go!\n")
+
+	fmt.Printf("\np/s: Please reach out to Adri or Ming for the secrets before you commit your code to your primary branch.\n")
 
 	/* END CLOUD RUN GITHUB ACTIONS*/
 

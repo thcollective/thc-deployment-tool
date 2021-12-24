@@ -1,0 +1,10 @@
+{% func SonarProps( sonarOrgKey string, sonarProjectKey string ) %}
+
+sonar.organization={%s sonarOrgKey %}
+sonar.projectKey={%s sonarProjectKey %}
+
+# relative paths to source directories. More details and properties are described
+# in https://sonarcloud.io/documentation/project-administration/narrowing-the-focus/
+sonar.sources=.
+
+{% endfunc %}

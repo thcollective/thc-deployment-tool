@@ -11,6 +11,8 @@ GCP_PROJECT_ID ---> project_id
 GCP_SA_EMAIl --> github action email
 GCP_SA_KEY ---> IAM secret key
 SONAR_TOKEN ---> sonar token for github action (organizations)
+sonarOrgKey ---> sonar properties
+sonarProjectKey --> sonar properties
 SENTRY_AUTH_TOKEN --> sentry authentication token
 SENTRY_ORG --> sentry organization
 SENTRY_PROJECT --> sentry project
