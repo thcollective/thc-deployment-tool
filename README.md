@@ -1,4 +1,4 @@
-# THC Deployment Automation tool
+# THC Deployment Automation Tool
 
 ### Procedure
 
@@ -44,6 +44,11 @@ No : allow-unauthenticate
 ```
 6. generate services file if the user architecture using multiple services
 
+7. *Do you need to set environment variables?
+```
+--set-env-vars envName=envValue
+```
+
 
 
 ### Future Work
@@ -52,6 +57,5 @@ No : allow-unauthenticate
 
 ### How To push to releases
 
-1. git push 
-2. git tag -m "description of release" vx.x.x HEAD
-3. git push --tags
+1. git tag -m "description of release" vx.x.x HEAD
+2. git push --tags

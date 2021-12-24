@@ -18,7 +18,7 @@ var (
 )
 
 //line gaction.qtpl:1
-func StreamGaction(qw422016 *qt422016.Writer, answer1 string, answer2 string, answer3 string, answer4 string, answer5 string) {
+func StreamGaction(qw422016 *qt422016.Writer, answer1 string, answer2 string, answer3 string, answer4 string, answer5 string, answerEnv string) {
 //line gaction.qtpl:1
 	qw422016.N().S(`
 name: publish
@@ -94,34 +94,40 @@ jobs:
 	qw422016.E().S(answer5)
 //line gaction.qtpl:42
 	qw422016.N().S(` \
-          --project ${{ secrets.GCP_PROJECT_ID }}
+          --quiet \
+          --project ${{ secrets.GCP_PROJECT_ID }} \
+          `)
+//line gaction.qtpl:45
+	qw422016.E().S(answerEnv)
+//line gaction.qtpl:45
+	qw422016.N().S(`
           
 `)
-//line gaction.qtpl:45
+//line gaction.qtpl:47
 }
 
-//line gaction.qtpl:45
-func WriteGaction(qq422016 qtio422016.Writer, answer1 string, answer2 string, answer3 string, answer4 string, answer5 string) {
-//line gaction.qtpl:45
+//line gaction.qtpl:47
+func WriteGaction(qq422016 qtio422016.Writer, answer1 string, answer2 string, answer3 string, answer4 string, answer5 string, answerEnv string) {
+//line gaction.qtpl:47
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line gaction.qtpl:45
-	StreamGaction(qw422016, answer1, answer2, answer3, answer4, answer5)
-//line gaction.qtpl:45
+//line gaction.qtpl:47
+	StreamGaction(qw422016, answer1, answer2, answer3, answer4, answer5, answerEnv)
+//line gaction.qtpl:47
 	qt422016.ReleaseWriter(qw422016)
-//line gaction.qtpl:45
+//line gaction.qtpl:47
 }
 
-//line gaction.qtpl:45
-func Gaction(answer1 string, answer2 string, answer3 string, answer4 string, answer5 string) string {
-//line gaction.qtpl:45
+//line gaction.qtpl:47
+func Gaction(answer1 string, answer2 string, answer3 string, answer4 string, answer5 string, answerEnv string) string {
+//line gaction.qtpl:47
 	qb422016 := qt422016.AcquireByteBuffer()
-//line gaction.qtpl:45
-	WriteGaction(qb422016, answer1, answer2, answer3, answer4, answer5)
-//line gaction.qtpl:45
+//line gaction.qtpl:47
+	WriteGaction(qb422016, answer1, answer2, answer3, answer4, answer5, answerEnv)
+//line gaction.qtpl:47
 	qs422016 := string(qb422016.B)
-//line gaction.qtpl:45
+//line gaction.qtpl:47
 	qt422016.ReleaseByteBuffer(qb422016)
-//line gaction.qtpl:45
+//line gaction.qtpl:47
 	return qs422016
-//line gaction.qtpl:45
+//line gaction.qtpl:47
 }
