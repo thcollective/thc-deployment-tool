@@ -26,7 +26,27 @@ The default IAM roles are as follow (iam.gserviceaccount.com):
 3. Storage Admin
 
 
-b. Prompt to generate cloud run yaml file
+b. Prompt to generate Dockerfile (basic) file
+
+1. What project are you working on?
+```
+Frontend
+Backend
+
+```
+
+2. *What framework are you using ?
+```
+IF Frontend: vue (will create nginx folder/file),nuxt,react
+IF Backend: gofiber, express
+
+```
+
+c. Generate sonar cloud github action yaml file for code scanning
+
+d. Generate sentry github action yaml file for logging
+
+e. Prompt to generate cloud run yaml file
 
 
 1. which branch do you want to perform this actions ?
@@ -48,6 +68,13 @@ No : allow-unauthenticate
 ```
 --set-env-vars envName=envValue
 ```
+
+
+### The github action will run step by step such as:
+
+1. sonarcloud action
+2. sentry action
+3. IF 1,2 pass, then run gcloud cloud run action
 
 
 

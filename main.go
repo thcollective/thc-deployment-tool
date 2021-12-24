@@ -20,28 +20,204 @@ func main() {
 		return nil
 	}
 
-	// TODO: DOCKERFILE
+	// DOCKERFILE (get PORT, only preset for VUE as it is using nginx server)
+	fmt.Println("PHASE: DOCKERFILE FILE CREATION")
+	/* START DOCKERFILE FILE CREATION*/
 
-	// TODO: SONARCLOUD GITHUB ACTIONS
+	project := promptui.Select{
+		Label: "What project are you working on?",
+		Items: []string{"Frontend", "Backend"},
+	}
+	_, ansProject, _ := project.Run()
 
-	// TODO: SENTRY GITHUB ACTIONS
+	if ansProject == "Frontend" {
+		framework := promptui.Select{
+			Label: "What framework are you using?",
+			Items: []string{"Vue", "Nuxt"},
+		}
 
-	// CLOUD RUN GITHUB ACTIONS
-	githubBranch := promptui.Prompt{
-		Label:    "What is your primary branch? Is it main or master?",
-		Validate: validate,
-		Default:  "master",
+		_, ansFramework, _ := framework.Run()
+		if ansFramework == "Vue" {
+			// default to port 80 for nginx integration
+			portNo := "80"
+			f, err := os.Create("Dockerfile")
+
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			defer f.Close()
+
+			val := templates.Vuedocker(portNo)
+			data := []byte(val)
+
+			_, err2 := f.Write(data)
+
+			if err2 != nil {
+				log.Fatal(err2)
+			}
+
+			folderPath := "nginx"
+			os.MkdirAll(folderPath, os.ModePerm)
+
+			f2, err3 := os.Create("nginx/nginx.conf")
+
+			if err3 != nil {
+				log.Fatal(err3)
+			}
+
+			defer f2.Close()
+
+			val2 := templates.Nginx(portNo)
+			data2 := []byte(val2)
+
+			_, err4 := f2.Write(data2)
+
+			if err4 != nil {
+				log.Fatal(err4)
+			}
+
+		} else if ansFramework == "Nuxt" {
+
+			portQuest := promptui.Prompt{
+				Label:   "What port number did you exposed on your dockerfile?",
+				Default: "3000",
+			}
+
+			portSelected, _ := portQuest.Run()
+
+			f, err := os.Create("Dockerfile")
+
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			defer f.Close()
+
+			val := templates.Nuxtdocker(portSelected)
+			data := []byte(val)
+
+			_, err2 := f.Write(data)
+
+			if err2 != nil {
+				log.Fatal(err2)
+			}
+
+		}
 	}
 
+	if ansProject == "Backend" {
+		framework := promptui.Select{
+			Label: "What framework are you using?",
+			Items: []string{"ExpressJS", "goFiber"},
+		}
+
+		_, ansFramework, _ := framework.Run()
+		if ansFramework == "ExpressJS" {
+
+			portQuest := promptui.Prompt{
+				Label:   "What port number did you exposed on your dockerfile?",
+				Default: "5000",
+			}
+
+			portSelected, _ := portQuest.Run()
+
+			f, err := os.Create("Dockerfile")
+
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			defer f.Close()
+
+			val := templates.Expressdocker(portSelected)
+			data := []byte(val)
+
+			_, err2 := f.Write(data)
+
+			if err2 != nil {
+				log.Fatal(err2)
+			}
+
+			// will create nginx folder also
+
+		} else if ansFramework == "goFiber" {
+
+			portQuest := promptui.Prompt{
+				Label:   "What port number did you exposed on your dockerfile?",
+				Default: "5000",
+			}
+
+			portSelected, _ := portQuest.Run()
+
+			f, err := os.Create("Dockerfile")
+
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			defer f.Close()
+
+			val := templates.Godocker(portSelected)
+			data := []byte(val)
+
+			_, err2 := f.Write(data)
+
+			if err2 != nil {
+				log.Fatal(err2)
+			}
+
+		}
+	}
+	/* END DOCKERFILE FILE CREATION*/
+
+	// TODO: SONARCLOUD GITHUB ACTIONS
+	fmt.Println("PHASE: SONARCLOUD GITHUB ACTIONS FILE CREATION")
+	/* START SONARCLOUD GITHUB ACTIONS*/
+	/* END SONARCLOUD GITHUB ACTIONS*/
+
+	// TODO: SENTRY GITHUB ACTIONS
+	fmt.Println("PHASE: SENTRY GITHUB ACTIONS FILE CREATION")
+	/* START SENTRY GITHUB ACTIONS*/
+	/* END SENTRY GITHUB ACTIONS*/
+
+	// TODO: GITHUB ACTIONS for CI/CD : for which actions runs first
+	// fmt.Println("PHASE: CLOUD RUN GITHUB ACTIONS FILE CREATION")
+
+	/* START CLOUD RUN GITHUB ACTIONS*/
+	fmt.Println("PHASE: CLOUD RUN GITHUB ACTIONS FILE CREATION")
+
+	purpose := promptui.Select{
+		Label: "Please select your purpose for creating this cloud run action files",
+		Items: []string{"for development with development environment", "for development with production environment (staging)", "for production with production environment (production)"},
+	}
+
+	_, branching, _ := purpose.Run()
+	answer1 := ""
+
+	if branching == "for development with development environment" {
+		answer1 = "main"
+	} else if branching == "for development with production environment (staging)" {
+		answer1 = "staging"
+	} else if branching == "for production with production environment (production)" {
+		answer1 = "production"
+	}
+
+	// githubBranch := promptui.Prompt{
+	// 	Label:    "What is the branch you want to deploy to? (main, staging, production)",
+	// 	Validate: validate,
+	// 	Default:  "main",
+	// }
+
 	dockerImageName := promptui.Prompt{
-		Label:    "What project are you working on? *must be same as docker image name",
+		Label:    "What is the name of your docker image?",
 		Validate: validate,
 		Default:  "my-app",
 	}
 
 	port := promptui.Prompt{
-		Label:   "What port number do you expose on your dockerfile?",
-		Default: "8080",
+		Label:   "What port number did you exposed on your dockerfile?",
+		Default: "3000",
 	}
 
 	region := promptui.Select{
@@ -73,9 +249,7 @@ func main() {
 		Items: []string{"Yes", "No"},
 	}
 
-	// TODO: will call GCP api to create new project | use existing project + IAM roles automation + API services activation automation
-	// webhooks ?
-	answer1, _ := githubBranch.Run()
+	// answer1, _ := githubBranch.Run()
 	answer2, _ := dockerImageName.Run()
 	answer3, _ := port.Run()
 	_, answer4, _ := region.Run()
@@ -158,7 +332,6 @@ func main() {
 
 	}
 
-	// TODO: prompts for app environment variables
 	env := promptui.Select{
 		Label: "Do you need to set environment variables?",
 		Items: []string{"Yes", "No"},
@@ -247,8 +420,10 @@ func main() {
 
 		fmt.Printf("\nDeployments file has successfully been created. Push the repo to your primary branch and you're good to go!\n")
 
-		fmt.Printf("\np/s: Please reach out to Adri or Ming for the secrets before you commit your code to your primary branch, thank you!\n")
+		fmt.Printf("\np/s: Please reach out to Adri or Ming for the secrets before you commit your code to your primary branch.\n")
 	}
+
+	/* END CLOUD RUN GITHUB ACTIONS*/
 
 }
 
