@@ -185,7 +185,7 @@ func main() {
 
 	orgKey := promptui.Prompt{
 		Label:   "Get from Adri or Ming for Sonar Cloud Organization Key",
-		Default: "",
+		Default: "thcollective",
 	}
 
 	projKey := promptui.Prompt{
