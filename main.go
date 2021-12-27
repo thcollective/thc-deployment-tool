@@ -420,7 +420,6 @@ func main() {
 
 	// _, answer8, err := env.Run()
 
-	//TODO these needs to be an array if env > 1 | push object to array
 	// envNames := ""
 	// envValues := ""``
 	// answerEnv := ""
