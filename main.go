@@ -498,6 +498,34 @@ func main() {
 		log.Fatal(err2)
 	}
 
+	todo := promptui.Select{
+		Label: "Do you want to add TODO to Issue github actions? ",
+		Items: []string{"Yes", "No"},
+	}
+
+	_, includeTodo, _ := todo.Run()
+
+	if includeTodo == "Yes" {
+		folderPath := ".github/workflows"
+		os.MkdirAll(folderPath, os.ModePerm)
+		fTodo, errTodo := os.Create(".github/workflows/todo-issue.yaml")
+
+		if errTodo != nil {
+			log.Fatal(errTodo)
+		}
+
+		defer fTodo.Close()
+
+		valTodo := templates.Todoaction()
+		dataTodo := []byte(valTodo)
+
+		_, errTodo2 := f.Write(dataTodo)
+
+		if errTodo2 != nil {
+			log.Fatal(errTodo2)
+		}
+	}
+
 	fmt.Printf("\nDeployments file has successfully been created. Push the repo to your primary branch and you're good to go!\n")
 
 	fmt.Printf("\np/s: Please reach out to Adri or Ming for the secrets before you commit your code to your primary branch.\n")

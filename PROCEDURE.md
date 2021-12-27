@@ -84,8 +84,9 @@ e. Prompt to generate cloud run yaml file
 
 ### Future Work
 
+- [x] TODO to Issue Action
 - [ ] Create sentry properties file for user based on what project their working on
-- [ ] Allow user to set environment variables on Dockerfile and cloud run action yaml file
+- [ ] Allow user to set environment variables on Dockerfile and cloud run action yaml file (current status: onlyset one env var @ cloud run action)
 - [ ] Create new github actions file to determine which actions to run first
 - [ ] Github authentication to run the script (thc-token)
 
