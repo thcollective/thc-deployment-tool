@@ -234,39 +234,42 @@ func main() {
 	/* END SONARCLOUD GITHUB ACTIONS*/
 
 	/* START SENTRY GITHUB ACTIONS*/
-	fmt.Println("PHASE: SENTRY GITHUB ACTIONS FILE CREATION")
+	// TODO add sentry github action and properties file -> only for FE (Vue2,Vue3,Nuxt,Nuxt3)
+	// assignees: ass77
 
-	sentry := promptui.Select{
-		Label: "Do you want to use sentry?",
-		Items: []string{"Yes", "No"},
-	}
+	// fmt.Println("PHASE: SENTRY GITHUB ACTIONS FILE CREATION")
 
-	_, ansSentry, _ := sentry.Run()
+	// sentry := promptui.Select{
+	// 	Label: "Do you want to use sentry? (only for frontend)",
+	// 	Items: []string{"Yes", "No"},
+	// }
 
-	if ansSentry == "Yes" {
+	// _, ansSentry, _ := sentry.Run()
 
-		// TODO add some properties file depends on project/framework their working
-		// assignees: ass77
+	// if ansSentry == "Yes" {
 
-		folderPathSentry := ".github/workflows"
-		os.MkdirAll(folderPathSentry, os.ModePerm)
-		fSentry, fSenErr := os.Create(".github/workflows/sentry.yaml")
+	// 	// TODO add some properties file depends on project/framework their working
+	// 	// assignees: ass77
 
-		if fSenErr != nil {
-			log.Fatal(fSenErr)
-		}
+	// 	folderPathSentry := ".github/workflows"
+	// 	os.MkdirAll(folderPathSentry, os.ModePerm)
+	// 	fSentry, fSenErr := os.Create(".github/workflows/sentry.yaml")
 
-		defer fSentry.Close()
+	// 	if fSenErr != nil {
+	// 		log.Fatal(fSenErr)
+	// 	}
 
-		valSentry := templates.Sentryaction()
-		dataSentry := []byte(valSentry)
+	// 	defer fSentry.Close()
 
-		_, errSentry := fSentry.Write(dataSentry)
+	// 	valSentry := templates.Sentryaction()
+	// 	dataSentry := []byte(valSentry)
 
-		if errSentry != nil {
-			log.Fatal(errSentry)
-		}
-	}
+	// 	_, errSentry := fSentry.Write(dataSentry)
+
+	// 	if errSentry != nil {
+	// 		log.Fatal(errSentry)
+	// 	}
+	// }
 
 	/* END SENTRY GITHUB ACTIONS*/
 
