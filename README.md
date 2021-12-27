@@ -1,96 +1,46 @@
-# THC Deployment Automation Tool
+<div align="center">
+  <a href="https://github.com/thcollective">
+    <img src="img/thc.png" alt="thc_logo" width="80" height="80">
+  </a>
+  <h3 align="center">THC deployment automation tool</h3>
+</div>
 
-### Procedure
+### What is it about?
 
-Prerequisite: Need to have Dockerfile
+This deployment automation tool helps users to generate basic files that are required to deploy their app on cloud run, scan their code to check for bugs before deployment and tracing any error on the app in dev mode or prod mode. The script will generate files as follows:
 
-a. Adri or Ming will provide the secrets to the user personally
+* Dockerfile for frontend (vue, nuxt) and backend(expressJS, gofiber)
+* Sonarcloud github actions and properties file (need to seek from Admin for keys)
+* Sentry github actions and properties files (under development)
+* Cloud Run github actions 
 
+### How To Run This Project (production)
+
+1. Download the latest binary package [here](https://github.com/ass77/deployment-automation-tool/releases)
+
+2. Run `./main` on your working project root directory, start answering the prompt and then the spell shall be casted. 
+
+## How To Run (development)
+
+1. Install dependencies
 ```
-GCP_PROJECT_ID ---> project_id
-GCP_SA_EMAIl --> github action email
-GCP_SA_KEY ---> IAM secret key
-SONAR_TOKEN ---> sonar token for github action (organizations)
-sonarOrgKey ---> sonar properties
-sonarProjectKey --> sonar properties
-SENTRY_AUTH_TOKEN --> sentry authentication token
-SENTRY_ORG --> sentry organization
-SENTRY_PROJECT --> sentry project
-```
-
-NOTE: make sure in the GCP projects, all API services + IAM roles are set based on project requirements
-
-The default API services are as follow:
-
-![gcloud services](https://github.com/ass77/deployment-automation-tool/blob/main/img/gcloud-services.png)
-
-
-The default IAM roles are as follow (iam.gserviceaccount.com):
-
-1. Cloud Run Admin
-2. Service Account User
-3. Storage Admin
-
-
-b. Prompt to generate Dockerfile (basic) file
-
-1. What project are you working on?
-```
-Frontend
-Backend
-
+go mod tidy
 ```
 
-2. *What framework are you using ?
+2. Run main file
 ```
-IF Frontend: vue (will create nginx folder/file),nuxt,react
-IF Backend: gofiber, express
-
+go run main.go
 ```
 
-c. Generate sonar cloud github action yaml file for code scanning
-
-1. Which branch would you like to run the code scanner? 
-
-d. Generate sentry github action yaml file for logging
-
-e. Prompt to generate cloud run yaml file
-
-
-1. which branch do you want to perform this actions ?
-
-2. what is your docker image name ? 
-
-3. which port did you expose in your Dockerfile ?
-
-4. Select which region do you want to host your app https://cloud.google.com/compute/docs/regions-zones
-
-5. Are you using Firebase authentication?
+3. Build main file
 ```
-Yes : allow-authenticate
-No : allow-unauthenticate
-```
-6. generate services file if the user architecture using multiple services
-
-7. *Do you need to set environment variables?
-```
---set-env-vars envName=envValue
+go build main.go
 ```
 
 
-### The github action will run step by step such as:
+`NOTE (for maintainers):` The deployment and procedure notes are [here](https://github.com/ass77/deployment-automation-tool/blob/main/PROCEDURE.md)
 
-1. sonarcloud action
-2. sentry action
-3. IF 1,2 pass, then run gcloud cloud run action
+<p align="right">(<a href="#top">back to top</a>)</p>
 
 
 
-### Future Work
-
-1. authentication to run the script (thc-token) 
-
-### How To push to releases
-
-1. git tag -m "description of release" vx.x.x HEAD
-2. git push --tags

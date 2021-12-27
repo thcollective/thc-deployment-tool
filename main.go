@@ -184,12 +184,12 @@ func main() {
 	fmt.Printf("Setting up sonar-project.properties file\n")
 
 	orgKey := promptui.Prompt{
-		Label:   "Seek from Adri or Ming for Sonar Cloud Organization Key",
+		Label:   "Get from Adri or Ming for Sonar Cloud Organization Key",
 		Default: "",
 	}
 
 	projKey := promptui.Prompt{
-		Label:   "Seek from Adri or Ming for Sonar Cloud Project Key",
+		Label:   "Get from Adri or Ming for Sonar Cloud Project Key",
 		Default: "",
 	}
 
@@ -244,6 +244,9 @@ func main() {
 	_, ansSentry, _ := sentry.Run()
 
 	if ansSentry == "Yes" {
+
+		// TODO: need to add some properties file depends on project/framework their working
+
 		folderPathSentry := ".github/workflows"
 		os.MkdirAll(folderPathSentry, os.ModePerm)
 		fSentry, fSenErr := os.Create(".github/workflows/sentry.yaml")
