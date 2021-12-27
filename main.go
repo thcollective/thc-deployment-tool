@@ -421,12 +421,11 @@ func main() {
 
 	// _, answer8, err := env.Run()
 
-	// // TODO: these needs to be an array if env > 1
+	// // TODO: these needs to be an array if env > 1 | push object to array
 	// envNames := ""
 	// envValues := ""
 	// answerEnv := ""
 
-	// // TODO: make it in array if answer11 == "Yes", then loop?
 	// if answer8 == "Yes" {
 
 	// 	setEnvNames := promptui.Prompt{
