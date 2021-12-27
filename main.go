@@ -277,13 +277,13 @@ func main() {
 
 	purpose := promptui.Select{
 		Label: "Please select your purpose for creating this cloud run action files",
-		Items: []string{"for development with development environment", "for development with production environment (staging)", "for production with production environment (production)"},
+		Items: []string{"for development with development environment (main)", "for development with production environment (staging)", "for production with production environment (production)"},
 	}
 
 	_, branching, _ := purpose.Run()
 	answer1 := ""
 
-	if branching == "for development with development environment" {
+	if branching == "for development with development environment (main)" {
 		answer1 = "main"
 	} else if branching == "for development with production environment (staging)" {
 		answer1 = "staging"
