@@ -414,100 +414,93 @@ func main() {
 
 	}
 
-	env := promptui.Select{
-		Label: "Do you need to set environment variables?",
-		Items: []string{"Yes", "No"},
-	}
-
-	_, answer8, err := env.Run()
-
-	// TODO: these needs to be an array if env > 1
-	envNames := ""
-	envValues := ""
-	answerEnv := ""
-
-	// TODO: make it in array if answer11 == "Yes", then loop?
-	if answer8 == "Yes" {
-
-		setEnvNames := promptui.Prompt{
-			Label:   "Set your environment name",
-			Default: "",
-		}
-
-		setEnvValues := promptui.Prompt{
-			Label:   "Set your environment value",
-			Default: "",
-		}
-
-		answer9 := ""
-		answer9, _ = setEnvNames.Run()
-		envNames = answer9
-
-		answer10 := ""
-		answer10, _ = setEnvValues.Run()
-		envValues = answer10
-
-		more := promptui.Select{
-			Label: "Do you need to add more environment variables?",
-			Items: []string{"Yes", "No"},
-		}
-
-		_, answer11, _ := more.Run()
-
-		if answer11 == "Yes" {
-
-			fmt.Printf("more env...")
-			// repeat setEnvNames and setEnvValues and push value to the array
-		}
-
-		// answerEnv will print x times (based on the array length) and loop the envNames and envValues (different values)
-		answerEnv = fmt.Sprintf(`--set-env-vars %s=%s`, envNames, envValues)
-
-	}
-
-	if err != nil {
-		fmt.Printf("Opps, something wong with the tools, please try again. %v\n", err)
-		return
-	}
-
-	// finalPrompt := promptui.Select{
-	// Label: "All good? ",
-	// Items: []string{"Yes", "No"},
+	// env := promptui.Select{
+	// 	Label: "Do you need to set environment variables?",
+	// 	Items: []string{"Yes", "No"},
 	// }
 
-	// _, good, _ := finalPrompt.Run()
+	// _, answer8, err := env.Run()
 
-	// create .github/workflows folder if not exist
-	folderPath := ".github/workflows"
-	os.MkdirAll(folderPath, os.ModePerm)
+	// // TODO: these needs to be an array if env > 1
+	// envNames := ""
+	// envValues := ""
+	// answerEnv := ""
 
-	f, err := os.Create(".github/workflows/cloud-run-action.yaml")
+	// // TODO: make it in array if answer11 == "Yes", then loop?
+	// if answer8 == "Yes" {
 
-	if err != nil {
-		log.Fatal(err)
+	// 	setEnvNames := promptui.Prompt{
+	// 		Label:   "Set your environment name",
+	// 		Default: "",
+	// 	}
+
+	// 	setEnvValues := promptui.Prompt{
+	// 		Label:   "Set your environment value",
+	// 		Default: "",
+	// 	}
+
+	// 	answer9 := ""
+	// 	answer9, _ = setEnvNames.Run()
+	// 	envNames = answer9
+
+	// 	answer10 := ""
+	// 	answer10, _ = setEnvValues.Run()
+	// 	envValues = answer10
+
+	// 	more := promptui.Select{
+	// 		Label: "Do you need to add more environment variables?",
+	// 		Items: []string{"Yes", "No"},
+	// 	}
+
+	// 	_, answer11, _ := more.Run()
+
+	// 	if answer11 == "Yes" {
+
+	// 		fmt.Printf("more env...")
+	// 		// repeat setEnvNames and setEnvValues and push value to the array
+	// 	}
+
+	// 	// answerEnv will print x times (based on the array length) and loop the envNames and envValues (different values)
+	// 	answerEnv = fmt.Sprintf(`--set-env-vars %s=%s`, envNames, envValues)
+
+	// }
+
+	// if err != nil {
+	// 	fmt.Printf("Opps, something wong with the tools, please try again. %v\n", err)
+	// 	return
+	// }
+
+	folderPathGaction := ".github/workflows"
+	os.MkdirAll(folderPathGaction, os.ModePerm)
+
+	fGaction, errGaction := os.Create(".github/workflows/cloud-run-action.yaml")
+
+	if errGaction != nil {
+		log.Fatal(errGaction)
 	}
 
-	defer f.Close()
+	defer fGaction.Close()
 
-	val := templates.Gaction(answer1, answer2, answer3, answer4_final, answer5, answerEnv)
-	data := []byte(val)
+	valGaction := templates.Gaction(answer1, answer2, answer3, answer4_final, answer5)
+	dataGaction := []byte(valGaction)
 
-	_, err2 := f.Write(data)
+	_, err2 := fGaction.Write(dataGaction)
 
 	if err2 != nil {
 		log.Fatal(err2)
 	}
+	/* END CLOUD RUN GITHUB ACTIONS*/
 
 	todo := promptui.Select{
-		Label: "Do you want to add TODO to Issue github actions? ",
+		Label: "Do you want to use TODO to Issue github actions? ",
 		Items: []string{"Yes", "No"},
 	}
 
 	_, includeTodo, _ := todo.Run()
 
 	if includeTodo == "Yes" {
-		folderPath := ".github/workflows"
-		os.MkdirAll(folderPath, os.ModePerm)
+		folderPathTodo := ".github/workflows"
+		os.MkdirAll(folderPathTodo, os.ModePerm)
 		fTodo, errTodo := os.Create(".github/workflows/todo-issue.yaml")
 
 		if errTodo != nil {
@@ -519,18 +512,16 @@ func main() {
 		valTodo := templates.Todoaction()
 		dataTodo := []byte(valTodo)
 
-		_, errTodo2 := f.Write(dataTodo)
+		_, errTodo2 := fTodo.Write(dataTodo)
 
 		if errTodo2 != nil {
 			log.Fatal(errTodo2)
 		}
 	}
 
-	fmt.Printf("\nDeployments file has successfully been created. Push the repo to your primary branch and you're good to go!\n")
+	fmt.Printf("\nDeployment files has successfully been created. Push the repo to your primary branch and you're good to go!\n")
 
 	fmt.Printf("\np/s: Please reach out to Adri or Ming for the secrets before you commit your code to your primary branch.\n")
-
-	/* END CLOUD RUN GITHUB ACTIONS*/
 
 }
 

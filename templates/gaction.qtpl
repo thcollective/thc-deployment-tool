@@ -1,4 +1,4 @@
-{% func Gaction(answer1 string, answer2 string, answer3 string, answer4 string, answer5 string, answerEnv string ) %}
+{% func Gaction(answer1 string, answer2 string, answer3 string, answer4 string, answer5 string) %}
 name: publish
 
 on:
@@ -41,7 +41,6 @@ jobs:
           --platform managed \
           --{%s answer5 %} \
           --quiet \
-          --project ${{ secrets.GCP_PROJECT_ID }} \
-          {%s answerEnv %}
+          --project ${{ secrets.GCP_PROJECT_ID }}
           
 {% endfunc %}
