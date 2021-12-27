@@ -245,7 +245,7 @@ func main() {
 
 	if ansSentry == "Yes" {
 
-		// TODO need to add some properties file depends on project/framework their working
+		//TODO need to add some properties file depends on project/framework their working
 
 		folderPathSentry := ".github/workflows"
 		os.MkdirAll(folderPathSentry, os.ModePerm)
@@ -269,7 +269,7 @@ func main() {
 
 	/* END SENTRY GITHUB ACTIONS*/
 
-	// TODO GITHUB ACTIONS for CI/CD : for which actions runs first
+	//TODO GITHUB ACTIONS for CI/CD : for which actions runs first
 
 	/* START CLOUD RUN GITHUB ACTIONS*/
 	fmt.Println("PHASE: CLOUD RUN GITHUB ACTIONS FILE CREATION")
@@ -420,9 +420,9 @@ func main() {
 
 	// _, answer8, err := env.Run()
 
-	// TODO these needs to be an array if env > 1 | push object to array
+	//TODO these needs to be an array if env > 1 | push object to array
 	// envNames := ""
-	// envValues := ""
+	// envValues := ""``
 	// answerEnv := ""
 
 	// if answer8 == "Yes" {
