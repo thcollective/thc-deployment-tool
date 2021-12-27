@@ -30,3 +30,10 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # Your GoReleaser Pro key, if you are using the 'goreleaser-pro' distribution
           # GORELEASER_KEY: ${{ secrets.GORELEASER_KEY }}
+  todo:
+        runs-on: "ubuntu-latest"
+        steps:
+          - uses: "actions/checkout@master"
+          - name: "TODO to Issue"
+            uses: "alstr/todo-to-issue-action@v4.5.3"
+            id: "todo"
