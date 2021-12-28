@@ -544,7 +544,7 @@ func main() {
 	// }
 	/* END CLOUD RUN GITHUB ACTIONS*/
 
-	/* START TODO TO ISSUE ACTIONS */
+	/* START TD TO ISSUE ACTIONS */
 	fmt.Println(color.Bold + "PHASE: TODO TO ISSUE ACTIONS CREATION" + color.Reset)
 
 	todo := promptui.Select{
@@ -586,7 +586,7 @@ func main() {
 
 	fmt.Printf(color.Red + "\nYou might need to fix the indentation issues in generated .yaml file later on.\n" + color.Reset)
 
-	/* END TODO TO ISSUE ACTIONS */
+	/* END TD TO ISSUE ACTIONS */
 
 	folderPathAll := ".github/workflows"
 	os.MkdirAll(folderPathAll, os.ModePerm)
