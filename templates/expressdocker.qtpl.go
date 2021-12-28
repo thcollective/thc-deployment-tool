@@ -21,7 +21,6 @@ var (
 func StreamExpressdocker(qw422016 *qt422016.Writer, portSelected string) {
 //line expressdocker.qtpl:1
 	qw422016.N().S(`
-
 FROM node:16
 
 # Create app directory
@@ -40,38 +39,38 @@ RUN npm install
 COPY . .
 
 EXPOSE `)
-//line expressdocker.qtpl:20
+//line expressdocker.qtpl:19
 	qw422016.E().S(portSelected)
-//line expressdocker.qtpl:20
+//line expressdocker.qtpl:19
 	qw422016.N().S(`
 CMD [ "node", "server.js" ]
 
 `)
-//line expressdocker.qtpl:23
+//line expressdocker.qtpl:22
 }
 
-//line expressdocker.qtpl:23
+//line expressdocker.qtpl:22
 func WriteExpressdocker(qq422016 qtio422016.Writer, portSelected string) {
-//line expressdocker.qtpl:23
+//line expressdocker.qtpl:22
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line expressdocker.qtpl:23
+//line expressdocker.qtpl:22
 	StreamExpressdocker(qw422016, portSelected)
-//line expressdocker.qtpl:23
+//line expressdocker.qtpl:22
 	qt422016.ReleaseWriter(qw422016)
-//line expressdocker.qtpl:23
+//line expressdocker.qtpl:22
 }
 
-//line expressdocker.qtpl:23
+//line expressdocker.qtpl:22
 func Expressdocker(portSelected string) string {
-//line expressdocker.qtpl:23
+//line expressdocker.qtpl:22
 	qb422016 := qt422016.AcquireByteBuffer()
-//line expressdocker.qtpl:23
+//line expressdocker.qtpl:22
 	WriteExpressdocker(qb422016, portSelected)
-//line expressdocker.qtpl:23
+//line expressdocker.qtpl:22
 	qs422016 := string(qb422016.B)
-//line expressdocker.qtpl:23
+//line expressdocker.qtpl:22
 	qt422016.ReleaseByteBuffer(qb422016)
-//line expressdocker.qtpl:23
+//line expressdocker.qtpl:22
 	return qs422016
-//line expressdocker.qtpl:23
+//line expressdocker.qtpl:22
 }

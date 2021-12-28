@@ -1,0 +1,5 @@
+{% func SonarIgnore(ansSonarIgnore string) %}
+# sonarcloud will not scan this folder/file
+{%s ansSonarIgnore %}
+
+{% endfunc %}

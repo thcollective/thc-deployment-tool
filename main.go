@@ -7,12 +7,18 @@ import (
 	"log"
 	"os"
 	"regexp"
+	"strings"
 
+	"github.com/TwiN/go-color"
 	"github.com/manifoldco/promptui"
 )
 
 func main() {
 
+	// initialize variables
+	globalPort := ""
+
+	// validation length
 	validate := func(input string) error {
 		if len(input) < 3 {
 			return errors.New("must have more than 3 characters")
@@ -21,7 +27,7 @@ func main() {
 	}
 
 	/* START DOCKERFILE FILE CREATION*/
-	fmt.Println("PHASE: DOCKERFILE FILE CREATION")
+	fmt.Println(color.Bold + "PHASE: DOCKERFILE CREATION" + color.Reset)
 
 	project := promptui.Select{
 		Label: "What project are you working on?",
@@ -39,6 +45,7 @@ func main() {
 		if ansFramework == "Vue" {
 			// default to port 80 for nginx integration
 			portNo := "80"
+			globalPort = portNo
 			f, err := os.Create("Dockerfile")
 
 			if err != nil {
@@ -85,6 +92,8 @@ func main() {
 
 			portSelected, _ := portQuest.Run()
 
+			globalPort = portSelected
+
 			f, err := os.Create("Dockerfile")
 
 			if err != nil {
@@ -121,6 +130,8 @@ func main() {
 
 			portSelected, _ := portQuest.Run()
 
+			globalPort = portSelected
+
 			f, err := os.Create("Dockerfile")
 
 			if err != nil {
@@ -149,6 +160,8 @@ func main() {
 
 			portSelected, _ := portQuest.Run()
 
+			globalPort = portSelected
+
 			f, err := os.Create("Dockerfile")
 
 			if err != nil {
@@ -171,7 +184,7 @@ func main() {
 	/* END DOCKERFILE FILE CREATION*/
 
 	/* START SONARCLOUD GITHUB ACTIONS*/
-	fmt.Println("PHASE: SONARCLOUD GITHUB ACTIONS FILE CREATION")
+	fmt.Println(color.Bold + "PHASE: SONARCLOUD ACTIONS" + color.Reset)
 
 	fSonarProps, fSonarPropsErr := os.Create("sonar-project.properties")
 
@@ -181,15 +194,15 @@ func main() {
 
 	defer fSonarProps.Close()
 
-	fmt.Printf("Setting up sonar-project.properties file\n")
+	// fmt.Printf("Setting up sonar-project.properties file\n")
 
 	orgKey := promptui.Prompt{
-		Label:   "Get from Adri or Ming for Sonar Cloud Organization Key",
+		Label:   "Add your sonarcloud organization key",
 		Default: "thcollective",
 	}
 
 	projKey := promptui.Prompt{
-		Label:   "Get from Adri or Ming for Sonar Cloud Project Key",
+		Label:   "Add your sonarcloud project key",
 		Default: "",
 	}
 
@@ -205,38 +218,76 @@ func main() {
 		log.Fatal(errSonarProps)
 	}
 
-	scannerBranch := promptui.Prompt{
-		Label:   "Which branch would you like to run the code scanner?",
-		Default: "main",
+	// scannerBranch := promptui.Prompt{
+	// 	Label:   "Which branch would you like to run the code scanner?",
+	// 	Default: "main",
+	// }
+
+	// sonarBranch, _ := scannerBranch.Run()
+
+	// folderPathSonar := ".github/workflows"
+	// os.MkdirAll(folderPathSonar, os.ModePerm)
+	// fSonarcloud, fSonarErr := os.Create(".github/workflows/sonarcloud.yaml")
+
+	// if fSonarErr != nil {
+	// 	log.Fatal(fSonarErr)
+	// }
+
+	// defer fSonarcloud.Close()
+
+	// valSonar := templates.Sonaraction(sonarBranch)
+	// dataSonar := []byte(valSonar)
+
+	// _, errSonar := fSonarcloud.Write(dataSonar)
+
+	// if errSonar != nil {
+	// 	log.Fatal(errSonar)
+	// }
+
+	sonarIgnore := promptui.Select{
+		Label: "Do you want to ignore specific directories / files from sonarcloud?",
+		Items: []string{"*Yes", "No"},
 	}
 
-	sonarBranch, _ := scannerBranch.Run()
+	_, ansIgnore, _ := sonarIgnore.Run()
 
-	folderPathSonar := ".github/workflows"
-	os.MkdirAll(folderPathSonar, os.ModePerm)
-	fSonarcloud, fSonarErr := os.Create(".github/workflows/sonarcloud.yaml")
+	if ansIgnore == "*Yes" {
 
-	if fSonarErr != nil {
-		log.Fatal(fSonarErr)
-	}
+		fSonarIgnore, fSonarIgnoreErr := os.Create("sonarcloud.ignore")
 
-	defer fSonarcloud.Close()
+		if fSonarIgnoreErr != nil {
+			log.Fatal(fSonarIgnoreErr)
+		}
 
-	valSonar := templates.Sonaraction(sonarBranch)
-	dataSonar := []byte(valSonar)
+		defer fSonarIgnore.Close()
 
-	_, errSonar := fSonarcloud.Write(dataSonar)
+		ignoreFiles := promptui.Prompt{
+			Label:   "Name the folders/files you want to ignore",
+			Default: "*separate it by comma if folder/file is more than 1",
+		}
 
-	if errSonar != nil {
-		log.Fatal(errSonar)
+		ansSonarIgnore, _ := ignoreFiles.Run()
+
+		// if ansSonarIgnore contains a comma, then we need to split it and convert it to become new line
+		if strings.Contains(ansSonarIgnore, ",") {
+			ansSonarIgnore = strings.Replace(ansSonarIgnore, ",", "\n", -1)
+		} else {
+			ansSonarIgnore = ansSonarIgnore + "\n"
+		}
+
+		valSonarIgnore := templates.SonarIgnore(ansSonarIgnore)
+		dataSonarIgnore := []byte(valSonarIgnore)
+		_, errSonarIgnore := fSonarIgnore.Write(dataSonarIgnore)
+
+		if errSonarIgnore != nil {
+			log.Fatal(errSonarIgnore)
+		}
+
 	}
 
 	/* END SONARCLOUD GITHUB ACTIONS*/
 
 	/* START SENTRY GITHUB ACTIONS*/
-	// TODO add sentry github action and properties file -> only for FE (Vue2,Vue3,Nuxt,Nuxt3)
-	// assignees: ass77
-
 	// fmt.Println("PHASE: SENTRY GITHUB ACTIONS FILE CREATION")
 
 	// sentry := promptui.Select{
@@ -247,9 +298,6 @@ func main() {
 	// _, ansSentry, _ := sentry.Run()
 
 	// if ansSentry == "Yes" {
-
-	// 	// TODO add some properties file depends on project/framework their working
-	// 	// assignees: ass77
 
 	// 	folderPathSentry := ".github/workflows"
 	// 	os.MkdirAll(folderPathSentry, os.ModePerm)
@@ -277,7 +325,7 @@ func main() {
 	// assignees: ass77
 
 	/* START CLOUD RUN GITHUB ACTIONS*/
-	fmt.Println("PHASE: CLOUD RUN GITHUB ACTIONS FILE CREATION")
+	fmt.Println(color.Bold + "PHASE: CLOUD RUN ACTIONS" + color.Reset)
 
 	purpose := promptui.Select{
 		Label: "Please select your purpose for creating this cloud run action files",
@@ -303,7 +351,7 @@ func main() {
 
 	port := promptui.Prompt{
 		Label:   "What port number did you exposed on your dockerfile?",
-		Default: "80",
+		Default: globalPort,
 	}
 
 	region := promptui.Select{
@@ -475,58 +523,92 @@ func main() {
 	// 	return
 	// }
 
-	folderPathGaction := ".github/workflows"
-	os.MkdirAll(folderPathGaction, os.ModePerm)
+	// folderPathGaction := ".github/workflows"
+	// os.MkdirAll(folderPathGaction, os.ModePerm)
 
-	fGaction, errGaction := os.Create(".github/workflows/cloud-run-action.yaml")
+	// fGaction, errGaction := os.Create(".github/workflows/cloud-run-action.yaml")
 
-	if errGaction != nil {
-		log.Fatal(errGaction)
-	}
+	// if errGaction != nil {
+	// 	log.Fatal(errGaction)
+	// }
 
-	defer fGaction.Close()
+	// defer fGaction.Close()
 
-	valGaction := templates.Gaction(answer1, answer2, answer3, answer4_final, answer5)
-	dataGaction := []byte(valGaction)
+	// valGaction := templates.Gaction(answer1, answer2, answer3, answer4_final, answer5)
+	// dataGaction := []byte(valGaction)
 
-	_, err2 := fGaction.Write(dataGaction)
+	// _, err2 := fGaction.Write(dataGaction)
 
-	if err2 != nil {
-		log.Fatal(err2)
-	}
+	// if err2 != nil {
+	// 	log.Fatal(err2)
+	// }
 	/* END CLOUD RUN GITHUB ACTIONS*/
 
+	/* START TODO TO ISSUE ACTIONS */
+	fmt.Println(color.Bold + "PHASE: TODO TO ISSUE ACTIONS CREATION" + color.Reset)
+
 	todo := promptui.Select{
-		Label: "Do you want to use TODO to Issue github actions? ",
+		Label: "Do you want to add TODO to Issue github actions? ",
 		Items: []string{"Yes", "No"},
 	}
 
 	_, includeTodo, _ := todo.Run()
+	answerTodo := ""
 
 	if includeTodo == "Yes" {
-		folderPathTodo := ".github/workflows"
-		os.MkdirAll(folderPathTodo, os.ModePerm)
-		fTodo, errTodo := os.Create(".github/workflows/todo-issue.yaml")
+		// folderPathTodo := ".github/workflows"
+		// os.MkdirAll(folderPathTodo, os.ModePerm)
+		// fTodo, errTodo := os.Create(".github/workflows/todo-issue.yaml")
 
-		if errTodo != nil {
-			log.Fatal(errTodo)
-		}
+		// if errTodo != nil {
+		// 	log.Fatal(errTodo)
+		// }
 
-		defer fTodo.Close()
+		// defer fTodo.Close()
 
-		valTodo := templates.Todoaction()
-		dataTodo := []byte(valTodo)
+		// valTodo := templates.Todoaction()
+		// dataTodo := []byte(valTodo)
 
-		_, errTodo2 := fTodo.Write(dataTodo)
+		// _, errTodo2 := fTodo.Write(dataTodo)
 
-		if errTodo2 != nil {
-			log.Fatal(errTodo2)
-		}
+		// if errTodo2 != nil {
+		// 	log.Fatal(errTodo2)
+		// }
+
+		answerTodo = `  todo:
+	    runs-on: ubuntu-latest
+	    steps:
+	    - uses: actions/checkout@master
+	    - name: TODO to Issue
+	        uses: alstr/todo-to-issue-action@v4.5
+	        id: todo`
 	}
 
-	fmt.Printf("\nDeployment files has successfully been created. Push the repo to your primary branch and you're good to go!\n")
+	fmt.Printf(color.Red + "\nYou might need to fix the indentation issues in generated .yaml file later on.\n" + color.Reset)
 
-	fmt.Printf("\np/s: Please reach out to Adri or Ming for the secrets before you commit your code to your primary branch.\n")
+	/* END TODO TO ISSUE ACTIONS */
+
+	folderPathAll := ".github/workflows"
+	os.MkdirAll(folderPathAll, os.ModePerm)
+	fAll, fAllErr := os.Create(".github/workflows/thc-deployment.yaml")
+
+	if fAllErr != nil {
+		log.Fatal(fAllErr)
+	}
+
+	defer fAll.Close()
+
+	valAll := templates.ThcToolKit(answer1, answer2, answer3, answer4_final, answer5, answerTodo)
+	dataAll := []byte(valAll)
+
+	_, errAll2 := fAll.Write(dataAll)
+
+	if errAll2 != nil {
+		log.Fatal(errAll2)
+	}
+
+	fmt.Printf("\n" + color.Green + "Deployment files " + color.Reset + "has successfully been created. Push the repo to your " + color.Red + "branch" + color.Reset + " and you're good to go!\n")
+	fmt.Printf("\np/s: Please reach out to" + color.Blue + " Adri or Ming " + color.Reset + "for the" + color.Yellow + " secrets " + color.Reset + "before you make a commit.\n\n")
 
 }
 

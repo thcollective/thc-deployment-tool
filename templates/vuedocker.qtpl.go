@@ -21,11 +21,13 @@ var (
 func StreamVuedocker(qw422016 *qt422016.Writer, portNo string) {
 //line vuedocker.qtpl:1
 	qw422016.N().S(`
-
-
 # build stage
-FROM node:11.12.0-alpine as build-stage
-ENV PORT=80
+FROM node:16-alpine3.14 as build-stage
+ENV PORT=`)
+//line vuedocker.qtpl:4
+	qw422016.E().S(portNo)
+//line vuedocker.qtpl:4
+	qw422016.N().S(`
 RUN apk update && apk add python make g++
 WORKDIR /app
 COPY package*.json ./
@@ -34,43 +36,43 @@ COPY . .
 RUN npm run build
 
 
-# production stage for google container registry
+# production stage
 FROM nginx:stable-alpine as production-stage
 COPY ./nginx/nginx.conf /etc/nginx/nginx.conf
 COPY --from=build-stage /app/dist /usr/share/nginx/html
 EXPOSE `)
-//line vuedocker.qtpl:19
+//line vuedocker.qtpl:17
 	qw422016.E().S(portNo)
-//line vuedocker.qtpl:19
+//line vuedocker.qtpl:17
 	qw422016.N().S(`
-# CMD ["nginx", "-g", "daemon off;"]
+CMD ["nginx", "-g", "daemon off;"]
 
 `)
-//line vuedocker.qtpl:22
+//line vuedocker.qtpl:20
 }
 
-//line vuedocker.qtpl:22
+//line vuedocker.qtpl:20
 func WriteVuedocker(qq422016 qtio422016.Writer, portNo string) {
-//line vuedocker.qtpl:22
+//line vuedocker.qtpl:20
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line vuedocker.qtpl:22
+//line vuedocker.qtpl:20
 	StreamVuedocker(qw422016, portNo)
-//line vuedocker.qtpl:22
+//line vuedocker.qtpl:20
 	qt422016.ReleaseWriter(qw422016)
-//line vuedocker.qtpl:22
+//line vuedocker.qtpl:20
 }
 
-//line vuedocker.qtpl:22
+//line vuedocker.qtpl:20
 func Vuedocker(portNo string) string {
-//line vuedocker.qtpl:22
+//line vuedocker.qtpl:20
 	qb422016 := qt422016.AcquireByteBuffer()
-//line vuedocker.qtpl:22
+//line vuedocker.qtpl:20
 	WriteVuedocker(qb422016, portNo)
-//line vuedocker.qtpl:22
+//line vuedocker.qtpl:20
 	qs422016 := string(qb422016.B)
-//line vuedocker.qtpl:22
+//line vuedocker.qtpl:20
 	qt422016.ReleaseByteBuffer(qb422016)
-//line vuedocker.qtpl:22
+//line vuedocker.qtpl:20
 	return qs422016
-//line vuedocker.qtpl:22
+//line vuedocker.qtpl:20
 }

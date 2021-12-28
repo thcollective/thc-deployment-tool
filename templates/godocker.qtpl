@@ -1,8 +1,7 @@
 {% func Godocker(portSelected string) %}
 
-# Start from the latest golang base image
+# Build Stage
 FROM golang:latest as builder
-
 
 # Set the Current Working Directory inside the container
 WORKDIR /app
@@ -14,7 +13,7 @@ COPY . .
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main ./cmd/app/main.go
 
 
-######## Start a new stage from scratch #######
+# Production Stage
 FROM alpine:latest
 
 RUN apk --no-cache add ca-certificates

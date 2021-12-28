@@ -3,6 +3,7 @@ module firstdemo
 go 1.17
 
 require (
+	github.com/TwiN/go-color v1.1.0
 	github.com/manifoldco/promptui v0.9.0
 	github.com/valyala/quicktemplate v1.7.0
 )
