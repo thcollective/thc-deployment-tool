@@ -7,7 +7,6 @@ import (
 	"log"
 	"os"
 	"regexp"
-	"strings"
 
 	"github.com/TwiN/go-color"
 	"github.com/manifoldco/promptui"
@@ -186,6 +185,8 @@ func main() {
 	/* START SONARCLOUD GITHUB ACTIONS*/
 	fmt.Println(color.Bold + "PHASE: SONARCLOUD ACTIONS" + color.Reset)
 
+	sonarRootDir, sonarTestDir, sonarTestInclusions, sonarTestExclusions := "", "", "", ""
+
 	fSonarProps, fSonarPropsErr := os.Create("sonar-project.properties")
 
 	if fSonarPropsErr != nil {
@@ -193,8 +194,6 @@ func main() {
 	}
 
 	defer fSonarProps.Close()
-
-	// fmt.Printf("Setting up sonar-project.properties file\n")
 
 	orgKey := promptui.Prompt{
 		Label:   "Add your sonarcloud organization key",
@@ -206,10 +205,62 @@ func main() {
 		Default: "",
 	}
 
+	sonarIgnore := promptui.Select{
+		Label: "Do you want to ignore specific directories / files from sonarcloud?",
+		Items: []string{"*Yes", "No"},
+	}
+
+	_, ansIgnore, _ := sonarIgnore.Run()
+
+	if ansIgnore == "*Yes" {
+		rootDir := promptui.Prompt{
+			Label:   "Please specify the root directory of your project",
+			Default: "",
+		}
+
+		testDirectory := promptui.Select{
+			Label: "Do you have a test directory?",
+			Items: []string{"Yes", "No"},
+		}
+
+		_, testDir, _ := testDirectory.Run()
+		rootDirSelected, _ := rootDir.Run()
+		sonarRootDir = rootDirSelected
+
+		if testDir == "Yes" {
+			fmt.Println("Assuming your test directory is the same as your root directory at " + color.Bold + sonarRootDir + color.Reset)
+			sonarTestDir = "sonar.tests = " + sonarRootDir
+
+			testInclusions := promptui.Select{
+				Label: "Do you want to include test subdirectories in the test scope?",
+				Items: []string{"Yes", "No"},
+			}
+
+			testExclusions := promptui.Select{
+				Label: "Do you want to exclude test subdirectories from the test scope?",
+				Items: []string{"Yes", "No"},
+			}
+
+			_, testInclusionsSelected, _ := testInclusions.Run()
+			_, testExclusionsSelected, _ := testExclusions.Run()
+
+			if testInclusionsSelected == "Yes" {
+				sonarInclusions := "sonar.test.inclusions = src/**/test/**/*"
+				sonarTestInclusions = sonarInclusions
+			}
+
+			if testExclusionsSelected == "Yes" {
+				sonarExclusions := "sonar.test.exclusions = src/**/test/**/*"
+				sonarTestExclusions = sonarExclusions
+			}
+		}
+
+	}
+
 	sonarOrgKey, _ := orgKey.Run()
 	sonarProjKey, _ := projKey.Run()
 
-	valSonarProps := templates.SonarProps(sonarOrgKey, sonarProjKey)
+	valSonarProps := templates.SonarProps(sonarOrgKey, sonarProjKey, sonarRootDir, sonarTestDir, sonarTestInclusions, sonarTestExclusions)
 	dataSonarProps := []byte(valSonarProps)
 
 	_, errSonarProps := fSonarProps.Write(dataSonarProps)
@@ -243,47 +294,6 @@ func main() {
 	// if errSonar != nil {
 	// 	log.Fatal(errSonar)
 	// }
-
-	sonarIgnore := promptui.Select{
-		Label: "Do you want to ignore specific directories / files from sonarcloud?",
-		Items: []string{"*Yes", "No"},
-	}
-
-	_, ansIgnore, _ := sonarIgnore.Run()
-
-	if ansIgnore == "*Yes" {
-
-		fSonarIgnore, fSonarIgnoreErr := os.Create("sonarcloud.ignore")
-
-		if fSonarIgnoreErr != nil {
-			log.Fatal(fSonarIgnoreErr)
-		}
-
-		defer fSonarIgnore.Close()
-
-		ignoreFiles := promptui.Prompt{
-			Label:   "Name the folders/files you want to ignore",
-			Default: "*separate it by comma if folder/file is more than 1",
-		}
-
-		ansSonarIgnore, _ := ignoreFiles.Run()
-
-		// if ansSonarIgnore contains a comma, then we need to split it and convert it to become new line
-		if strings.Contains(ansSonarIgnore, ",") {
-			ansSonarIgnore = strings.Replace(ansSonarIgnore, ",", "\n", -1)
-		} else {
-			ansSonarIgnore = ansSonarIgnore + "\n"
-		}
-
-		valSonarIgnore := templates.SonarIgnore(ansSonarIgnore)
-		dataSonarIgnore := []byte(valSonarIgnore)
-		_, errSonarIgnore := fSonarIgnore.Write(dataSonarIgnore)
-
-		if errSonarIgnore != nil {
-			log.Fatal(errSonarIgnore)
-		}
-
-	}
 
 	/* END SONARCLOUD GITHUB ACTIONS*/
 
@@ -356,7 +366,7 @@ func main() {
 
 	region := promptui.Select{
 		Label: "Please select region that you want to deploy to",
-		Items: []string{"*asia-southeast1-a", "asia-east1-a", "asia-east1-b", "asia-east1-c", "asia-east2-a", "asia-east2-b", "asia-east2-c",
+		Items: []string{"*asia-southeast1", "asia-east1-a", "asia-east1-b", "asia-east1-c", "asia-east2-a", "asia-east2-b", "asia-east2-c",
 			"asia-northeast1-a", "asia-northeast1-b", "asia-northeast1-c", "asia-northeast2-a", "asia-northeast2-b", "asia-northeast2-c",
 			"asia-northeast3-a", "asia-northeast3-b", "asia-northeast3-c", "asia-south1-a", "asia-south1-b", "asia-south1-c",
 			"asia-south2-a", "asia-south2-b", "asia-south2-c", "asia-southeast1-b", "asia-southeast1-c",
@@ -607,7 +617,18 @@ func main() {
 		log.Fatal(errAll2)
 	}
 
-	fmt.Printf("\n" + color.Green + "Deployment files " + color.Reset + "has successfully been created. Push the repo to your " + color.Red + "branch" + color.Reset + " and you're good to go!\n")
+	// fmt.Println(color.Bold + "PHASE: COMMITLINT ACTIONS" + color.Reset)
+	// /* START COMMITLINT ACTIONS */
+
+	// /* END COMMITLINT ACTIONS */
+
+	// fmt.Println(color.Bold + "PHASE: SEMANTIC RELEASES ACTIONS" + color.Reset)
+
+	// /* START SEMANTIC RELEASES ACTIONS */
+
+	// /* END SEMANTIC RELEASES ACTIONS */
+
+	fmt.Printf("\n" + color.Green + "THCFileSystem " + color.Reset + "has successfully been created. Push the repo to your " + color.Red + "branch" + color.Reset + " and you're good to go!\n")
 	fmt.Printf("\np/s: Please reach out to" + color.Blue + " Adri or Ming " + color.Reset + "for the" + color.Yellow + " secrets " + color.Reset + "before you make a commit.\n\n")
 
 }

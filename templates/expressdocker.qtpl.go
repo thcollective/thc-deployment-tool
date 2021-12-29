@@ -21,7 +21,10 @@ var (
 func StreamExpressdocker(qw422016 *qt422016.Writer, portSelected string) {
 //line expressdocker.qtpl:1
 	qw422016.N().S(`
-FROM node:16
+FROM node:16-alpine3.14
+
+ENV HOST 0.0.0.0
+ENV PORT {{portSelected}}
 
 # Create app directory
 WORKDIR /usr/src/app
@@ -31,46 +34,45 @@ WORKDIR /usr/src/app
 # where available (npm@5+)
 COPY package*.json ./
 
-RUN npm install
-# If you are building your code for production
-# RUN npm ci --only=production
+# Install production dependencies.
+RUN npm ci --only=production
 
 # Bundle app source
-COPY . .
+COPY . ./
 
 EXPOSE `)
-//line expressdocker.qtpl:19
+//line expressdocker.qtpl:21
 	qw422016.E().S(portSelected)
-//line expressdocker.qtpl:19
+//line expressdocker.qtpl:21
 	qw422016.N().S(`
-CMD [ "node", "server.js" ]
+CMD [ "npm", "start" ]
 
 `)
-//line expressdocker.qtpl:22
+//line expressdocker.qtpl:24
 }
 
-//line expressdocker.qtpl:22
+//line expressdocker.qtpl:24
 func WriteExpressdocker(qq422016 qtio422016.Writer, portSelected string) {
-//line expressdocker.qtpl:22
+//line expressdocker.qtpl:24
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line expressdocker.qtpl:22
+//line expressdocker.qtpl:24
 	StreamExpressdocker(qw422016, portSelected)
-//line expressdocker.qtpl:22
+//line expressdocker.qtpl:24
 	qt422016.ReleaseWriter(qw422016)
-//line expressdocker.qtpl:22
+//line expressdocker.qtpl:24
 }
 
-//line expressdocker.qtpl:22
+//line expressdocker.qtpl:24
 func Expressdocker(portSelected string) string {
-//line expressdocker.qtpl:22
+//line expressdocker.qtpl:24
 	qb422016 := qt422016.AcquireByteBuffer()
-//line expressdocker.qtpl:22
+//line expressdocker.qtpl:24
 	WriteExpressdocker(qb422016, portSelected)
-//line expressdocker.qtpl:22
+//line expressdocker.qtpl:24
 	qs422016 := string(qb422016.B)
-//line expressdocker.qtpl:22
+//line expressdocker.qtpl:24
 	qt422016.ReleaseByteBuffer(qb422016)
-//line expressdocker.qtpl:22
+//line expressdocker.qtpl:24
 	return qs422016
-//line expressdocker.qtpl:22
+//line expressdocker.qtpl:24
 }

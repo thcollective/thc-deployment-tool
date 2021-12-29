@@ -1,10 +1,16 @@
-{% func SonarProps( sonarOrgKey string, sonarProjectKey string ) %}
+{% func SonarProps( sonarOrgKey string, sonarProjectKey string, sonarRootDir string, sonarTestDir string, sonarTestInclusions string, SonarTestExclusions string  ) %}
 
 sonar.organization={%s sonarOrgKey %}
 sonar.projectKey={%s sonarProjectKey %}
 
-# relative paths to source directories. More details and properties are described
-# in https://sonarcloud.io/documentation/project-administration/narrowing-the-focus/
-sonar.sources=.
+# Define the same root directory for sources and tests (if any)
+sonar.sources = {%s sonarRootDir %}
+{%s sonarTestDir %}
+
+# Include test subdirectories in test scope if any
+{%s sonarTestInclusions %}
+
+# Exclude test subdirectories from source scope if any
+{%s SonarTestExclusions %}
 
 {% endfunc %}

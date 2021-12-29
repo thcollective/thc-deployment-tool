@@ -1,0 +1,80 @@
+
+# Copyright 2021 The Hacker Collective, LLC.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+name: thcdeployment
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  todo:
+	  runs-on: ubuntu-latest
+	  steps:
+	  - uses: actions/checkout@master
+	  - name: TODO to Issue
+	      uses: alstr/todo-to-issue-action@v4.5
+	      id: todo
+  sonarcloud:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        # Disabling shallow clone is recommended for improving relevancy of reporting
+        fetch-depth: 0
+    - name: SonarCloud Scan
+      uses: sonarsource/sonarcloud-github-action@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  build:
+    name: Cloud Run Deployment
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@master
+
+      - name: Setup GCP Service Account
+        uses: google-github-actions/setup-gcloud@master
+        with:
+          version: 'latest'
+          service_account_email: ${{ secrets.GCP_SA_EMAIL }}
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          export_default_credentials: true
+
+      - name: Configure Docker
+        run: |
+          gcloud auth configure-docker
+      
+      - name: Build
+        run: |
+          docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/my-app:latest .
+      - name: Push
+        run: |
+          docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/my-app:latest
+      - name: Deploy
+        run: |
+          gcloud run deploy my-app \
+          --port 5000 \
+          --region asia-southeast1-a \
+          --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/my-app \
+          --platform managed \
+          --allow-unauthenticated \
+          --quiet \
+          --project ${{ secrets.GCP_PROJECT_ID }}
+
+   
+          
