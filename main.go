@@ -34,6 +34,8 @@ func main() {
 	}
 	_, ansProject, _ := project.Run()
 
+	answerTestApi := ""
+
 	if ansProject == "Frontend" {
 		framework := promptui.Select{
 			Label: "What framework are you using?",
@@ -179,6 +181,38 @@ func main() {
 			}
 
 		}
+
+		// TODO Setting up GitHub Actions Workflows to automate the API tests
+		/*
+					test-api:
+			    runs-on: ubuntu-latest
+			    steps:
+			    - uses: actions/checkout@main
+
+			    - name: Docker for newman
+			      run: |
+			        docker run -v $(pwd)/test:/etc/newman -t postman/newman:latest run "HttpbinForNewman.json" --reporters="cli"
+		*/
+
+		testApi := promptui.Select{
+			Label: "Do you want to test your API automatically using Github Actions?",
+			Items: []string{"Yes", "No"},
+		}
+
+		_, includeTestApi, _ := testApi.Run()
+
+		if includeTestApi == "Yes" {
+
+			answerTestApi = `	test-api:
+			runs-on: ubuntu-latest
+			steps:
+			- uses: actions/checkout@main
+
+			- name: Docker for newman
+			  run: |
+				docker run -v $(pwd)/test:/etc/newman -t postman/newman:latest run "HttpbinForNewman.json" --reporters="cli"`
+		}
+
 	}
 	/* END DOCKERFILE FILE CREATION*/
 
@@ -598,6 +632,71 @@ func main() {
 
 	/* END TD TO ISSUE ACTIONS */
 
+	/* START COMMITLINT ACTIONS */
+	fmt.Println(color.Bold + "PHASE: COMMITLINT ACTIONS" + color.Reset)
+
+	fmt.Printf("\n" + color.Yellow + "Only applicable pull request " + color.Reset)
+
+	comlint := promptui.Select{
+		Label: "Do you want to add commitlint actions?",
+		Items: []string{"Yes", "No"},
+	}
+
+	_, includeCommitlint, _ := comlint.Run()
+
+	if includeCommitlint == "Yes" {
+
+		folderPathCommitLint := ".github/workflows"
+		os.MkdirAll(folderPathCommitLint, os.ModePerm)
+		fCommitLink, fCommitLinkErr := os.Create(".github/workflows/commitlint.yaml")
+
+		if fCommitLinkErr != nil {
+			log.Fatal(fCommitLinkErr)
+		}
+
+		defer fCommitLink.Close()
+
+		valCommitLint := templates.Commitlint()
+		dataCommitLint := []byte(valCommitLint)
+
+		_, errCommitLintFile := fCommitLink.Write(dataCommitLint)
+
+		if errCommitLintFile != nil {
+			log.Fatal(errCommitLintFile)
+		}
+
+	}
+	/* END COMMITLINT ACTIONS */
+
+	/* START SEMANTIC RELEASES ACTIONS */
+	fmt.Println(color.Bold + "PHASE: SEMANTIC RELEASES ACTIONS" + color.Reset)
+
+	semRelease := promptui.Select{
+		Label: "Do you want to add semantic release actions?",
+		Items: []string{"Yes", "No"},
+	}
+
+	_, includeSemRelease, _ := semRelease.Run()
+	answerSemantic := ""
+
+	if includeSemRelease == "Yes" {
+		answerSemantic = `  semantic-release:
+	    runs-on: ubuntu-latest
+	    steps:
+		- name : Checkout
+	      uses: actions/checkout@master
+	    - name: Semantic Release
+	      uses: cycjimmy/semantic-release-action@v2
+		  env:
+      		GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+     		 NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+	    `
+	}
+
+	/* END SEMANTIC RELEASES ACTIONS */
+
+	/* START thc-deployment.yaml file creation */
+
 	folderPathAll := ".github/workflows"
 	os.MkdirAll(folderPathAll, os.ModePerm)
 	fAll, fAllErr := os.Create(".github/workflows/thc-deployment.yaml")
@@ -608,7 +707,7 @@ func main() {
 
 	defer fAll.Close()
 
-	valAll := templates.ThcToolKit(answer1, answer2, answer3, answer4_final, answer5, answerTodo)
+	valAll := templates.ThcToolKit(answer1, answer2, answer3, answer4_final, answer5, answerTodo, answerSemantic, answerTestApi)
 	dataAll := []byte(valAll)
 
 	_, errAll2 := fAll.Write(dataAll)
@@ -617,18 +716,9 @@ func main() {
 		log.Fatal(errAll2)
 	}
 
-	// fmt.Println(color.Bold + "PHASE: COMMITLINT ACTIONS" + color.Reset)
-	// /* START COMMITLINT ACTIONS */
+	/* END thc-deployment.yaml file creation */
 
-	// /* END COMMITLINT ACTIONS */
-
-	// fmt.Println(color.Bold + "PHASE: SEMANTIC RELEASES ACTIONS" + color.Reset)
-
-	// /* START SEMANTIC RELEASES ACTIONS */
-
-	// /* END SEMANTIC RELEASES ACTIONS */
-
-	fmt.Printf("\n" + color.Green + "THCFileSystem " + color.Reset + "has successfully been created. Push the repo to your " + color.Red + "branch" + color.Reset + " and you're good to go!\n")
+	fmt.Printf("\n" + color.Green + "THC magic " + color.Reset + "has successfully been casted. Push the repo to your " + color.Red + "branch" + color.Reset + " and you're good to go!\n")
 	fmt.Printf("\np/s: Please reach out to" + color.Blue + " Adri or Ming " + color.Reset + "for the" + color.Yellow + " secrets " + color.Reset + "before you make a commit.\n\n")
 
 }

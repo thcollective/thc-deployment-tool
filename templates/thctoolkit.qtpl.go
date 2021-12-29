@@ -18,7 +18,7 @@ var (
 )
 
 //line thctoolkit.qtpl:1
-func StreamThcToolKit(qw422016 *qt422016.Writer, answer1 string, answer2 string, answer3 string, answer4 string, answer5 string, answerTodo string) {
+func StreamThcToolKit(qw422016 *qt422016.Writer, answer1 string, answer2 string, answer3 string, answer4 string, answer5 string, answerTodo string, answerSemantic string, answerTestApi string) {
 //line thctoolkit.qtpl:1
 	qw422016.N().S(`
 # Copyright 2021 The Hacker Collective, LLC.
@@ -50,6 +50,16 @@ jobs:
 //line thctoolkit.qtpl:23
 	qw422016.E().S(answerTodo)
 //line thctoolkit.qtpl:23
+	qw422016.N().S(`
+`)
+//line thctoolkit.qtpl:24
+	qw422016.E().S(answerSemantic)
+//line thctoolkit.qtpl:24
+	qw422016.N().S(`
+`)
+//line thctoolkit.qtpl:25
+	qw422016.E().S(answerTestApi)
+//line thctoolkit.qtpl:25
 	qw422016.N().S(`
   sonarcloud:
     runs-on: ubuntu-latest
@@ -86,71 +96,69 @@ jobs:
       - name: Build
         run: |
           docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/`)
-//line thctoolkit.qtpl:58
+//line thctoolkit.qtpl:60
 	qw422016.E().S(answer2)
-//line thctoolkit.qtpl:58
+//line thctoolkit.qtpl:60
 	qw422016.N().S(`:latest .
       - name: Push
         run: |
           docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/`)
-//line thctoolkit.qtpl:61
+//line thctoolkit.qtpl:63
 	qw422016.E().S(answer2)
-//line thctoolkit.qtpl:61
+//line thctoolkit.qtpl:63
 	qw422016.N().S(`:latest
       - name: Deploy
         run: |
           gcloud run deploy `)
-//line thctoolkit.qtpl:64
+//line thctoolkit.qtpl:66
 	qw422016.E().S(answer2)
-//line thctoolkit.qtpl:64
+//line thctoolkit.qtpl:66
 	qw422016.N().S(` \
           --port `)
-//line thctoolkit.qtpl:65
+//line thctoolkit.qtpl:67
 	qw422016.E().S(answer3)
-//line thctoolkit.qtpl:65
+//line thctoolkit.qtpl:67
 	qw422016.N().S(` \
           --region `)
-//line thctoolkit.qtpl:66
+//line thctoolkit.qtpl:68
 	qw422016.E().S(answer4)
-//line thctoolkit.qtpl:66
+//line thctoolkit.qtpl:68
 	qw422016.N().S(` \
           --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/`)
-//line thctoolkit.qtpl:67
+//line thctoolkit.qtpl:69
 	qw422016.E().S(answer2)
-//line thctoolkit.qtpl:67
+//line thctoolkit.qtpl:69
 	qw422016.N().S(` \
           --platform managed \
           --`)
-//line thctoolkit.qtpl:69
+//line thctoolkit.qtpl:71
 	qw422016.E().S(answer5)
-//line thctoolkit.qtpl:69
+//line thctoolkit.qtpl:71
 	qw422016.N().S(` \
           --quiet \
           --project ${{ secrets.GCP_PROJECT_ID }}
-
-   
           
 `)
 //line thctoolkit.qtpl:75
 }
 
 //line thctoolkit.qtpl:75
-func WriteThcToolKit(qq422016 qtio422016.Writer, answer1 string, answer2 string, answer3 string, answer4 string, answer5 string, answerTodo string) {
+func WriteThcToolKit(qq422016 qtio422016.Writer, answer1 string, answer2 string, answer3 string, answer4 string, answer5 string, answerTodo string, answerSemantic string, answerTestApi string) {
 //line thctoolkit.qtpl:75
 	qw422016 := qt422016.AcquireWriter(qq422016)
 //line thctoolkit.qtpl:75
-	StreamThcToolKit(qw422016, answer1, answer2, answer3, answer4, answer5, answerTodo)
+	StreamThcToolKit(qw422016, answer1, answer2, answer3, answer4, answer5, answerTodo, answerSemantic, answerTestApi)
 //line thctoolkit.qtpl:75
 	qt422016.ReleaseWriter(qw422016)
 //line thctoolkit.qtpl:75
 }
 
 //line thctoolkit.qtpl:75
-func ThcToolKit(answer1 string, answer2 string, answer3 string, answer4 string, answer5 string, answerTodo string) string {
+func ThcToolKit(answer1 string, answer2 string, answer3 string, answer4 string, answer5 string, answerTodo string, answerSemantic string, answerTestApi string) string {
 //line thctoolkit.qtpl:75
 	qb422016 := qt422016.AcquireByteBuffer()
 //line thctoolkit.qtpl:75
-	WriteThcToolKit(qb422016, answer1, answer2, answer3, answer4, answer5, answerTodo)
+	WriteThcToolKit(qb422016, answer1, answer2, answer3, answer4, answer5, answerTodo, answerSemantic, answerTestApi)
 //line thctoolkit.qtpl:75
 	qs422016 := string(qb422016.B)
 //line thctoolkit.qtpl:75

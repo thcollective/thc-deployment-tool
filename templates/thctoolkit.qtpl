@@ -1,4 +1,4 @@
-{% func ThcToolKit(answer1 string, answer2 string, answer3 string, answer4 string, answer5 string, answerTodo string) %}
+{% func ThcToolKit(answer1 string, answer2 string, answer3 string, answer4 string, answer5 string, answerTodo string, answerSemantic string, answerTestApi string) %}
 # Copyright 2021 The Hacker Collective, LLC.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,6 +21,8 @@ on:
 
 jobs:
 {%s answerTodo %}
+{%s answerSemantic %}
+{%s answerTestApi %}
   sonarcloud:
     runs-on: ubuntu-latest
     steps:
@@ -69,7 +71,5 @@ jobs:
           --{%s answer5 %} \
           --quiet \
           --project ${{ secrets.GCP_PROJECT_ID }}
-
-   
           
 {% endfunc %}

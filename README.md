@@ -16,7 +16,7 @@ This deployment automation tool helps users to generate basic files that are req
 
 ### How To Run This Project (production)
 
-1. Download the latest binary package [here](https://github.com/ass77/deployment-automation-tool/releases)
+1. Download the latest binary package [here](https://github.com/thcollective/thc-deployment-tool/releases)
 
 2. Run `./main` on your working project root directory, start answering the prompt and then the spell shall be casted. 
 

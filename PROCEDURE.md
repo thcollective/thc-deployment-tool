@@ -85,15 +85,24 @@ e. Prompt to generate cloud run yaml file
 ### Future Work
 
 - [x] TODO to Issue Action
+- [x] Commit Lint on pull request
+- [x] Semantic Releases
+- [x] Automated CI tests with Postman and Newman - applicable for BE only
 - [ ] Allow user to set environment variables on Dockerfile and cloud run action yaml file (current status: onlyset one env var @ cloud run action)
 - [ ] Create new github actions file to determine which actions to run first
 - [ ] Github authentication to run the script (thc-token)
+- [ ] Test Cases for FE | BE
+    - [ ] FE: create file structure based on JSON file for example `{ fileName: "Button.component.vue", path: "src.components.loginpage"}`
+    - [ ] BE (experimental) : using openAPI to generate BE routes
+    - [ ] re-initialization : declarative programming such as JSON file must sync with code files, wil check the current files `IF` there is `new` file to be created, add those into the JSON, `ELSE` dont touch any current files (appending)
+- [ ] THC own npx libraries to generate preloaded templates for FE | BE frameworks
+
 
 
 
 ### How To push to releases
 
-1. git tag -m "description of release" vx.x.x HEAD
+1. git tag -m "Release vx.x.x" vx.x.x HEAD
 2. git push --tags
 
 <p align="right">(<a href="#top">back to top</a>)</p>
