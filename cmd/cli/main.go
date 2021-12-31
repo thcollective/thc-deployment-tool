@@ -28,13 +28,22 @@ func main() {
 	/* START DOCKERFILE FILE CREATION*/
 	fmt.Println(color.Bold + "PHASE: DOCKERFILE CREATION" + color.Reset)
 
+	// TODO need to create .dockerignore file and env (buildtime env) to be used in cloud run deploy .yaml file > thc-deployment.yaml
+	// assignees: ass77
+	//  - name: write environment file
+	// 	run: |
+	// 	touch .env
+	// 	echo BACKEND_URL=${{secrets.BACKEND_URL_PROD}} >> .env
+	// 	echo SENTRY_DSN=${{secrets.SENTRY_DSN}} >> .env
+	// 	echo SENTRY_TRACERATE=0.5 >> .env
+	// 	echo ADMIN_TOKEN=${{secrets.ADMIN_TOKEN}} >> .env
+	// 	cat .env
+
 	project := promptui.Select{
 		Label: "What project are you working on?",
 		Items: []string{"Frontend", "Backend"},
 	}
 	_, ansProject, _ := project.Run()
-
-	answerTestApi := ""
 
 	if ansProject == "Frontend" {
 		framework := promptui.Select{
@@ -212,38 +221,32 @@ func main() {
 
 			ApiEnvSelected, _ := ApiEnv.Run()
 
-			answerTestApi = `	test-api:
-			runs-on: ubuntu-latest
-			steps:
-			# Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-			- uses: actions/checkout@v2
-			  
-			# Install Node on the runner
-			- name: Install Node
-			  uses: actions/setup-node@v1
-			  with: 
-				node-version: '14.x'
-			
-			# Install the newman command line utility and also install the html extra reporter
-			- name: Install newman
-			  run: |
-			   npm install -g newman
-			   npm install -g newman-reporter-htmlextra
-			# Make directory to upload the test results
-			- name: Make Directory for results
-			  run: mkdir -p testResults
-		
-			# Run the API collection
-			- name: Run API collection
-			  run: |
-			   newman run ./` + ApiFolderSelected + `/` + ApiFilesSelected + ` -e ./` + ApiFolderSelected + `/` + ApiEnvSelected + ` -r htmlextra --reporter-hmlextra-export testResults/htmlreport.html --reporter-htmlextra-darkTheme  > testResults/runreport1.html
-			    
-			# Upload the contents of Test Results directory to workspace
-			- name: Output the run Details
-			  uses: actions/upload-artifact@v2
-			  with: 
-			   name: RunReports
-			   path: testResults`
+			testAPIBranch := promptui.Prompt{
+				Label:   "Which branch would you like to run the api testing github actions?",
+				Default: "development, staging",
+			}
+
+			testBranch, _ := testAPIBranch.Run()
+
+			folderPathTestAPI := ".github/workflows"
+			os.MkdirAll(folderPathTestAPI, os.ModePerm)
+			fTestAPIcloud, fTestAPIErr := os.Create(".github/workflows/test-api.yaml")
+
+			if fTestAPIErr != nil {
+				log.Fatal(fTestAPIErr)
+			}
+
+			defer fTestAPIcloud.Close()
+
+			valTestAPI := templates.TestAPIaction(testBranch, ApiFolderSelected, ApiFilesSelected, ApiEnvSelected)
+			dataTestAPI := []byte(valTestAPI)
+
+			_, errTestAPI := fTestAPIcloud.Write(dataTestAPI)
+
+			if errTestAPI != nil {
+				log.Fatal(errTestAPI)
+			}
+
 		}
 
 	}
@@ -252,8 +255,31 @@ func main() {
 	/* START SONARCLOUD GITHUB ACTIONS*/
 	fmt.Println(color.Bold + "PHASE: SONARCLOUD ACTIONS" + color.Reset)
 
-	// TODO should be only in development && staging branch
-	// assignees: ass77
+	scannerBranch := promptui.Prompt{
+		Label:   "Which branch would you like to run the code scanner?",
+		Default: "development, staging",
+	}
+
+	sonarBranch, _ := scannerBranch.Run()
+
+	folderPathSonar := ".github/workflows"
+	os.MkdirAll(folderPathSonar, os.ModePerm)
+	fSonarcloud, fSonarErr := os.Create(".github/workflows/sonarcloud.yaml")
+
+	if fSonarErr != nil {
+		log.Fatal(fSonarErr)
+	}
+
+	defer fSonarcloud.Close()
+
+	valSonar := templates.Sonaraction(sonarBranch)
+	dataSonar := []byte(valSonar)
+
+	_, errSonar := fSonarcloud.Write(dataSonar)
+
+	if errSonar != nil {
+		log.Fatal(errSonar)
+	}
 
 	sonarRootDir, sonarTestDir, sonarTestInclusions, sonarTestExclusions := "", "", "", ""
 
@@ -288,43 +314,58 @@ func main() {
 			Default: "",
 		}
 
-		testDirectory := promptui.Select{
-			Label: "Do you have a test directory?",
-			Items: []string{"Yes", "No"},
-		}
-
-		_, testDir, _ := testDirectory.Run()
 		rootDirSelected, _ := rootDir.Run()
+
+		testDirectory := promptui.Select{
+			Label: "Do you have a test directory to scan? If so, is your test code is intermingled with your source code?",
+			Items: []string{"Yes", "No", "I don't have any test directory"},
+		}
+		_, testDir, _ := testDirectory.Run()
 		sonarRootDir = rootDirSelected
 
 		if testDir == "Yes" {
-			fmt.Println("Assuming your test directory is the same as your root directory at " + color.Bold + sonarRootDir + color.Reset)
-			sonarTestDir = "sonar.tests = " + sonarRootDir
 
-			testInclusions := promptui.Select{
-				Label: "Do you want to include test subdirectories in the test scope?",
+			sonarTestDir = "sonar.tests = " + rootDirSelected
+			//TODO prompt user on where do the test folder/file lives :directory-level
+			// assignees: ass77
+
+			fmt.Println(color.Blue + `You may need to modify the values for sonar.test.inclusions in sonar-project.properties file based on your own test directory-level` + color.Reset)
+
+			sonarInclusions := "sonar.test.inclusions = " + rootDirSelected + "/**/test/**/*"
+			sonarTestInclusions = sonarInclusions
+
+			sonarExclusions := "sonar.exclusions = " + rootDirSelected + "/**/test/**/*"
+			sonarTestExclusions = sonarExclusions
+
+		} else {
+			testDirName := promptui.Prompt{
+				Label:   "Please specify the test directory in the project",
+				Default: "tests",
+			}
+
+			testDirNameSelected, _ := testDirName.Run()
+
+			sonarTestDir = "sonar.tests = " + testDirNameSelected
+
+			testExclude := promptui.Select{
+				Label: "Do you want to exclude some folders from code scanning?",
 				Items: []string{"Yes", "No"},
 			}
+			_, testExcludeDir, _ := testExclude.Run()
 
-			testExclusions := promptui.Select{
-				Label: "Do you want to exclude test subdirectories from the test scope?",
-				Items: []string{"Yes", "No"},
-			}
+			if testExcludeDir == "Yes" {
 
-			_, testInclusionsSelected, _ := testInclusions.Run()
-			_, testExclusionsSelected, _ := testExclusions.Run()
+				excludeDir := promptui.Prompt{
+					Label:   "Please specify the directory that you want to exclude from code scanning",
+					Default: "foo, bar",
+				}
 
-			if testInclusionsSelected == "Yes" {
-				sonarInclusions := "sonar.test.inclusions = src/**/test/**/*"
-				sonarTestInclusions = sonarInclusions
-			}
+				excludeDirSelected, _ := excludeDir.Run()
 
-			if testExclusionsSelected == "Yes" {
-				sonarExclusions := "sonar.test.exclusions = src/**/test/**/*"
+				sonarExclusions := "sonar.exclusions = " + excludeDirSelected + "/**/test/**/*"
 				sonarTestExclusions = sonarExclusions
 			}
 		}
-
 	}
 
 	sonarOrgKey, _ := orgKey.Run()
@@ -383,7 +424,7 @@ func main() {
 
 	purpose := promptui.Select{
 		Label: "Please select your purpose for creating this cloud run action files",
-		Items: []string{"for development with development environment (main)", "for development with production environment (staging)", "for production with production environment (production)"},
+		Items: []string{"for development with development environment (development)", "for development with production environment (staging)", "for production with production environment (production)"},
 	}
 
 	_, branching, _ := purpose.Run()
@@ -607,38 +648,29 @@ func main() {
 	}
 
 	_, includeTodo, _ := todo.Run()
-	answerTodo := ""
 
 	if includeTodo == "Yes" {
-		// folderPathTodo := ".github/workflows"
-		// os.MkdirAll(folderPathTodo, os.ModePerm)
-		// fTodo, errTodo := os.Create(".github/workflows/todo-issue.yaml")
+		folderPathTodo := ".github/workflows"
+		os.MkdirAll(folderPathTodo, os.ModePerm)
+		fTodo, errTodo := os.Create(".github/workflows/todo-to-issue.yaml")
 
-		// if errTodo != nil {
-		// 	log.Fatal(errTodo)
-		// }
+		if errTodo != nil {
+			log.Fatal(errTodo)
+		}
 
-		// defer fTodo.Close()
+		defer fTodo.Close()
 
-		// valTodo := templates.Todoaction()
-		// dataTodo := []byte(valTodo)
+		valTodo := templates.Todoaction()
+		dataTodo := []byte(valTodo)
 
-		// _, errTodo2 := fTodo.Write(dataTodo)
+		_, errTodo2 := fTodo.Write(dataTodo)
 
-		// if errTodo2 != nil {
-		// 	log.Fatal(errTodo2)
-		// }
+		if errTodo2 != nil {
+			log.Fatal(errTodo2)
 
-		answerTodo = `  todo:
-	    runs-on: ubuntu-latest
-	    steps:
-	    - uses: actions/checkout@master
-	    - name: TODO to Issue
-	        uses: alstr/todo-to-issue-action@v4.5
-	        id: todo`
+		}
+
 	}
-
-	fmt.Printf(color.Red + "\nYou might need to fix the indentation issues in generated .yaml file later on.\n" + color.Reset)
 
 	/* END TD TO ISSUE ACTIONS */
 
@@ -701,20 +733,35 @@ func main() {
 	}
 
 	_, includeSemRelease, _ := semRelease.Run()
-	answerSemantic := ""
 
 	if includeSemRelease == "Yes" {
-		answerSemantic = `  semantic-release:
-	    runs-on: ubuntu-latest
-	    steps:
-		- name : Checkout
-	      uses: actions/checkout@master
-	    - name: Semantic Release
-	      uses: cycjimmy/semantic-release-action@v2
-		  env:
-      		GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-     		 NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-	    `
+
+		semBranch := promptui.Prompt{
+			Label:   "Which branch would you like to run the semantic releases?",
+			Default: "release/x.x.x",
+		}
+
+		semanticBranch, _ := semBranch.Run()
+
+		folderPathSemantic := ".github/workflows"
+		os.MkdirAll(folderPathSemantic, os.ModePerm)
+		fSemanticcloud, fSemanticErr := os.Create(".github/workflows/semantic-releases.yaml")
+
+		if fSemanticErr != nil {
+			log.Fatal(fSemanticErr)
+		}
+
+		defer fSemanticcloud.Close()
+
+		valSemantic := templates.Sonaraction(semanticBranch)
+		dataSemantic := []byte(valSemantic)
+
+		_, errSemantic := fSemanticcloud.Write(dataSemantic)
+
+		if errSemantic != nil {
+			log.Fatal(errSemantic)
+		}
+
 	}
 
 	/* END SEMANTIC RELEASES ACTIONS */
@@ -731,7 +778,7 @@ func main() {
 
 	defer fAll.Close()
 
-	valAll := templates.ThcToolKit(answer1, answer2, answer3, answer4_final, answer5, answerTodo, answerSemantic, answerTestApi)
+	valAll := templates.ThcToolKit(answer1, answer2, answer3, answer4_final, answer5)
 	dataAll := []byte(valAll)
 
 	_, errAll2 := fAll.Write(dataAll)
@@ -741,9 +788,11 @@ func main() {
 	}
 
 	/* END thc-deployment.yaml file creation */
-	fmt.Printf(color.Purple + "\n\nAll jobs will be compiled into one branch " + answer1 + " except for actions such as commitlint.\n\n" + color.Reset)
+
 	fmt.Printf("\n" + color.Green + "THC magic " + color.Reset + "has successfully been casted. Push the repo to your " + color.Red + "branch" + color.Reset + " and you're good to go!\n")
 	fmt.Printf("\np/s: Please reach out to" + color.Blue + " Adri or Ming " + color.Reset + "for the" + color.Yellow + " secrets " + color.Reset + "before you make a commit.\n\n")
+
+	fmt.Printf(color.Yellow + "\nNOTE: You might need to double check fix the yaml indentation issues in generated .yaml file.\n" + color.Reset)
 
 }
 

@@ -21,19 +21,33 @@ var (
 func StreamSonaraction(qw422016 *qt422016.Writer, sonarBranch string) {
 //line sonaraction.qtpl:1
 	qw422016.N().S(`
+# Copyright 2021 The Hacker Collective, LLC.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
 on:
   # Trigger analysis when pushing in master or pull requests, and when creating
   # a pull request.
   push:
     branches:
-      - `)
-//line sonaraction.qtpl:8
+      - [`)
+//line sonaraction.qtpl:21
 	qw422016.E().S(sonarBranch)
-//line sonaraction.qtpl:8
-	qw422016.N().S(`
+//line sonaraction.qtpl:21
+	qw422016.N().S(`]
   pull_request:
       types: [opened, synchronize, reopened]
+      
 name: Main Workflow
 jobs:
   sonarcloud:
@@ -50,31 +64,31 @@ jobs:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
 `)
-//line sonaraction.qtpl:26
+//line sonaraction.qtpl:40
 }
 
-//line sonaraction.qtpl:26
+//line sonaraction.qtpl:40
 func WriteSonaraction(qq422016 qtio422016.Writer, sonarBranch string) {
-//line sonaraction.qtpl:26
+//line sonaraction.qtpl:40
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line sonaraction.qtpl:26
+//line sonaraction.qtpl:40
 	StreamSonaraction(qw422016, sonarBranch)
-//line sonaraction.qtpl:26
+//line sonaraction.qtpl:40
 	qt422016.ReleaseWriter(qw422016)
-//line sonaraction.qtpl:26
+//line sonaraction.qtpl:40
 }
 
-//line sonaraction.qtpl:26
+//line sonaraction.qtpl:40
 func Sonaraction(sonarBranch string) string {
-//line sonaraction.qtpl:26
+//line sonaraction.qtpl:40
 	qb422016 := qt422016.AcquireByteBuffer()
-//line sonaraction.qtpl:26
+//line sonaraction.qtpl:40
 	WriteSonaraction(qb422016, sonarBranch)
-//line sonaraction.qtpl:26
+//line sonaraction.qtpl:40
 	qs422016 := string(qb422016.B)
-//line sonaraction.qtpl:26
+//line sonaraction.qtpl:40
 	qt422016.ReleaseByteBuffer(qb422016)
-//line sonaraction.qtpl:26
+//line sonaraction.qtpl:40
 	return qs422016
-//line sonaraction.qtpl:26
+//line sonaraction.qtpl:40
 }
