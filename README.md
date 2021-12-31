@@ -38,7 +38,7 @@ go build main.go
 ```
 
 
-`NOTE (for maintainers):` The deployment and procedure notes are [here](https://github.com/thcollective/deployment-automation-tool/blob/main/PROCEDURE.md)
+`NOTE (for maintainers):` The deployment and procedure notes are [here](https://github.com/thcollective/thc-deployment-tool/blob/main/PROCEDURE.md)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
