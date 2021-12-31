@@ -182,18 +182,6 @@ func main() {
 
 		}
 
-		// TODO Setting up GitHub Actions Workflows to automate the API tests
-		/*
-					test-api:
-			    runs-on: ubuntu-latest
-			    steps:
-			    - uses: actions/checkout@main
-
-			    - name: Docker for newman
-			      run: |
-			        docker run -v $(pwd)/test:/etc/newman -t postman/newman:latest run "HttpbinForNewman.json" --reporters="cli"
-		*/
-
 		testApi := promptui.Select{
 			Label: "Do you want to test your API automatically using Github Actions?",
 			Items: []string{"Yes", "No"},
@@ -203,14 +191,59 @@ func main() {
 
 		if includeTestApi == "Yes" {
 
+			ApiFolder := promptui.Prompt{
+				Label:   "Please speficy the folder name that you want to test",
+				Default: "test",
+			}
+
+			ApiFolderSelected, _ := ApiFolder.Run()
+
+			ApiFiles := promptui.Prompt{
+				Label:   "Please speficy the collection name that you want to test",
+				Default: "collection.json",
+			}
+
+			ApiFilesSelected, _ := ApiFiles.Run()
+
+			ApiEnv := promptui.Prompt{
+				Label:   "Please speficy the environment file for testing",
+				Default: "environment.json",
+			}
+
+			ApiEnvSelected, _ := ApiEnv.Run()
+
 			answerTestApi = `	test-api:
 			runs-on: ubuntu-latest
 			steps:
-			- uses: actions/checkout@main
-
-			- name: Docker for newman
+			# Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+			- uses: actions/checkout@v2
+			  
+			# Install Node on the runner
+			- name: Install Node
+			  uses: actions/setup-node@v1
+			  with: 
+				node-version: '14.x'
+			
+			# Install the newman command line utility and also install the html extra reporter
+			- name: Install newman
 			  run: |
-				docker run -v $(pwd)/test:/etc/newman -t postman/newman:latest run "HttpbinForNewman.json" --reporters="cli"`
+			   npm install -g newman
+			   npm install -g newman-reporter-htmlextra
+			# Make directory to upload the test results
+			- name: Make Directory for results
+			  run: mkdir -p testResults
+		
+			# Run the API collection
+			- name: Run API collection
+			  run: |
+			   newman run ./` + ApiFolderSelected + `/` + ApiFilesSelected + ` -e ./` + ApiFolderSelected + `/` + ApiEnvSelected + ` -r htmlextra --reporter-hmlextra-export testResults/htmlreport.html --reporter-htmlextra-darkTheme  > testResults/runreport1.html
+			    
+			# Upload the contents of Test Results directory to workspace
+			- name: Output the run Details
+			  uses: actions/upload-artifact@v2
+			  with: 
+			   name: RunReports
+			   path: testResults`
 		}
 
 	}
@@ -218,6 +251,9 @@ func main() {
 
 	/* START SONARCLOUD GITHUB ACTIONS*/
 	fmt.Println(color.Bold + "PHASE: SONARCLOUD ACTIONS" + color.Reset)
+
+	// TODO should be only in development && staging branch
+	// assignees: ass77
 
 	sonarRootDir, sonarTestDir, sonarTestInclusions, sonarTestExclusions := "", "", "", ""
 
@@ -379,8 +415,8 @@ func main() {
 	_, branching, _ := purpose.Run()
 	answer1 := ""
 
-	if branching == "for development with development environment (main)" {
-		answer1 = "main"
+	if branching == "for development with development environment (development)" {
+		answer1 = "development"
 	} else if branching == "for development with production environment (staging)" {
 		answer1 = "staging"
 	} else if branching == "for production with production environment (production)" {
@@ -635,7 +671,7 @@ func main() {
 	/* START COMMITLINT ACTIONS */
 	fmt.Println(color.Bold + "PHASE: COMMITLINT ACTIONS" + color.Reset)
 
-	fmt.Printf("\n" + color.Yellow + "Only applicable pull request " + color.Reset)
+	fmt.Printf("\n" + color.Yellow + "Only applicable on pull request " + color.Reset)
 
 	comlint := promptui.Select{
 		Label: "Do you want to add commitlint actions?",
@@ -648,21 +684,35 @@ func main() {
 
 		folderPathCommitLint := ".github/workflows"
 		os.MkdirAll(folderPathCommitLint, os.ModePerm)
-		fCommitLink, fCommitLinkErr := os.Create(".github/workflows/commitlint.yaml")
+		fCommitLint, fCommitLintErr := os.Create(".github/workflows/commitlint.yaml")
+		fCommitLintConfig, fCommitLintConfigErr := os.Create("commitlint.config.js")
 
-		if fCommitLinkErr != nil {
-			log.Fatal(fCommitLinkErr)
+		if fCommitLintErr != nil {
+			log.Fatal(fCommitLintErr)
 		}
 
-		defer fCommitLink.Close()
+		if fCommitLintConfigErr != nil {
+			log.Fatal(fCommitLintConfigErr)
+		}
+
+		defer fCommitLint.Close()
+		defer fCommitLintConfig.Close()
 
 		valCommitLint := templates.Commitlint()
 		dataCommitLint := []byte(valCommitLint)
 
-		_, errCommitLintFile := fCommitLink.Write(dataCommitLint)
+		valCommitLintConfig := templates.CommitlintConfig()
+		dataCommitLintConfig := []byte(valCommitLintConfig)
+
+		_, errCommitLintFile := fCommitLint.Write(dataCommitLint)
+		_, errCommitLintConfigFile := fCommitLintConfig.Write(dataCommitLintConfig)
 
 		if errCommitLintFile != nil {
 			log.Fatal(errCommitLintFile)
+		}
+
+		if errCommitLintConfigFile != nil {
+			log.Fatal(errCommitLintConfigFile)
 		}
 
 	}
@@ -717,7 +767,7 @@ func main() {
 	}
 
 	/* END thc-deployment.yaml file creation */
-
+	fmt.Printf(color.Purple + "\n\nAll jobs will be compiled into one branch " + answer1 + " except for actions such as commitlint.\n\n" + color.Reset)
 	fmt.Printf("\n" + color.Green + "THC magic " + color.Reset + "has successfully been casted. Push the repo to your " + color.Red + "branch" + color.Reset + " and you're good to go!\n")
 	fmt.Printf("\np/s: Please reach out to" + color.Blue + " Adri or Ming " + color.Reset + "for the" + color.Yellow + " secrets " + color.Reset + "before you make a commit.\n\n")
 
