@@ -1,8 +1,6 @@
-name: todo
+name: Todo
 
-on:
-  push:
-      - '*'
+on: ["push"]
 
 jobs:
   todo:
@@ -10,5 +8,5 @@ jobs:
     steps:
       - uses: "actions/checkout@master"
       - name: "TODO to Issue"
-        uses: "alstr/todo-to-issue-action@v4.5.3"
+        uses: "alstr/todo-to-issue-action@v4.5"
         id: "todo"
