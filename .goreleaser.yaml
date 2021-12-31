@@ -1,0 +1,25 @@
+#  multiple binaries
+builds:
+  - main: ./cmd/cli
+    id: "cli"
+    binary: cli
+    goos:
+      - linux
+      - darwin
+      - windows
+
+  - main: ./cmd/worker
+    id: "worker"
+    binary: worker
+    goos:
+      - linux
+      - darwin
+      - windows
+
+  - main: ./cmd/tracker
+    id: "tracker"
+    binary: tracker
+    goos:
+      - linux
+      - darwin
+      - windows
