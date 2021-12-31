@@ -339,32 +339,6 @@ func main() {
 		log.Fatal(errSonarProps)
 	}
 
-	// scannerBranch := promptui.Prompt{
-	// 	Label:   "Which branch would you like to run the code scanner?",
-	// 	Default: "main",
-	// }
-
-	// sonarBranch, _ := scannerBranch.Run()
-
-	// folderPathSonar := ".github/workflows"
-	// os.MkdirAll(folderPathSonar, os.ModePerm)
-	// fSonarcloud, fSonarErr := os.Create(".github/workflows/sonarcloud.yaml")
-
-	// if fSonarErr != nil {
-	// 	log.Fatal(fSonarErr)
-	// }
-
-	// defer fSonarcloud.Close()
-
-	// valSonar := templates.Sonaraction(sonarBranch)
-	// dataSonar := []byte(valSonar)
-
-	// _, errSonar := fSonarcloud.Write(dataSonar)
-
-	// if errSonar != nil {
-	// 	log.Fatal(errSonar)
-	// }
-
 	/* END SONARCLOUD GITHUB ACTIONS*/
 
 	/* START SENTRY GITHUB ACTIONS*/
