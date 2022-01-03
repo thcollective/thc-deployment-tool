@@ -270,127 +270,136 @@ func main() {
 	/* START SONARCLOUD GITHUB ACTIONS*/
 	fmt.Println(color.Bold + "PHASE: SONARCLOUD ACTIONS" + color.Reset)
 
-	scannerBranch := promptui.Prompt{
-		Label:   "Which branch would you like to run the code scanner?",
-		Default: "development, staging",
+	runSonar := promptui.Select{
+		Label: "Do you want to run sonarcloud actions?",
+		Items: []string{"Yes", "No"},
 	}
 
-	sonarBranch, _ := scannerBranch.Run()
+	_, runSonarSelected, _ := runSonar.Run()
 
-	folderPathSonar := ".github/workflows"
-	os.MkdirAll(folderPathSonar, os.ModePerm)
-	fSonarcloud, fSonarErr := os.Create(".github/workflows/sonarcloud.yaml")
+	if runSonarSelected == "Yes" {
+		scannerBranch := promptui.Prompt{
+			Label:   "Which branch would you like to run the code scanner?",
+			Default: "development, staging",
+		}
 
-	if fSonarErr != nil {
-		log.Fatal(fSonarErr)
-	}
+		sonarBranch, _ := scannerBranch.Run()
 
-	defer fSonarcloud.Close()
+		folderPathSonar := ".github/workflows"
+		os.MkdirAll(folderPathSonar, os.ModePerm)
+		fSonarcloud, fSonarErr := os.Create(".github/workflows/sonarcloud.yaml")
 
-	valSonar := templates.Sonaraction(sonarBranch)
-	dataSonar := []byte(valSonar)
+		if fSonarErr != nil {
+			log.Fatal(fSonarErr)
+		}
 
-	_, errSonar := fSonarcloud.Write(dataSonar)
+		defer fSonarcloud.Close()
 
-	if errSonar != nil {
-		log.Fatal(errSonar)
-	}
+		valSonar := templates.Sonaraction(sonarBranch)
+		dataSonar := []byte(valSonar)
 
-	sonarRootDir, sonarTestDir, sonarTestInclusions, sonarTestExclusions := "", "", "", ""
+		_, errSonar := fSonarcloud.Write(dataSonar)
 
-	fSonarProps, fSonarPropsErr := os.Create("sonar-project.properties")
+		if errSonar != nil {
+			log.Fatal(errSonar)
+		}
 
-	if fSonarPropsErr != nil {
-		log.Fatal(fSonarProps)
-	}
+		sonarRootDir, sonarTestDir, sonarTestInclusions, sonarTestExclusions := "", "", "", ""
 
-	defer fSonarProps.Close()
+		fSonarProps, fSonarPropsErr := os.Create("sonar-project.properties")
 
-	orgKey := promptui.Prompt{
-		Label:   "Add your sonarcloud organization key",
-		Default: "${{secrets.SONAR_ORG}}",
-	}
+		if fSonarPropsErr != nil {
+			log.Fatal(fSonarProps)
+		}
 
-	projKey := promptui.Prompt{
-		Label:   "Add your sonarcloud project key",
-		Default: "",
-	}
+		defer fSonarProps.Close()
 
-	sonarIgnore := promptui.Select{
-		Label: "Do you want to ignore specific directories / files from sonarcloud?",
-		Items: []string{"*Yes", "No"},
-	}
+		orgKey := promptui.Prompt{
+			Label:   "Add your sonarcloud organization key",
+			Default: "${{secrets.SONAR_ORG}}",
+		}
 
-	_, ansIgnore, _ := sonarIgnore.Run()
-
-	if ansIgnore == "*Yes" {
-		rootDir := promptui.Prompt{
-			Label:   "Please specify the root directory of your project",
+		projKey := promptui.Prompt{
+			Label:   "Add your sonarcloud project key",
 			Default: "",
 		}
 
-		rootDirSelected, _ := rootDir.Run()
-
-		testDirectory := promptui.Select{
-			Label: "Do you have a test directory to scan? If so, is your test code is intermingled with your source code?",
-			Items: []string{"Yes", "No", "I don't have any test directory"},
+		sonarIgnore := promptui.Select{
+			Label: "Do you want to ignore specific directories / files from sonarcloud?",
+			Items: []string{"*Yes", "No"},
 		}
-		_, testDir, _ := testDirectory.Run()
-		sonarRootDir = rootDirSelected
 
-		if testDir == "Yes" {
+		_, ansIgnore, _ := sonarIgnore.Run()
 
-			sonarTestDir = "sonar.tests = " + rootDirSelected
-
-			fmt.Println(color.Blue + `You may need to modify the values for sonar.test.inclusions in sonar-project.properties file based on your own test directory-level` + color.Reset)
-
-			sonarInclusions := "sonar.test.inclusions = " + rootDirSelected + "/**/test/**/*"
-			sonarTestInclusions = sonarInclusions
-
-			sonarExclusions := "sonar.exclusions = " + rootDirSelected + "/**/test/**/*"
-			sonarTestExclusions = sonarExclusions
-
-		} else {
-			testDirName := promptui.Prompt{
-				Label:   "Please specify the test directory in the project",
-				Default: "tests",
+		if ansIgnore == "*Yes" {
+			rootDir := promptui.Prompt{
+				Label:   "Please specify the root directory of your project",
+				Default: "",
 			}
 
-			testDirNameSelected, _ := testDirName.Run()
+			rootDirSelected, _ := rootDir.Run()
 
-			sonarTestDir = "sonar.tests = " + testDirNameSelected
-
-			testExclude := promptui.Select{
-				Label: "Do you want to exclude some folders from code scanning?",
-				Items: []string{"Yes", "No"},
+			testDirectory := promptui.Select{
+				Label: "Do you have a test directory to scan? If so, is your test code is intermingled with your source code?",
+				Items: []string{"Yes", "No", "I don't have any test directory"},
 			}
-			_, testExcludeDir, _ := testExclude.Run()
+			_, testDir, _ := testDirectory.Run()
+			sonarRootDir = rootDirSelected
 
-			if testExcludeDir == "Yes" {
+			if testDir == "Yes" {
 
-				excludeDir := promptui.Prompt{
-					Label:   "Please specify the directory that you want to exclude from code scanning",
-					Default: "foo, bar",
+				sonarTestDir = "sonar.tests = " + rootDirSelected
+
+				fmt.Println(color.Blue + `You may need to modify the values for sonar.test.inclusions in sonar-project.properties file based on your own test directory-level` + color.Reset)
+
+				sonarInclusions := "sonar.test.inclusions = " + rootDirSelected + "/**/test/**/*"
+				sonarTestInclusions = sonarInclusions
+
+				sonarExclusions := "sonar.exclusions = " + rootDirSelected + "/**/test/**/*"
+				sonarTestExclusions = sonarExclusions
+
+			} else {
+				testDirName := promptui.Prompt{
+					Label:   "Please specify the test directory in the project",
+					Default: "tests",
 				}
 
-				excludeDirSelected, _ := excludeDir.Run()
+				testDirNameSelected, _ := testDirName.Run()
 
-				sonarExclusions := "sonar.exclusions = " + excludeDirSelected + "/**/test/**/*"
-				sonarTestExclusions = sonarExclusions
+				sonarTestDir = "sonar.tests = " + testDirNameSelected
+
+				testExclude := promptui.Select{
+					Label: "Do you want to exclude some folders from code scanning?",
+					Items: []string{"Yes", "No"},
+				}
+				_, testExcludeDir, _ := testExclude.Run()
+
+				if testExcludeDir == "Yes" {
+
+					excludeDir := promptui.Prompt{
+						Label:   "Please specify the directory that you want to exclude from code scanning",
+						Default: "foo, bar",
+					}
+
+					excludeDirSelected, _ := excludeDir.Run()
+
+					sonarExclusions := "sonar.exclusions = " + excludeDirSelected + "/**/test/**/*"
+					sonarTestExclusions = sonarExclusions
+				}
 			}
 		}
-	}
 
-	sonarOrgKey, _ := orgKey.Run()
-	sonarProjKey, _ := projKey.Run()
+		sonarOrgKey, _ := orgKey.Run()
+		sonarProjKey, _ := projKey.Run()
 
-	valSonarProps := templates.SonarProps(sonarOrgKey, sonarProjKey, sonarRootDir, sonarTestDir, sonarTestInclusions, sonarTestExclusions)
-	dataSonarProps := []byte(valSonarProps)
+		valSonarProps := templates.SonarProps(sonarOrgKey, sonarProjKey, sonarRootDir, sonarTestDir, sonarTestInclusions, sonarTestExclusions)
+		dataSonarProps := []byte(valSonarProps)
 
-	_, errSonarProps := fSonarProps.Write(dataSonarProps)
+		_, errSonarProps := fSonarProps.Write(dataSonarProps)
 
-	if errSonarProps != nil {
-		log.Fatal(errSonarProps)
+		if errSonarProps != nil {
+			log.Fatal(errSonarProps)
+		}
 	}
 
 	/* END SONARCLOUD GITHUB ACTIONS*/
