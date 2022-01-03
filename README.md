@@ -14,13 +14,18 @@ This deployment automation tool helps users to generate basic files that are req
 * Sentry github actions and properties files (under development)
 * Cloud Run github actions 
 
-### How To Run This Project (production)
+### How To Run This Project
 
 1. Download the latest binary package [here](https://github.com/thcollective/thc-deployment-tool/releases)
 
-2. Run `./main` on your working project root directory, start answering the prompt and then the spell shall be casted. 
+2. Extract the folder, drag the file named `cli` to your root directory of your working project.
 
-## How To Run (development)
+3. Run `./cli` on your working project root directory, preferably run it on your `cli`, start answering the prompt and then the spell shall be casted. 
+
+`NOTE (for maintainers):` The deployment and procedure notes are [here](https://github.com/thcollective/thc-deployment-tool/blob/main/PROCEDURE.md)
+
+
+## How To Run (in development mode)
 
 1. Install dependencies
 ```
@@ -29,16 +34,15 @@ go mod tidy
 
 2. Run main file
 ```
-go run main.go
+go run cmd/cli/main.go
 ```
 
 3. Build main file
 ```
-go build main.go
+go build cmd/cli/main.go
 ```
 
 
-`NOTE (for maintainers):` The deployment and procedure notes are [here](https://github.com/thcollective/thc-deployment-tool/blob/main/PROCEDURE.md)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 

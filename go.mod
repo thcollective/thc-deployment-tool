@@ -1,4 +1,4 @@
-module firstdemo
+module thcdeploymentool
 
 go 1.17
 

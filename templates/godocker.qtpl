@@ -1,4 +1,4 @@
-{% func Godocker(portSelected string) %}
+{% func Godocker(portSelected string, mainScriptDir string) %}
 
 # Build Stage
 FROM golang:latest as builder
@@ -10,7 +10,7 @@ WORKDIR /app
 COPY . .
 
 # Build the Go app
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main ./cmd/app/main.go
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main ./{%s mainScriptDir %}
 
 
 # Production Stage

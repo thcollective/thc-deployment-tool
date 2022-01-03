@@ -18,7 +18,7 @@ var (
 )
 
 //line godocker.qtpl:1
-func StreamGodocker(qw422016 *qt422016.Writer, portSelected string) {
+func StreamGodocker(qw422016 *qt422016.Writer, portSelected string, mainScriptDir string) {
 //line godocker.qtpl:1
 	qw422016.N().S(`
 
@@ -32,7 +32,11 @@ WORKDIR /app
 COPY . .
 
 # Build the Go app
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main ./cmd/app/main.go
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main ./`)
+//line godocker.qtpl:13
+	qw422016.E().S(mainScriptDir)
+//line godocker.qtpl:13
+	qw422016.N().S(`
 
 
 # Production Stage
@@ -60,22 +64,22 @@ CMD ["./main"]
 }
 
 //line godocker.qtpl:32
-func WriteGodocker(qq422016 qtio422016.Writer, portSelected string) {
+func WriteGodocker(qq422016 qtio422016.Writer, portSelected string, mainScriptDir string) {
 //line godocker.qtpl:32
 	qw422016 := qt422016.AcquireWriter(qq422016)
 //line godocker.qtpl:32
-	StreamGodocker(qw422016, portSelected)
+	StreamGodocker(qw422016, portSelected, mainScriptDir)
 //line godocker.qtpl:32
 	qt422016.ReleaseWriter(qw422016)
 //line godocker.qtpl:32
 }
 
 //line godocker.qtpl:32
-func Godocker(portSelected string) string {
+func Godocker(portSelected string, mainScriptDir string) string {
 //line godocker.qtpl:32
 	qb422016 := qt422016.AcquireByteBuffer()
 //line godocker.qtpl:32
-	WriteGodocker(qb422016, portSelected)
+	WriteGodocker(qb422016, portSelected, mainScriptDir)
 //line godocker.qtpl:32
 	qs422016 := string(qb422016.B)
 //line godocker.qtpl:32

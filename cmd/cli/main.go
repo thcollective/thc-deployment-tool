@@ -2,11 +2,11 @@ package main
 
 import (
 	"errors"
-	"firstdemo/templates"
 	"fmt"
 	"log"
 	"os"
 	"regexp"
+	"thcdeploymentool/templates"
 
 	"github.com/TwiN/go-color"
 	"github.com/manifoldco/promptui"
@@ -172,6 +172,13 @@ func main() {
 
 			globalPort = portSelected
 
+			mainDir := promptui.Prompt{
+				Label:   "Please specify where is your main.go located. ",
+				Default: "cmd/app/main.go",
+			}
+
+			mainScriptDir, _ := mainDir.Run()
+
 			f, err := os.Create("Dockerfile")
 
 			if err != nil {
@@ -180,7 +187,7 @@ func main() {
 
 			defer f.Close()
 
-			val := templates.Godocker(portSelected)
+			val := templates.Godocker(portSelected, mainScriptDir)
 			data := []byte(val)
 
 			_, err2 := f.Write(data)
@@ -790,7 +797,7 @@ func main() {
 	/* END thc-deployment.yaml file creation */
 
 	fmt.Printf("\n" + color.Green + "THC magic " + color.Reset + "has successfully been casted. Push the repo to your " + color.Red + "branch" + color.Reset + " and you're good to go!\n")
-	fmt.Printf("\np/s: Please reach out to" + color.Blue + " Adri or Ming " + color.Reset + "for the" + color.Yellow + " secrets " + color.Reset + "before you make a commit.\n\n")
+	fmt.Printf("\np/s: Please reach out to" + color.Blue + " Adri or Ming " + color.Reset + "for the" + color.Yellow + " secrets " + color.Reset + "before you make a commit.\n")
 
 	fmt.Printf(color.Yellow + "\nNOTE: You might need to double check fix the yaml indentation issues in generated .yaml file.\n" + color.Reset)
 
