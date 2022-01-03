@@ -14,8 +14,9 @@ import (
 
 func main() {
 
-	// initialize variables
+	// initialize global variables
 	globalPort := ""
+	ansEnvFile := ""
 
 	// validation length
 	validate := func(input string) error {
@@ -27,17 +28,6 @@ func main() {
 
 	/* START DOCKERFILE FILE CREATION*/
 	fmt.Println(color.Bold + "PHASE: DOCKERFILE CREATION" + color.Reset)
-
-	// TODO need to create .dockerignore file and env (buildtime env) to be used in cloud run deploy .yaml file > thc-deployment.yaml
-	// assignees: ass77
-	//  - name: write environment file
-	// 	run: |
-	// 	touch .env
-	// 	echo BACKEND_URL=${{secrets.BACKEND_URL_PROD}} >> .env
-	// 	echo SENTRY_DSN=${{secrets.SENTRY_DSN}} >> .env
-	// 	echo SENTRY_TRACERATE=0.5 >> .env
-	// 	echo ADMIN_TOKEN=${{secrets.ADMIN_TOKEN}} >> .env
-	// 	cat .env
 
 	project := promptui.Select{
 		Label: "What project are you working on?",
@@ -257,6 +247,24 @@ func main() {
 		}
 
 	}
+
+	fDockerIgnore, errDockerIgnore := os.Create(".dockerignore")
+
+	if errDockerIgnore != nil {
+		log.Fatal(errDockerIgnore)
+	}
+
+	defer fDockerIgnore.Close()
+
+	valDockerIgnore := templates.Dockerignore()
+	dataDockerIgnore := []byte(valDockerIgnore)
+
+	_, errDockerIgnoreFile := fDockerIgnore.Write(dataDockerIgnore)
+
+	if errDockerIgnoreFile != nil {
+		log.Fatal(errDockerIgnoreFile)
+	}
+
 	/* END DOCKERFILE FILE CREATION*/
 
 	/* START SONARCLOUD GITHUB ACTIONS*/
@@ -300,7 +308,7 @@ func main() {
 
 	orgKey := promptui.Prompt{
 		Label:   "Add your sonarcloud organization key",
-		Default: "thcollective",
+		Default: "${{secrets.SONAR_ORG}}",
 	}
 
 	projKey := promptui.Prompt{
@@ -333,8 +341,6 @@ func main() {
 		if testDir == "Yes" {
 
 			sonarTestDir = "sonar.tests = " + rootDirSelected
-			//TODO prompt user on where do the test folder/file lives :directory-level
-			// assignees: ass77
 
 			fmt.Println(color.Blue + `You may need to modify the values for sonar.test.inclusions in sonar-project.properties file based on your own test directory-level` + color.Reset)
 
@@ -568,84 +574,6 @@ func main() {
 
 	}
 
-	// env := promptui.Select{
-	// 	Label: "Do you need to set environment variables?",
-	// 	Items: []string{"Yes", "No"},
-	// }
-
-	// _, answer8, err := env.Run()
-
-	// TODO setting up environment variables in cloud run (need array | object)
-	// assignees: ass77
-
-	// envNames := ""
-	// envValues := ""``
-	// answerEnv := ""
-
-	// if answer8 == "Yes" {
-
-	// 	setEnvNames := promptui.Prompt{
-	// 		Label:   "Set your environment name",
-	// 		Default: "",
-	// 	}
-
-	// 	setEnvValues := promptui.Prompt{
-	// 		Label:   "Set your environment value",
-	// 		Default: "",
-	// 	}
-
-	// 	answer9 := ""
-	// 	answer9, _ = setEnvNames.Run()
-	// 	envNames = answer9
-
-	// 	answer10 := ""
-	// 	answer10, _ = setEnvValues.Run()
-	// 	envValues = answer10
-
-	// 	more := promptui.Select{
-	// 		Label: "Do you need to add more environment variables?",
-	// 		Items: []string{"Yes", "No"},
-	// 	}
-
-	// 	_, answer11, _ := more.Run()
-
-	// 	if answer11 == "Yes" {
-
-	// 		fmt.Printf("more env...")
-	// 		// repeat setEnvNames and setEnvValues and push value to the array
-	// 	}
-
-	// 	// answerEnv will print x times (based on the array length) and loop the envNames and envValues (different values)
-	// 	answerEnv = fmt.Sprintf(`--set-env-vars %s=%s`, envNames, envValues)
-
-	// }
-
-	// if err != nil {
-	// 	fmt.Printf("Opps, something wong with the tools, please try again. %v\n", err)
-	// 	return
-	// }
-
-	// folderPathGaction := ".github/workflows"
-	// os.MkdirAll(folderPathGaction, os.ModePerm)
-
-	// fGaction, errGaction := os.Create(".github/workflows/cloud-run-action.yaml")
-
-	// if errGaction != nil {
-	// 	log.Fatal(errGaction)
-	// }
-
-	// defer fGaction.Close()
-
-	// valGaction := templates.Gaction(answer1, answer2, answer3, answer4_final, answer5)
-	// dataGaction := []byte(valGaction)
-
-	// _, err2 := fGaction.Write(dataGaction)
-
-	// if err2 != nil {
-	// 	log.Fatal(err2)
-	// }
-	/* END CLOUD RUN GITHUB ACTIONS*/
-
 	/* START TD TO ISSUE ACTIONS */
 	fmt.Println(color.Bold + "PHASE: TODO TO ISSUE ACTIONS CREATION" + color.Reset)
 
@@ -745,7 +673,7 @@ func main() {
 
 		semBranch := promptui.Prompt{
 			Label:   "Which branch would you like to run the semantic releases?",
-			Default: "release/x.x.x",
+			Default: "release/**",
 		}
 
 		semanticBranch, _ := semBranch.Run()
@@ -774,6 +702,61 @@ func main() {
 	/* END SEMANTIC RELEASES ACTIONS */
 
 	/* START thc-deployment.yaml file creation */
+	fmt.Println(color.Bold + "PHASE: FINALIZING DEPLOYMENT FILE WITH ENV" + color.Reset)
+	envFile := promptui.Select{
+		Label: "Do you have/use .env file?",
+		Items: []string{"Yes", "No"},
+	}
+
+	_, includeEnvFile, _ := envFile.Run()
+
+	if includeEnvFile == "Yes" {
+
+		fmt.Println(color.Yellow + "Please provide the path of your .env file" + color.Reset)
+
+		// create an array to store environment name and value
+		env := []string{}
+
+		// prompt user to enter the environment name and value and push to env array
+		for {
+			envName := promptui.Prompt{
+				Label: "Environment name",
+			}
+
+			envNameVal, _ := envName.Run()
+
+			envValue := promptui.Prompt{
+				Label:   "Environment value",
+				Default: "${{secret.ENV_NAME}} if you using github secrets",
+			}
+
+			envValueVal, _ := envValue.Run()
+
+			env = append(env, envNameVal+"="+envValueVal)
+
+			// prompt user to continue or not
+			fmt.Println(color.Yellow + "Do you want to add more environment variables?" + color.Reset)
+
+			addMoreEnv := promptui.Select{
+				Label: "Select",
+				Items: []string{"Yes", "No"},
+			}
+
+			_, addMoreEnvVal, _ := addMoreEnv.Run()
+
+			if addMoreEnvVal == "No" {
+				break
+			}
+
+		}
+
+		for _, val := range env {
+			// fmt.Println("echo " + val + " >> .env")
+			special := `>>`
+			ansEnvFile += "echo " + val + " " + special + " .env\n\t\t\t\t\t\t"
+		}
+
+	}
 
 	folderPathAll := ".github/workflows"
 	os.MkdirAll(folderPathAll, os.ModePerm)
@@ -785,7 +768,7 @@ func main() {
 
 	defer fAll.Close()
 
-	valAll := templates.ThcToolKit(answer1, answer2, answer3, answer4_final, answer5)
+	valAll := templates.ThcToolKit(answer1, answer2, answer3, answer4_final, answer5, includeEnvFile, ansEnvFile)
 	dataAll := []byte(valAll)
 
 	_, errAll2 := fAll.Write(dataAll)
@@ -798,10 +781,14 @@ func main() {
 
 	fmt.Printf("\n" + color.Green + "THC magic " + color.Reset + "has successfully been casted. Push the repo to your " + color.Red + "branch" + color.Reset + " and you're good to go!\n")
 	fmt.Printf("\np/s: Please reach out to" + color.Blue + " Adri or Ming " + color.Reset + "for the" + color.Yellow + " secrets " + color.Reset + "before you make a commit.\n")
-
 	fmt.Printf(color.Yellow + "\nNOTE: You might need to double check fix the yaml indentation issues in generated .yaml file.\n" + color.Reset)
 
 }
+
+// func HtmlspecialChars(s string) string {
+// 	return html.EscapeString(s)
+
+// }
 
 // func ensureDir(dirName string) error {
 // 	err := os.Mkdir(dirName, os.ModeDir)

@@ -21,8 +21,6 @@ var (
 func StreamNginx(qw422016 *qt422016.Writer, portNo string) {
 //line nginx.qtpl:1
 	qw422016.N().S(`
-
-
 worker_processes  1;
 
 events {
@@ -32,9 +30,9 @@ events {
 http {
   server {
     listen `)
-//line nginx.qtpl:12
+//line nginx.qtpl:10
 	qw422016.E().S(portNo)
-//line nginx.qtpl:12
+//line nginx.qtpl:10
 	qw422016.N().S(`;
     server_name  localhost;
 
@@ -54,31 +52,31 @@ http {
 }
 
 `)
-//line nginx.qtpl:30
+//line nginx.qtpl:28
 }
 
-//line nginx.qtpl:30
+//line nginx.qtpl:28
 func WriteNginx(qq422016 qtio422016.Writer, portNo string) {
-//line nginx.qtpl:30
+//line nginx.qtpl:28
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line nginx.qtpl:30
+//line nginx.qtpl:28
 	StreamNginx(qw422016, portNo)
-//line nginx.qtpl:30
+//line nginx.qtpl:28
 	qt422016.ReleaseWriter(qw422016)
-//line nginx.qtpl:30
+//line nginx.qtpl:28
 }
 
-//line nginx.qtpl:30
+//line nginx.qtpl:28
 func Nginx(portNo string) string {
-//line nginx.qtpl:30
+//line nginx.qtpl:28
 	qb422016 := qt422016.AcquireByteBuffer()
-//line nginx.qtpl:30
+//line nginx.qtpl:28
 	WriteNginx(qb422016, portNo)
-//line nginx.qtpl:30
+//line nginx.qtpl:28
 	qs422016 := string(qb422016.B)
-//line nginx.qtpl:30
+//line nginx.qtpl:28
 	qt422016.ReleaseByteBuffer(qb422016)
-//line nginx.qtpl:30
+//line nginx.qtpl:28
 	return qs422016
-//line nginx.qtpl:30
+//line nginx.qtpl:28
 }

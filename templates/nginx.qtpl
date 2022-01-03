@@ -1,6 +1,4 @@
 {% func Nginx(portNo string) %}
-
-
 worker_processes  1;
 
 events {

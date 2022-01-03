@@ -11,18 +11,17 @@ This deployment automation tool helps users to generate basic files that are req
 
 * Dockerfile for frontend (vue, nuxt) and backend(expressJS, gofiber)
 * Sonarcloud github actions and properties file (need to seek from Admin for keys)
-* Sentry github actions and properties files (under development)
-* Cloud Run github actions 
+* Cloud Run github actions with .env
 
 ### How To Run This Project
 
-1. Download the latest binary package [here](https://github.com/thcollective/thc-deployment-tool/releases)
+1. Download the latest binary package [here](https://github.com/thcollective/thc-deployment-tool/releases) depending on your machine (Mac, Linux, Windows)
 
-2. Extract the folder, drag the file named `cli` to your root directory of your working project.
+2. Extract the folder and drag the file named `cli` to your root directory of your working project.
 
-3. Run `./cli` on your working project root directory, preferably run it on your `cli`, start answering the prompt and then the spell shall be casted. 
+3. Run `./cli` on your working project root directory, preferably run it on your `cli`, then start answering the prompt.
 
-`NOTE (for maintainers):` The deployment and procedure notes are [here](https://github.com/thcollective/thc-deployment-tool/blob/main/PROCEDURE.md)
+`NOTE (for maintainers):` The procedure and deployment notes are [here](https://github.com/thcollective/thc-deployment-tool/blob/main/PROCEDURE.md)
 
 
 ## How To Run (in development mode)

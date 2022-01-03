@@ -18,7 +18,7 @@ var (
 )
 
 //line thctoolkit.qtpl:1
-func StreamThcToolKit(qw422016 *qt422016.Writer, answer1 string, answer2 string, answer3 string, answer4 string, answer5 string) {
+func StreamThcToolKit(qw422016 *qt422016.Writer, answer1 string, answer2 string, answer3 string, answer4 string, answer5 string, includeEnvFile string, ansEnvFile string) {
 //line thctoolkit.qtpl:1
 	qw422016.N().S(`
 # Copyright 2021 The Hacker Collective, LLC.
@@ -66,77 +66,98 @@ jobs:
         run: |
           gcloud auth configure-docker
       
+      `)
+//line thctoolkit.qtpl:43
+	if includeEnvFile == "Yes" {
+//line thctoolkit.qtpl:43
+		qw422016.N().S(`
+      - name: Add and Write environment file
+        run: |
+          touch .env
+            `)
+//line thctoolkit.qtpl:47
+		qw422016.N().S(ansEnvFile)
+//line thctoolkit.qtpl:47
+		qw422016.N().S(`
+            cat .env
+      `)
+//line thctoolkit.qtpl:49
+	}
+//line thctoolkit.qtpl:49
+	qw422016.N().S(`
       - name: Build
         run: |
           docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/`)
-//line thctoolkit.qtpl:45
+//line thctoolkit.qtpl:52
 	qw422016.E().S(answer2)
-//line thctoolkit.qtpl:45
+//line thctoolkit.qtpl:52
 	qw422016.N().S(`:latest .
+          
       - name: Push
         run: |
           docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/`)
-//line thctoolkit.qtpl:48
+//line thctoolkit.qtpl:56
 	qw422016.E().S(answer2)
-//line thctoolkit.qtpl:48
+//line thctoolkit.qtpl:56
 	qw422016.N().S(`:latest
+
       - name: Deploy
         run: |
           gcloud run deploy `)
-//line thctoolkit.qtpl:51
+//line thctoolkit.qtpl:60
 	qw422016.E().S(answer2)
-//line thctoolkit.qtpl:51
+//line thctoolkit.qtpl:60
 	qw422016.N().S(` \
+          --project ${{ secrets.GCP_PROJECT_ID }} \
           --port `)
-//line thctoolkit.qtpl:52
+//line thctoolkit.qtpl:62
 	qw422016.E().S(answer3)
-//line thctoolkit.qtpl:52
+//line thctoolkit.qtpl:62
 	qw422016.N().S(` \
           --region `)
-//line thctoolkit.qtpl:53
+//line thctoolkit.qtpl:63
 	qw422016.E().S(answer4)
-//line thctoolkit.qtpl:53
+//line thctoolkit.qtpl:63
 	qw422016.N().S(` \
           --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/`)
-//line thctoolkit.qtpl:54
+//line thctoolkit.qtpl:64
 	qw422016.E().S(answer2)
-//line thctoolkit.qtpl:54
+//line thctoolkit.qtpl:64
 	qw422016.N().S(` \
           --platform managed \
           --`)
-//line thctoolkit.qtpl:56
+//line thctoolkit.qtpl:66
 	qw422016.E().S(answer5)
-//line thctoolkit.qtpl:56
+//line thctoolkit.qtpl:66
 	qw422016.N().S(` \
-          --quiet \
-          --project ${{ secrets.GCP_PROJECT_ID }}
+          --quiet
           
 `)
-//line thctoolkit.qtpl:60
+//line thctoolkit.qtpl:69
 }
 
-//line thctoolkit.qtpl:60
-func WriteThcToolKit(qq422016 qtio422016.Writer, answer1 string, answer2 string, answer3 string, answer4 string, answer5 string) {
-//line thctoolkit.qtpl:60
+//line thctoolkit.qtpl:69
+func WriteThcToolKit(qq422016 qtio422016.Writer, answer1 string, answer2 string, answer3 string, answer4 string, answer5 string, includeEnvFile string, ansEnvFile string) {
+//line thctoolkit.qtpl:69
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line thctoolkit.qtpl:60
-	StreamThcToolKit(qw422016, answer1, answer2, answer3, answer4, answer5)
-//line thctoolkit.qtpl:60
+//line thctoolkit.qtpl:69
+	StreamThcToolKit(qw422016, answer1, answer2, answer3, answer4, answer5, includeEnvFile, ansEnvFile)
+//line thctoolkit.qtpl:69
 	qt422016.ReleaseWriter(qw422016)
-//line thctoolkit.qtpl:60
+//line thctoolkit.qtpl:69
 }
 
-//line thctoolkit.qtpl:60
-func ThcToolKit(answer1 string, answer2 string, answer3 string, answer4 string, answer5 string) string {
-//line thctoolkit.qtpl:60
+//line thctoolkit.qtpl:69
+func ThcToolKit(answer1 string, answer2 string, answer3 string, answer4 string, answer5 string, includeEnvFile string, ansEnvFile string) string {
+//line thctoolkit.qtpl:69
 	qb422016 := qt422016.AcquireByteBuffer()
-//line thctoolkit.qtpl:60
-	WriteThcToolKit(qb422016, answer1, answer2, answer3, answer4, answer5)
-//line thctoolkit.qtpl:60
+//line thctoolkit.qtpl:69
+	WriteThcToolKit(qb422016, answer1, answer2, answer3, answer4, answer5, includeEnvFile, ansEnvFile)
+//line thctoolkit.qtpl:69
 	qs422016 := string(qb422016.B)
-//line thctoolkit.qtpl:60
+//line thctoolkit.qtpl:69
 	qt422016.ReleaseByteBuffer(qb422016)
-//line thctoolkit.qtpl:60
+//line thctoolkit.qtpl:69
 	return qs422016
-//line thctoolkit.qtpl:60
+//line thctoolkit.qtpl:69
 }
