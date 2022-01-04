@@ -13,7 +13,7 @@ This deployment automation tool helps users to generate basic files that are req
 * Sonarcloud github actions and properties file (need to seek from Admin for keys)
 * Cloud Run github actions with .env
 
-### How To Run This Project
+## How To Run 
 
 1. Download the latest binary package [here](https://github.com/thcollective/thc-deployment-tool/releases) depending on your machine (Mac, Linux, Windows)
 
@@ -24,7 +24,7 @@ This deployment automation tool helps users to generate basic files that are req
 `NOTE (for maintainers):` The procedure and deployment notes are [here](https://github.com/thcollective/thc-deployment-tool/blob/main/PROCEDURE.md)
 
 
-## How To Run (in development mode)
+### How To Run (in development mode)
 
 1. Install dependencies
 ```
