@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"os/signal"
 	"regexp"
 	"thcdeploymentool/templates"
 
@@ -13,6 +14,16 @@ import (
 )
 
 func main() {
+
+	// break if user hits ctrl+c | d
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, os.Interrupt)
+	go func() {
+		for sig := range c {
+			fmt.Println('\n', sig)
+			os.Exit(1)
+		}
+	}()
 
 	// initialize global variables
 	globalPort := ""
@@ -403,40 +414,6 @@ func main() {
 	}
 
 	/* END SONARCLOUD GITHUB ACTIONS*/
-
-	/* START SENTRY GITHUB ACTIONS*/
-	// fmt.Println("PHASE: SENTRY GITHUB ACTIONS FILE CREATION")
-
-	// sentry := promptui.Select{
-	// 	Label: "Do you want to use sentry? (only for frontend)",
-	// 	Items: []string{"Yes", "No"},
-	// }
-
-	// _, ansSentry, _ := sentry.Run()
-
-	// if ansSentry == "Yes" {
-
-	// 	folderPathSentry := ".github/workflows"
-	// 	os.MkdirAll(folderPathSentry, os.ModePerm)
-	// 	fSentry, fSenErr := os.Create(".github/workflows/sentry.yaml")
-
-	// 	if fSenErr != nil {
-	// 		log.Fatal(fSenErr)
-	// 	}
-
-	// 	defer fSentry.Close()
-
-	// 	valSentry := templates.Sentryaction()
-	// 	dataSentry := []byte(valSentry)
-
-	// 	_, errSentry := fSentry.Write(dataSentry)
-
-	// 	if errSentry != nil {
-	// 		log.Fatal(errSentry)
-	// 	}
-	// }
-
-	/* END SENTRY GITHUB ACTIONS*/
 
 	// TODO github action for CI/CD -> for which actions runs first
 	// assignees: ass77

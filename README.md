@@ -5,7 +5,7 @@
   <h3 align="center">THC deployment automation tool</h3>
 </div>
 
-### What is it about?
+## What is it about?
 
 This deployment automation tool helps users to generate basic files that are required to deploy their app on cloud run, scan their code to check for bugs before deployment and tracing any error on the app in dev mode or prod mode. The script will generate files as follows:
 
@@ -20,6 +20,8 @@ This deployment automation tool helps users to generate basic files that are req
 2. Extract the folder and drag the file named `cli` to your root directory of your working project.
 
 3. Run `./cli` on your working project root directory, preferably run it on your `cli`, then start answering the prompt.
+
+4. Hit ctrl+c or ctrl+d to if you want to abort the process.
 
 `NOTE (for maintainers):` The procedure and deployment notes are [here](https://github.com/thcollective/thc-deployment-tool/blob/main/PROCEDURE.md)
 
