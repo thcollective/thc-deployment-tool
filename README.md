@@ -21,7 +21,9 @@ This deployment automation tool helps users to generate basic files that are req
 
 3. Run `./cli` on your working project root directory, preferably run it on your `cli`, then start answering the prompt.
 
-4. Hit ctrl+c or ctrl+d to if you want to abort the process.
+4. The live url will be display on github actions `tab` located under `deploy` job.
+
+5. Hit ctrl+c or ctrl+d to if you want to abort the process.
 
 `NOTE (for maintainers):` The procedure and deployment notes are [here](https://github.com/thcollective/thc-deployment-tool/blob/main/PROCEDURE.md)
 
