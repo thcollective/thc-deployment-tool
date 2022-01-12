@@ -13,17 +13,42 @@ This deployment automation tool helps users to generate basic files that are req
 * Sonarcloud github actions and properties file (need to seek from Admin for keys)
 * Cloud Run github actions with .env
 
-## How To Run 
+## Download and Run 
 
-1. Download the latest binary package [here](https://github.com/thcollective/thc-deployment-tool/releases) depending on your machine (Mac, Linux, Windows)
+1. Download the latest binary package depending on your machine (Mac, Linux, Windows)
 
-2. Extract the folder and drag the file named `cli` to your root directory of your working project.
+### Darwin
+*  [amd64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.2.9/thc-deployment-tool_0.2.9_darwin_amd64.tar.gz) 
+*  [arm64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.2.9/thc-deployment-tool_0.2.9_darwin_arm64.tar.gz)
 
-3. Run `./cli` on your working project root directory, preferably run it on your `cli`, then start answering the prompt.
+### Linux
+*  [amd64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.2.9/thc-deployment-tool_0.2.9_linux_amd64.tar.gz)
+*  [arm64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.2.9/thc-deployment-tool_0.2.9_linux_arm64.tar.gz)
 
-4. The live url will be display on github actions `tab` located under `deploy` job.
+### Windows
+*  [amd64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.2.9/thc-deployment-tool_0.2.9_windows_amd64.tar.gz)
+*  [arm64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.2.9/thc-deployment-tool_0.2.9_windows_arm64.tar.gz)
 
-5. Hit ctrl+c or ctrl+d to if you want to abort the process.
+2. Extract the binary
+
+### Mac
+* `tar -xvzf thc-deployment-tool_0.2.9_linux_amd64.tar.gz -C <your_root_project_directory>`
+
+### Linux
+* `tar -xvzf thc-deployment-tool_0.2.9_linux_amd64.tar.gz -C <your_root_project_directory>`
+
+### Windows
+* Right click the file and extract it the folder to your root directory of your working project.
+* or use `tar -xvzf thc-deployment-tool_0.2.9_linux_amd64.tar.gz -C <your_root_project_directory>` if you have git bash installed on your windows cli
+
+
+3. Remove `README.md` from the `.tar.gz` to avoid any conflicts with your project `README.md`. 
+
+4. Run `./cli` on your working project root directory, preferably run it on your `cli`, then start answering the prompt.
+
+5. The live url will be display on github actions `tab` located under `deploy` job.
+
+6. Hit ctrl+c or ctrl+d to if you want to abort the process.
 
 `NOTE (for maintainers):` The procedure and deployment notes are [here](https://github.com/thcollective/thc-deployment-tool/blob/main/PROCEDURE.md)
 
