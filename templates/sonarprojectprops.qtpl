@@ -1,16 +1,12 @@
-{% func SonarProps( sonarOrgKey string, sonarProjectKey string, sonarRootDir string, sonarTestDir string, sonarTestInclusions string, SonarTestExclusions string  ) %}
-
-sonar.organization={%s sonarOrgKey %}
+{% func SonarProps( sonarOrgKey string, sonarProjectKey string, sonarInclusions string, sonarExclusions string  ) %} {%s sonarOrgKey %}
 sonar.projectKey={%s sonarProjectKey %}
 
 # Define the same root directory for sources and tests (if any)
-sonar.sources = {%s sonarRootDir %}
-{%s sonarTestDir %}
+sonar.sources = .
 
-# Include test subdirectories in test scope if any
-{%s sonarTestInclusions %}
+{%s sonarInclusions %}
 
-# Exclude test subdirectories from source scope if any
-{%s SonarTestExclusions %}
+{%s sonarExclusions %}
+
 
 {% endfunc %}

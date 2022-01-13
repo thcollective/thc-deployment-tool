@@ -315,7 +315,7 @@ func main() {
 			log.Fatal(errSonar)
 		}
 
-		sonarRootDir, sonarTestDir, sonarTestInclusions, sonarTestExclusions := "", "", "", ""
+		sonarInclusions, sonarExclusions := "", ""
 
 		fSonarProps, fSonarPropsErr := os.Create("sonar-project.properties")
 
@@ -335,75 +335,107 @@ func main() {
 			Default: "",
 		}
 
-		sonarIgnore := promptui.Select{
-			Label: "Do you want to ignore specific directories / files from sonarcloud?",
-			Items: []string{"*Yes", "No"},
+		rootDir := promptui.Prompt{
+			Label:   "Please specify the root directory of your project that you want to perform the sonar scan",
+			Default: "",
 		}
 
-		_, ansIgnore, _ := sonarIgnore.Run()
+		rootDirSelected, _ := rootDir.Run()
 
-		if ansIgnore == "*Yes" {
-			rootDir := promptui.Prompt{
-				Label:   "Please specify the root directory of your project",
-				Default: "",
-			}
-
-			rootDirSelected, _ := rootDir.Run()
-
-			testDirectory := promptui.Select{
-				Label: "Do you have a test directory to scan? If so, is your test code is intermingled with your source code?",
-				Items: []string{"Yes", "No", "I don't have any test directory"},
-			}
-			_, testDir, _ := testDirectory.Run()
-			sonarRootDir = rootDirSelected
-
-			if testDir == "Yes" {
-
-				sonarTestDir = "sonar.tests = " + rootDirSelected
-
-				fmt.Println(color.Blue + `You may need to modify the values for sonar.test.inclusions in sonar-project.properties file based on your own test directory-level` + color.Reset)
-
-				sonarInclusions := "sonar.test.inclusions = " + rootDirSelected + "/**/test/**/*"
-				sonarTestInclusions = sonarInclusions
-
-				sonarExclusions := "sonar.exclusions = " + rootDirSelected + "/**/test/**/*"
-				sonarTestExclusions = sonarExclusions
-
-			} else {
-				testDirName := promptui.Prompt{
-					Label:   "Please specify the test directory in the project",
-					Default: "tests",
-				}
-
-				testDirNameSelected, _ := testDirName.Run()
-
-				sonarTestDir = "sonar.tests = " + testDirNameSelected
-
-				testExclude := promptui.Select{
-					Label: "Do you want to exclude some folders from code scanning?",
-					Items: []string{"Yes", "No"},
-				}
-				_, testExcludeDir, _ := testExclude.Run()
-
-				if testExcludeDir == "Yes" {
-
-					excludeDir := promptui.Prompt{
-						Label:   "Please specify the directory that you want to exclude from code scanning",
-						Default: "foo, bar",
-					}
-
-					excludeDirSelected, _ := excludeDir.Run()
-
-					sonarExclusions := "sonar.exclusions = " + excludeDirSelected + "/**/test/**/*"
-					sonarTestExclusions = sonarExclusions
-				}
-			}
+		includeDir := promptui.Select{
+			Label: "Do you have any directory/path that you want to include aside from " + rootDirSelected + "?",
+			Items: []string{"Yes", "No"},
 		}
+
+		_, includeDirSelected, _ := includeDir.Run()
+
+		if includeDirSelected == "Yes" {
+
+			sonarInclusionsName := promptui.Prompt{
+				Label:   "Please specify the directory/path that you want to include",
+				Default: "scripts",
+			}
+
+			sonarInclusionsSelected, _ := sonarInclusionsName.Run()
+
+			sonarInclusions = "sonar.inclusions= " + sonarInclusionsSelected
+
+		} else {
+			excludeDir := promptui.Select{
+				Label: "Do you have any directory that you want to exclude from getting scanned?",
+				Items: []string{"Yes", "No"},
+			}
+
+			_, excludeDirSelected, _ := excludeDir.Run()
+
+			if excludeDirSelected == "Yes" {
+
+				sonarExclusionsName := promptui.Prompt{
+					Label:   "Please specify the directory/path that you want to exclude",
+					Default: "src/tests",
+				}
+
+				sonarExclusionsSelected, _ := sonarExclusionsName.Run()
+
+				sonarExclusions = "sonar.exclusions= " + sonarExclusionsSelected
+			}
+
+		}
+
+		// testDirectory := promptui.Select{
+		// 	Label: "Do you have a test directory to scan? If so, is your test code is intermingled with your source code?",
+		// 	Items: []string{"Yes", "Yes but it's not intermingled", "I don't have any test directory"},
+		// }
+		// _, testDir, _ := testDirectory.Run()
+		// sonarRootDir = rootDirSelected
+
+		// if testDir == "Yes" {
+
+		// 	sonarTestDir = "sonar.tests = " + rootDirSelected
+
+		// 	fmt.Println(color.Blue + `You may need to modify the values for sonar.test.inclusions in sonar-project.properties file based on your own test directory-level` + color.Reset)
+
+		// 	// TODO drill down test directory /**/test/**/*
+
+		// 	sonarTestInclusions = "sonar.test.inclusions = " + rootDirSelected + "/**/test/**/*"
+
+		// 	sonarTestExclusions = "sonar.exclusions = " + rootDirSelected + "/**/test/**/*"
+
+		// }
+
+		// if testDir == "Yes but it's not intermingled" {
+		// 	testDirName := promptui.Prompt{
+		// 		Label:   "Please specify the test directory in the project",
+		// 		Default: "tests",
+		// 	}
+
+		// 	testDirNameSelected, _ := testDirName.Run()
+
+		// 	sonarTestDir = "sonar.tests = " + testDirNameSelected
+
+		// 	testExclude := promptui.Select{
+		// 		Label: "Do you want to exclude some test folders from code scanning?",
+		// 		Items: []string{"Yes", "No"},
+		// 	}
+		// 	_, testExcludeDir, _ := testExclude.Run()
+
+		// 	if testExcludeDir == "Yes" {
+
+		// 		excludeDir := promptui.Prompt{
+		// 			Label:   "Please specify the test directory that you want to exclude from code scanning",
+		// 			Default: "foo, bar",
+		// 		}
+
+		// 		excludeDirSelected, _ := excludeDir.Run()
+
+		// 		sonarTestExclusions = "sonar.test.exclusions = " + excludeDirSelected + "/**/test/**/*"
+		// 	}
+		// }
 
 		sonarOrgKey, _ := orgKey.Run()
 		sonarProjKey, _ := projKey.Run()
 
-		valSonarProps := templates.SonarProps(sonarOrgKey, sonarProjKey, sonarRootDir, sonarTestDir, sonarTestInclusions, sonarTestExclusions)
+		valSonarProps := templates.SonarProps(sonarOrgKey, sonarProjKey, sonarInclusions, sonarExclusions)
 		dataSonarProps := []byte(valSonarProps)
 
 		_, errSonarProps := fSonarProps.Write(dataSonarProps)
