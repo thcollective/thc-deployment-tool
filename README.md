@@ -39,7 +39,7 @@ This deployment automation tool helps users to generate basic files that are req
 
 ### Windows
 * Right click the file and extract it the folder to your root directory of your working project.
-* or use `tar -xvzf thc-deployment-tool_0.3.0_linux_amd64.tar.gz -C <your_root_project_directory>` if you have git bash installed on your windows cli
+* or use `tar -xvzf x.tar.gz -C <your_root_project_directory>` if you have git bash installed on your windows cli
 
 
 3. Remove `README.md` from the `.tar.gz` to avoid any conflicts with your project `README.md`. 
