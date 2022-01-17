@@ -35,20 +35,19 @@ func StreamSonaraction(qw422016 *qt422016.Writer, sonarBranch string) {
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+name: Main Workflow
 on:
   # Trigger analysis when pushing in master or pull requests, and when creating
   # a pull request.
   push:
-    branches:
-      - `)
+    branches: [`)
 //line sonaraction.qtpl:21
 	qw422016.E().S(sonarBranch)
 //line sonaraction.qtpl:21
-	qw422016.N().S(`
+	qw422016.N().S(`]
   pull_request:
-      types: [opened, synchronize, reopened]
+    types: [opened, synchronize, reopened]
       
-name: Main Workflow
 jobs:
   sonarcloud:
     runs-on: ubuntu-latest
@@ -62,33 +61,32 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
 `)
-//line sonaraction.qtpl:40
+//line sonaraction.qtpl:38
 }
 
-//line sonaraction.qtpl:40
+//line sonaraction.qtpl:38
 func WriteSonaraction(qq422016 qtio422016.Writer, sonarBranch string) {
-//line sonaraction.qtpl:40
+//line sonaraction.qtpl:38
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line sonaraction.qtpl:40
+//line sonaraction.qtpl:38
 	StreamSonaraction(qw422016, sonarBranch)
-//line sonaraction.qtpl:40
+//line sonaraction.qtpl:38
 	qt422016.ReleaseWriter(qw422016)
-//line sonaraction.qtpl:40
+//line sonaraction.qtpl:38
 }
 
-//line sonaraction.qtpl:40
+//line sonaraction.qtpl:38
 func Sonaraction(sonarBranch string) string {
-//line sonaraction.qtpl:40
+//line sonaraction.qtpl:38
 	qb422016 := qt422016.AcquireByteBuffer()
-//line sonaraction.qtpl:40
+//line sonaraction.qtpl:38
 	WriteSonaraction(qb422016, sonarBranch)
-//line sonaraction.qtpl:40
+//line sonaraction.qtpl:38
 	qs422016 := string(qb422016.B)
-//line sonaraction.qtpl:40
+//line sonaraction.qtpl:38
 	qt422016.ReleaseByteBuffer(qb422016)
-//line sonaraction.qtpl:40
+//line sonaraction.qtpl:38
 	return qs422016
-//line sonaraction.qtpl:40
+//line sonaraction.qtpl:38
 }

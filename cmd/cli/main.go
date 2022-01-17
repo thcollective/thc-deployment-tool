@@ -327,7 +327,7 @@ func cloudrunActions(globalPort string) (string, string, string, string, string)
 	dockerImageName := promptui.Prompt{
 		Label:    "What is the name of your docker image?",
 		Validate: validate,
-		Default:  "my-app",
+		Default:  "eg. my-app",
 	}
 
 	port := promptui.Prompt{

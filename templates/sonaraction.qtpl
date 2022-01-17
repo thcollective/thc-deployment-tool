@@ -13,16 +13,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+name: Main Workflow
 on:
   # Trigger analysis when pushing in master or pull requests, and when creating
   # a pull request.
   push:
-    branches:
-      - {%s sonarBranch %}
+    branches: [{%s sonarBranch %}]
   pull_request:
-      types: [opened, synchronize, reopened]
+    types: [opened, synchronize, reopened]
       
-name: Main Workflow
 jobs:
   sonarcloud:
     runs-on: ubuntu-latest
@@ -36,5 +35,4 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
 {% endfunc %}
