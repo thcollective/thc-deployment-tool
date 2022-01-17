@@ -44,7 +44,7 @@ This deployment automation tool helps users to generate basic files that are req
 
 3. Remove `README.md` from the `.tar.gz` to avoid any conflicts with your project `README.md`. 
 
-4. Run `./cli` on your working project root directory, preferably run it on your `cli`, then start answering the prompt.
+4. Run `./cli.exe` on your working project root directory, preferably run it on your `cli`, then start answering the prompt.
 
 5. The live url will be display on github actions `tab` located under `deploy` job.
 
