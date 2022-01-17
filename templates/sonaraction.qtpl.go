@@ -40,11 +40,11 @@ on:
   # a pull request.
   push:
     branches:
-      - [`)
+      - `)
 //line sonaraction.qtpl:21
 	qw422016.E().S(sonarBranch)
 //line sonaraction.qtpl:21
-	qw422016.N().S(`]
+	qw422016.N().S(`
   pull_request:
       types: [opened, synchronize, reopened]
       

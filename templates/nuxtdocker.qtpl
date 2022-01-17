@@ -2,7 +2,7 @@
 # build stage
 FROM node:16-alpine3.14 as build-stage
 ENV HOST 0.0.0.0
-ENV PORT {{portSelected}}
+ENV PORT {%s portSelected %}
 
 WORKDIR /app
 COPY package*.json ./

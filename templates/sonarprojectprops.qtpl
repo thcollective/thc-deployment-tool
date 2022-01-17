@@ -1,8 +1,10 @@
-{% func SonarProps( sonarOrgKey string, sonarProjectKey string, sonarInclusions string, sonarExclusions string  ) %} {%s sonarOrgKey %}
-sonar.projectKey={%s sonarProjectKey %}
+{% func SonarProps( sonarOrgKey string, sonarProjectKey string, sonarRootDir string, sonarInclusions string, sonarExclusions string  ) %} {%s sonarOrgKey %}
+sonar.organization={%s sonarOrgKey %}
+
+sonar.projectKey= {%s sonarProjectKey %}
 
 # Define the same root directory for sources and tests (if any)
-sonar.sources = .
+sonar.sources = {%s= sonarRootDir %}
 
 {%s sonarInclusions %}
 

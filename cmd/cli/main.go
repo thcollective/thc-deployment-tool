@@ -13,6 +13,18 @@ import (
 	"github.com/manifoldco/promptui"
 )
 
+// global variables
+
+var answer1 = ""
+var answer2 = ""
+var answer3 = ""
+var answer4 = ""
+var answer4_final = ""
+var answer5 = ""
+var answer6 = ""
+var globalPort = ""
+var ansEnvFile = ""
+
 func main() {
 
 	// break if user hits ctrl+c | d
@@ -25,19 +37,27 @@ func main() {
 		}
 	}()
 
-	// initialize global variables
-	globalPort := ""
-	ansEnvFile := ""
+	dockerfileCreation()
 
-	// validation length
-	validate := func(input string) error {
-		if len(input) < 3 {
-			return errors.New("must have more than 3 characters")
-		}
-		return nil
-	}
+	sonarcloudActions()
 
-	/* START DOCKERFILE FILE CREATION*/
+	cloudrunActions(globalPort)
+
+	todotoissueActions()
+
+	commitlintActions()
+
+	semanticreleaseActions()
+
+	thcDeploymentFC(answer1, answer2, answer3, answer4_final, answer5, ansEnvFile)
+
+	// TODO github action for CI/CD -> for which actions runs first
+	// assignees: ass77
+
+}
+
+func dockerfileCreation() {
+
 	fmt.Println(color.Bold + "PHASE: DOCKERFILE CREATION" + color.Reset)
 
 	project := promptui.Select{
@@ -276,182 +296,18 @@ func main() {
 		log.Fatal(errDockerIgnoreFile)
 	}
 
-	/* END DOCKERFILE FILE CREATION*/
+}
 
-	/* START SONARCLOUD GITHUB ACTIONS*/
-	fmt.Println(color.Bold + "PHASE: SONARCLOUD ACTIONS" + color.Reset)
-
-	runSonar := promptui.Select{
-		Label: "Do you want to run sonarcloud actions?",
-		Items: []string{"Yes", "No"},
-	}
-
-	_, runSonarSelected, _ := runSonar.Run()
-
-	if runSonarSelected == "Yes" {
-		scannerBranch := promptui.Prompt{
-			Label:   "Which branch would you like to run the code scanner?",
-			Default: "development, staging",
-		}
-
-		sonarBranch, _ := scannerBranch.Run()
-
-		folderPathSonar := ".github/workflows"
-		os.MkdirAll(folderPathSonar, os.ModePerm)
-		fSonarcloud, fSonarErr := os.Create(".github/workflows/sonarcloud.yaml")
-
-		if fSonarErr != nil {
-			log.Fatal(fSonarErr)
-		}
-
-		defer fSonarcloud.Close()
-
-		valSonar := templates.Sonaraction(sonarBranch)
-		dataSonar := []byte(valSonar)
-
-		_, errSonar := fSonarcloud.Write(dataSonar)
-
-		if errSonar != nil {
-			log.Fatal(errSonar)
-		}
-
-		sonarInclusions, sonarExclusions := "", ""
-
-		fSonarProps, fSonarPropsErr := os.Create("sonar-project.properties")
-
-		if fSonarPropsErr != nil {
-			log.Fatal(fSonarProps)
-		}
-
-		defer fSonarProps.Close()
-
-		orgKey := promptui.Prompt{
-			Label:   "Add your sonarcloud organization key",
-			Default: "${{secrets.SONAR_ORG}}",
-		}
-
-		projKey := promptui.Prompt{
-			Label:   "Add your sonarcloud project key",
-			Default: "",
-		}
-
-		rootDir := promptui.Prompt{
-			Label:   "Please specify the root directory of your project that you want to perform the sonar scan",
-			Default: "",
-		}
-
-		rootDirSelected, _ := rootDir.Run()
-
-		includeDir := promptui.Select{
-			Label: "Do you have any directory/path that you want to include aside from " + rootDirSelected + "?",
-			Items: []string{"Yes", "No"},
-		}
-
-		_, includeDirSelected, _ := includeDir.Run()
-
-		if includeDirSelected == "Yes" {
-
-			sonarInclusionsName := promptui.Prompt{
-				Label:   "Please specify the directory/path that you want to include",
-				Default: "scripts",
-			}
-
-			sonarInclusionsSelected, _ := sonarInclusionsName.Run()
-
-			sonarInclusions = "sonar.inclusions= " + sonarInclusionsSelected
-
-		} else {
-			excludeDir := promptui.Select{
-				Label: "Do you have any directory that you want to exclude from getting scanned?",
-				Items: []string{"Yes", "No"},
-			}
-
-			_, excludeDirSelected, _ := excludeDir.Run()
-
-			if excludeDirSelected == "Yes" {
-
-				sonarExclusionsName := promptui.Prompt{
-					Label:   "Please specify the directory/path that you want to exclude",
-					Default: "src/tests",
-				}
-
-				sonarExclusionsSelected, _ := sonarExclusionsName.Run()
-
-				sonarExclusions = "sonar.exclusions= " + sonarExclusionsSelected
-			}
-
-		}
-
-		// testDirectory := promptui.Select{
-		// 	Label: "Do you have a test directory to scan? If so, is your test code is intermingled with your source code?",
-		// 	Items: []string{"Yes", "Yes but it's not intermingled", "I don't have any test directory"},
-		// }
-		// _, testDir, _ := testDirectory.Run()
-		// sonarRootDir = rootDirSelected
-
-		// if testDir == "Yes" {
-
-		// 	sonarTestDir = "sonar.tests = " + rootDirSelected
-
-		// 	fmt.Println(color.Blue + `You may need to modify the values for sonar.test.inclusions in sonar-project.properties file based on your own test directory-level` + color.Reset)
-
-		// 	// TODO drill down test directory /**/test/**/*
-
-		// 	sonarTestInclusions = "sonar.test.inclusions = " + rootDirSelected + "/**/test/**/*"
-
-		// 	sonarTestExclusions = "sonar.exclusions = " + rootDirSelected + "/**/test/**/*"
-
-		// }
-
-		// if testDir == "Yes but it's not intermingled" {
-		// 	testDirName := promptui.Prompt{
-		// 		Label:   "Please specify the test directory in the project",
-		// 		Default: "tests",
-		// 	}
-
-		// 	testDirNameSelected, _ := testDirName.Run()
-
-		// 	sonarTestDir = "sonar.tests = " + testDirNameSelected
-
-		// 	testExclude := promptui.Select{
-		// 		Label: "Do you want to exclude some test folders from code scanning?",
-		// 		Items: []string{"Yes", "No"},
-		// 	}
-		// 	_, testExcludeDir, _ := testExclude.Run()
-
-		// 	if testExcludeDir == "Yes" {
-
-		// 		excludeDir := promptui.Prompt{
-		// 			Label:   "Please specify the test directory that you want to exclude from code scanning",
-		// 			Default: "foo, bar",
-		// 		}
-
-		// 		excludeDirSelected, _ := excludeDir.Run()
-
-		// 		sonarTestExclusions = "sonar.test.exclusions = " + excludeDirSelected + "/**/test/**/*"
-		// 	}
-		// }
-
-		sonarOrgKey, _ := orgKey.Run()
-		sonarProjKey, _ := projKey.Run()
-
-		valSonarProps := templates.SonarProps(sonarOrgKey, sonarProjKey, sonarInclusions, sonarExclusions)
-		dataSonarProps := []byte(valSonarProps)
-
-		_, errSonarProps := fSonarProps.Write(dataSonarProps)
-
-		if errSonarProps != nil {
-			log.Fatal(errSonarProps)
-		}
-	}
-
-	/* END SONARCLOUD GITHUB ACTIONS*/
-
-	// TODO github action for CI/CD -> for which actions runs first
-	// assignees: ass77
-
-	/* START CLOUD RUN GITHUB ACTIONS*/
+func cloudrunActions(globalPort string) (string, string, string, string, string) {
 	fmt.Println(color.Bold + "PHASE: CLOUD RUN ACTIONS" + color.Reset)
+
+	// validation length
+	validate := func(input string) error {
+		if len(input) < 3 {
+			return errors.New("must have more than 3 characters")
+		}
+		return nil
+	}
 
 	purpose := promptui.Select{
 		Label: "Please select your purpose for creating this cloud run action files",
@@ -459,7 +315,6 @@ func main() {
 	}
 
 	_, branching, _ := purpose.Run()
-	answer1 := ""
 
 	if branching == "for development with development environment (development)" {
 		answer1 = "development"
@@ -509,16 +364,15 @@ func main() {
 		Items: []string{"Yes", "No"},
 	}
 
-	// answer1, _ := githubBranch.Run()
-	answer2, _ := dockerImageName.Run()
-	answer3, _ := port.Run()
-	_, answer4, _ := region.Run()
-	_, answer5, _ := firebaseAuth.Run()
-	_, answer6, _ := s2s.Run()
+	answer2, _ = dockerImageName.Run()
+	answer3, _ = port.Run()
+	_, answer4, _ = region.Run()
+	_, answer5, _ = firebaseAuth.Run()
+	_, answer6, _ = s2s.Run()
 
 	// regex to get rid of *symbol
 	reg := regexp.MustCompile(`\*`)
-	answer4_final := reg.ReplaceAllString(answer4, "${1}")
+	answer4_final = reg.ReplaceAllString(answer4, "${1}")
 
 	if answer5 == "Yes" {
 		answer5 = "allow-authenticated"
@@ -592,7 +446,139 @@ func main() {
 
 	}
 
-	/* START TD TO ISSUE ACTIONS */
+	return answer2, answer3, answer4_final, answer5, answer6
+
+}
+
+func sonarcloudActions() {
+	fmt.Println(color.Bold + "PHASE: SONARCLOUD ACTIONS" + color.Reset)
+
+	runSonar := promptui.Select{
+		Label: "Do you want to run sonarcloud actions?",
+		Items: []string{"Yes", "No"},
+	}
+
+	_, runSonarSelected, _ := runSonar.Run()
+
+	if runSonarSelected == "Yes" {
+		scannerBranch := promptui.Prompt{
+			Label:   "Which branch would you like to run the code scanner?",
+			Default: "development, staging",
+		}
+
+		sonarBranch, _ := scannerBranch.Run()
+
+		folderPathSonar := ".github/workflows"
+		os.MkdirAll(folderPathSonar, os.ModePerm)
+		fSonarcloud, fSonarErr := os.Create(".github/workflows/sonarcloud.yaml")
+
+		if fSonarErr != nil {
+			log.Fatal(fSonarErr)
+		}
+
+		defer fSonarcloud.Close()
+
+		valSonar := templates.Sonaraction(sonarBranch)
+		dataSonar := []byte(valSonar)
+
+		_, errSonar := fSonarcloud.Write(dataSonar)
+
+		if errSonar != nil {
+			log.Fatal(errSonar)
+		}
+
+		sonarInclusions, sonarExclusions := "", ""
+
+		fSonarProps, fSonarPropsErr := os.Create("sonar-project.properties")
+
+		if fSonarPropsErr != nil {
+			log.Fatal(fSonarProps)
+		}
+
+		defer fSonarProps.Close()
+
+		orgKey := promptui.Prompt{
+			Label:   "Add your sonarcloud organization key",
+			Default: "${{secrets.SONAR_ORG}}",
+		}
+
+		projKey := promptui.Prompt{
+			Label:   "Add your sonarcloud project key",
+			Default: "",
+		}
+
+		rootDir := promptui.Prompt{
+			Label:   "Please specify the root directory of your project that you want to perform the sonar scan",
+			Default: "src",
+		}
+
+		rootDirSelected, _ := rootDir.Run()
+
+		sonarRootDir := ""
+
+		if rootDirSelected == "src" {
+			sonarRootDir = "."
+		} else {
+			sonarRootDir = rootDirSelected
+		}
+
+		includeDir := promptui.Select{
+			Label: "Do you have any directory/path that you want to include aside from " + rootDirSelected + "?",
+			Items: []string{"Yes", "No"},
+		}
+
+		_, includeDirSelected, _ := includeDir.Run()
+
+		if includeDirSelected == "Yes" {
+
+			sonarInclusionsName := promptui.Prompt{
+				Label:   "Please specify the directory/path that you want to include",
+				Default: "scripts",
+			}
+
+			sonarInclusionsSelected, _ := sonarInclusionsName.Run()
+
+			sonarInclusions = "sonar.inclusions= " + sonarInclusionsSelected
+
+		} else {
+			excludeDir := promptui.Select{
+				Label: "Do you have any directory that you want to exclude from getting scanned?",
+				Items: []string{"Yes", "No"},
+			}
+
+			_, excludeDirSelected, _ := excludeDir.Run()
+
+			if excludeDirSelected == "Yes" {
+
+				sonarExclusionsName := promptui.Prompt{
+					Label:   "Please specify the directory/path that you want to exclude",
+					Default: "src/tests",
+				}
+
+				sonarExclusionsSelected, _ := sonarExclusionsName.Run()
+
+				sonarExclusions = "sonar.exclusions= " + sonarExclusionsSelected
+			}
+
+		}
+
+		sonarOrgKey, _ := orgKey.Run()
+		sonarProjKey, _ := projKey.Run()
+
+		valSonarProps := templates.SonarProps(sonarOrgKey, sonarProjKey, sonarRootDir, sonarInclusions, sonarExclusions)
+		dataSonarProps := []byte(valSonarProps)
+
+		_, errSonarProps := fSonarProps.Write(dataSonarProps)
+
+		if errSonarProps != nil {
+			log.Fatal(errSonarProps)
+		}
+	}
+
+}
+
+func todotoissueActions() {
+
 	fmt.Println(color.Bold + "PHASE: TODO TO ISSUE ACTIONS CREATION" + color.Reset)
 
 	todo := promptui.Select{
@@ -625,9 +611,9 @@ func main() {
 
 	}
 
-	/* END TD TO ISSUE ACTIONS */
+}
 
-	/* START COMMITLINT ACTIONS */
+func commitlintActions() {
 	fmt.Println(color.Bold + "PHASE: COMMITLINT ACTIONS" + color.Reset)
 
 	fmt.Printf("\n" + color.Yellow + "Only applicable on pull request " + color.Reset)
@@ -675,9 +661,10 @@ func main() {
 		}
 
 	}
-	/* END COMMITLINT ACTIONS */
+}
 
-	/* START SEMANTIC RELEASES ACTIONS */
+func semanticreleaseActions() {
+
 	fmt.Println(color.Bold + "PHASE: SEMANTIC RELEASES ACTIONS" + color.Reset)
 
 	semRelease := promptui.Select{
@@ -717,10 +704,10 @@ func main() {
 
 	}
 
-	/* END SEMANTIC RELEASES ACTIONS */
+}
 
-	/* START thc-deployment.yaml file creation */
-	fmt.Println(color.Bold + "PHASE: FINALIZING DEPLOYMENT FILE WITH ENV" + color.Reset)
+func thcDeploymentFC(answer1 string, answer2 string, answer3 string, answer4_final string, answer5 string, ansEnvFile string) {
+	fmt.Println(color.Bold + "PHASE: FINALIZING DEPLOYMENT FILE" + color.Reset)
 	envFile := promptui.Select{
 		Label: "Do you have/use .env file?",
 		Items: []string{"Yes", "No"},
@@ -795,34 +782,8 @@ func main() {
 		log.Fatal(errAll2)
 	}
 
-	/* END thc-deployment.yaml file creation */
-
 	fmt.Printf("\n" + color.Green + "THC magic " + color.Reset + "has successfully been casted. Push the repo to your " + color.Red + "branch" + color.Reset + " and you're good to go!\n")
-	fmt.Printf("\np/s: Please reach out to" + color.Blue + " Adri or Ming " + color.Reset + "for the" + color.Yellow + " secrets " + color.Reset + "before you make a commit.\n")
-	fmt.Printf(color.Yellow + "\nNOTE: You might need to double check fix the yaml indentation issues in generated .yaml file.\n" + color.Reset)
+	fmt.Printf("\np/s: Please reach out to" + color.Blue + " Adri or Ming " + color.Reset + "for the" + color.Yellow + " secrets " + color.Reset + "before you commit.\n")
+	fmt.Printf(color.Yellow + "\nNOTE: You might need to double check and fix the yaml indentation issues in generated .yaml file.\n" + color.Reset)
 
 }
-
-// func HtmlspecialChars(s string) string {
-// 	return html.EscapeString(s)
-
-// }
-
-// func ensureDir(dirName string) error {
-// 	err := os.Mkdir(dirName, os.ModeDir)
-// 	if err == nil {
-// 		return nil
-// 	}
-// 	if os.IsExist(err) {
-// 		// check that the existing path is a directory
-// 		info, err := os.Stat(dirName)
-// 		if err != nil {
-// 			return err
-// 		}
-// 		if !info.IsDir() {
-// 			return errors.New("path exists but is not a directory")
-// 		}
-// 		return nil
-// 	}
-// 	return err
-// }

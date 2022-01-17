@@ -21,7 +21,7 @@ var (
 func StreamCommitlintConfig(qw422016 *qt422016.Writer) {
 //line commitlintconfig.qtpl:1
 	qw422016.N().S(`
-"module.exports = {extends: ['@commitlint/config-conventional']};" 
+module.exports = {extends: ['@commitlint/config-conventional']}; 
 
 `)
 //line commitlintconfig.qtpl:4

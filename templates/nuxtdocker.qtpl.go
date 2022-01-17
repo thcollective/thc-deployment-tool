@@ -24,7 +24,11 @@ func StreamNuxtdocker(qw422016 *qt422016.Writer, portSelected string) {
 # build stage
 FROM node:16-alpine3.14 as build-stage
 ENV HOST 0.0.0.0
-ENV PORT {{portSelected}}
+ENV PORT `)
+//line nuxtdocker.qtpl:5
+	qw422016.E().S(portSelected)
+//line nuxtdocker.qtpl:5
+	qw422016.N().S(`
 
 WORKDIR /app
 COPY package*.json ./

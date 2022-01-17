@@ -24,7 +24,11 @@ func StreamExpressdocker(qw422016 *qt422016.Writer, portSelected string) {
 FROM node:16-alpine3.14
 
 ENV HOST 0.0.0.0
-ENV PORT {{portSelected}}
+ENV PORT `)
+//line expressdocker.qtpl:5
+	qw422016.E().S(portSelected)
+//line expressdocker.qtpl:5
+	qw422016.N().S(`
 
 # Create app directory
 WORKDIR /usr/src/app
