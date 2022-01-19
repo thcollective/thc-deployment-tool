@@ -1,6 +1,6 @@
 {
   "name": "thc-deployment-tool",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "THC deployment automation tool",
   "main": "index.js",
   "scripts": {
