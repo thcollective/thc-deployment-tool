@@ -1,6 +1,6 @@
 {
   "name": "thc-deployment-tool",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "description": "THC deployment automation tool",
   "main": "index.js",
   "scripts": {
@@ -14,7 +14,7 @@
   "goBinary": {
     "name": "thc-tool",
     "path": "./bin",
-    "url": "https://github.com/thcollective/thc-deployment-tool/releases/download/v{{version}}/thc-deployment-tool_{{version}}__{{platform}}_{{arch}}.tar.gz"
+    "url": "https://github.com/thcollective/thc-deployment-tool/releases/download/v{{version}}/thc-deployment-tool_{{version}}_{{platform}}_{{arch}}.tar.gz"
    },
   "author": "ass77",
   "license": "MIT",
