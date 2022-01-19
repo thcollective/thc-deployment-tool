@@ -3,6 +3,7 @@
     <img src="img/thc.png" alt="thc_logo" width="80" height="80">
   </a>
   <h3 align="center">THC deployment automation tool</h3>
+  <h4 align="center">Maintained by: ass77</h4>
 </div>
 
 ## What is it about?

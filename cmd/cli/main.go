@@ -51,8 +51,7 @@ func main() {
 
 	thcDeploymentFC(answer1, answer2, answer3, answer4_final, answer5, ansEnvFile)
 
-	// TODO github action for CI/CD -> for which actions runs first
-	// assignees: ass77
+	// github action for CI/CD -> for which actions runs first
 
 }
 
