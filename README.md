@@ -18,24 +18,24 @@ This deployment automation tool helps users to generate basic files that are req
 1. Download the latest binary package depending on your machine (Mac, Linux, Windows)
 
 ### Darwin
-*  [amd64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.2/thc-deployment-tool_0.3.2_darwin_amd64.tar.gz) 
-*  [arm64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.2/thc-deployment-tool_0.3.2_darwin_arm64.tar.gz)
+*  [amd64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.3/thc-deployment-tool_0.3.3_darwin_amd64.tar.gz) 
+*  [arm64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.3/thc-deployment-tool_0.3.3_darwin_arm64.tar.gz)
 
 ### Linux
-*  [amd64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.2/thc-deployment-tool_0.3.2_linux_amd64.tar.gz)
-*  [arm64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.2/thc-deployment-tool_0.3.2_linux_arm64.tar.gz)
+*  [amd64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.3/thc-deployment-tool_0.3.3_linux_amd64.tar.gz)
+*  [arm64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.3/thc-deployment-tool_0.3.3_linux_arm64.tar.gz)
 
 ### Windows
-*  [amd64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.2/thc-deployment-tool_0.3.2_windows_amd64.tar.gz)
-*  [arm64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.2/thc-deployment-tool_0.3.2_windows_arm64.tar.gz)
+*  [amd64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.3/thc-deployment-tool_0.3.3_windows_amd64.tar.gz)
+*  [arm64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.3/thc-deployment-tool_0.3.3_windows_arm64.tar.gz)
 
 2. Extract the binary
 
 ### Mac
-* `tar -xvzf thc-deployment-tool_0.3.2_linux_amd64.tar.gz -C <your_root_project_directory>`
+* `tar -xvzf thc-deployment-tool_0.3.3_linux_amd64.tar.gz -C <your_root_project_directory>`
 
 ### Linux
-* `tar -xvzf thc-deployment-tool_0.3.2_linux_amd64.tar.gz -C <your_root_project_directory>`
+* `tar -xvzf thc-deployment-tool_0.3.3_linux_amd64.tar.gz -C <your_root_project_directory>`
 
 ### Windows
 * Right click the file and extract it the folder to your root directory of your working project.

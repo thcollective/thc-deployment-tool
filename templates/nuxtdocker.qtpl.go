@@ -29,7 +29,6 @@ ENV PORT `)
 	qw422016.E().S(portSelected)
 //line nuxtdocker.qtpl:5
 	qw422016.N().S(`
-
 WORKDIR /app
 COPY package*.json ./
 RUN npm ci
@@ -37,41 +36,46 @@ COPY . .
 RUN npm run build
 
 # production stage
+FROM node:16-alpine3.14
+WORKDIR /app
 EXPOSE `)
-//line nuxtdocker.qtpl:14
+//line nuxtdocker.qtpl:15
 	qw422016.E().S(portSelected)
-//line nuxtdocker.qtpl:14
+//line nuxtdocker.qtpl:15
 	qw422016.N().S(`
-
-# Start command
+ENV NODE_ENV=production
+ADD package.json ./
+ADD nuxt.config.ts ./
+COPY --from=build-stage ./app/node_modules ./node_modules/
+COPY --from=build-stage ./app/.nuxt ./.nuxt/
+COPY --from=build-stage ./app/.output ./.output/
 CMD [ "npm", "start" ]
-
 `)
-//line nuxtdocker.qtpl:19
+//line nuxtdocker.qtpl:23
 }
 
-//line nuxtdocker.qtpl:19
+//line nuxtdocker.qtpl:23
 func WriteNuxtdocker(qq422016 qtio422016.Writer, portSelected string) {
-//line nuxtdocker.qtpl:19
+//line nuxtdocker.qtpl:23
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line nuxtdocker.qtpl:19
+//line nuxtdocker.qtpl:23
 	StreamNuxtdocker(qw422016, portSelected)
-//line nuxtdocker.qtpl:19
+//line nuxtdocker.qtpl:23
 	qt422016.ReleaseWriter(qw422016)
-//line nuxtdocker.qtpl:19
+//line nuxtdocker.qtpl:23
 }
 
-//line nuxtdocker.qtpl:19
+//line nuxtdocker.qtpl:23
 func Nuxtdocker(portSelected string) string {
-//line nuxtdocker.qtpl:19
+//line nuxtdocker.qtpl:23
 	qb422016 := qt422016.AcquireByteBuffer()
-//line nuxtdocker.qtpl:19
+//line nuxtdocker.qtpl:23
 	WriteNuxtdocker(qb422016, portSelected)
-//line nuxtdocker.qtpl:19
+//line nuxtdocker.qtpl:23
 	qs422016 := string(qb422016.B)
-//line nuxtdocker.qtpl:19
+//line nuxtdocker.qtpl:23
 	qt422016.ReleaseByteBuffer(qb422016)
-//line nuxtdocker.qtpl:19
+//line nuxtdocker.qtpl:23
 	return qs422016
-//line nuxtdocker.qtpl:19
+//line nuxtdocker.qtpl:23
 }

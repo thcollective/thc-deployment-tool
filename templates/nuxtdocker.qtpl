@@ -3,7 +3,6 @@
 FROM node:16-alpine3.14 as build-stage
 ENV HOST 0.0.0.0
 ENV PORT {%s portSelected %}
-
 WORKDIR /app
 COPY package*.json ./
 RUN npm ci
@@ -11,9 +10,14 @@ COPY . .
 RUN npm run build
 
 # production stage
+FROM node:16-alpine3.14
+WORKDIR /app
 EXPOSE {%s portSelected %}
-
-# Start command
+ENV NODE_ENV=production
+ADD package.json ./
+ADD nuxt.config.ts ./
+COPY --from=build-stage ./app/node_modules ./node_modules/
+COPY --from=build-stage ./app/.nuxt ./.nuxt/
+COPY --from=build-stage ./app/.output ./.output/
 CMD [ "npm", "start" ]
-
 {% endfunc %}
