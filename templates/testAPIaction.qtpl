@@ -16,8 +16,7 @@
 name: test-api-collection
 on:
   push:
-    branches:
-      - {%s testBranch %}
+    branches: [ {%s testBranch %} ]
 jobs:
   test-api:
     runs-on: ubuntu-latest

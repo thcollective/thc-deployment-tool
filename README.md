@@ -16,27 +16,27 @@ This deployment automation tool helps users to generate basic files that are req
 
 ## Download and Run 
 
-1. Download the latest binary package depending on your machine (Mac, Linux, Windows)
+1. Tap on the options below and download the binary package based on your OS.
 
 ### Darwin
-*  [amd64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.4/thc-deployment-tool_0.3.4_darwin_amd64.tar.gz) 
-*  [arm64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.4/thc-deployment-tool_0.3.4_darwin_arm64.tar.gz)
+*  [amd64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.5/thc-deployment-tool_0.3.5_darwin_amd64.tar.gz) 
+*  [arm64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.5/thc-deployment-tool_0.3.5_darwin_arm64.tar.gz)
 
 ### Linux
-*  [amd64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.4/thc-deployment-tool_0.3.4_linux_amd64.tar.gz)
-*  [arm64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.4/thc-deployment-tool_0.3.4_linux_arm64.tar.gz)
+*  [amd64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.5/thc-deployment-tool_0.3.5_linux_amd64.tar.gz)
+*  [arm64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.5/thc-deployment-tool_0.3.5_linux_arm64.tar.gz)
 
 ### Windows
-*  [amd64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.4/thc-deployment-tool_0.3.4_windows_amd64.tar.gz)
-*  [arm64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.4/thc-deployment-tool_0.3.4_windows_arm64.tar.gz)
+*  [amd64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.5/thc-deployment-tool_0.3.5_windows_amd64.tar.gz)
+*  [arm64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.5/thc-deployment-tool_0.3.5_windows_arm64.tar.gz)
 
 2. Extract the binary
 
 ### Mac
-* `tar -xvzf thc-deployment-tool_0.3.4_linux_amd64.tar.gz -C <your_root_project_directory>`
+* `tar -xvzf thc-deployment-tool_0.3.5_linux_amd64.tar.gz -C <your_root_project_directory>`
 
 ### Linux
-* `tar -xvzf thc-deployment-tool_0.3.4_linux_amd64.tar.gz -C <your_root_project_directory>`
+* `tar -xvzf thc-deployment-tool_0.3.5_linux_amd64.tar.gz -C <your_root_project_directory>`
 
 ### Windows
 * Right click the file and extract it the folder to your root directory of your working project.

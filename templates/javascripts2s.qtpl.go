@@ -21,7 +21,6 @@ var (
 func StreamJavascriptS2S(qw422016 *qt422016.Writer, answer7 string) {
 //line javascripts2s.qtpl:1
 	qw422016.N().S(`
-
 /**
  * TODO(developer): Uncomment these variables before running the sample.
  */
@@ -55,31 +54,31 @@ request().catch(err => {
 });
 
 `)
-//line javascripts2s.qtpl:27
+//line javascripts2s.qtpl:26
 }
 
-//line javascripts2s.qtpl:27
+//line javascripts2s.qtpl:26
 func WriteJavascriptS2S(qq422016 qtio422016.Writer, answer7 string) {
-//line javascripts2s.qtpl:27
+//line javascripts2s.qtpl:26
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line javascripts2s.qtpl:27
+//line javascripts2s.qtpl:26
 	StreamJavascriptS2S(qw422016, answer7)
-//line javascripts2s.qtpl:27
+//line javascripts2s.qtpl:26
 	qt422016.ReleaseWriter(qw422016)
-//line javascripts2s.qtpl:27
+//line javascripts2s.qtpl:26
 }
 
-//line javascripts2s.qtpl:27
+//line javascripts2s.qtpl:26
 func JavascriptS2S(answer7 string) string {
-//line javascripts2s.qtpl:27
+//line javascripts2s.qtpl:26
 	qb422016 := qt422016.AcquireByteBuffer()
-//line javascripts2s.qtpl:27
+//line javascripts2s.qtpl:26
 	WriteJavascriptS2S(qb422016, answer7)
-//line javascripts2s.qtpl:27
+//line javascripts2s.qtpl:26
 	qs422016 := string(qb422016.B)
-//line javascripts2s.qtpl:27
+//line javascripts2s.qtpl:26
 	qt422016.ReleaseByteBuffer(qb422016)
-//line javascripts2s.qtpl:27
+//line javascripts2s.qtpl:26
 	return qs422016
-//line javascripts2s.qtpl:27
+//line javascripts2s.qtpl:26
 }

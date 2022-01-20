@@ -18,24 +18,12 @@ var (
 )
 
 //line sonarprojectprops.qtpl:1
-func StreamSonarProps(qw422016 *qt422016.Writer, sonarOrgKey string, sonarProjectKey string, sonarRootDir string, sonarInclusions string, sonarExclusions string) {
+func StreamSonarProps(qw422016 *qt422016.Writer, sonarRootDir string, sonarInclusions string, sonarExclusions string) {
 //line sonarprojectprops.qtpl:1
-	qw422016.N().S(` `)
-//line sonarprojectprops.qtpl:1
-	qw422016.E().S(sonarOrgKey)
-//line sonarprojectprops.qtpl:1
-	qw422016.N().S(`
-sonar.organization=`)
-//line sonarprojectprops.qtpl:2
-	qw422016.E().S(sonarOrgKey)
-//line sonarprojectprops.qtpl:2
-	qw422016.N().S(`
+	qw422016.N().S(` 
+sonar.organization= ${{secrets.SONAR_ORG}}
 
-sonar.projectKey= `)
-//line sonarprojectprops.qtpl:4
-	qw422016.E().S(sonarProjectKey)
-//line sonarprojectprops.qtpl:4
-	qw422016.N().S(`
+sonar.projectKey= ${{secrets.SONAR_PROJECT_KEY}}
 
 # Define the same root directory for sources and tests (if any)
 sonar.sources = `)
@@ -56,33 +44,32 @@ sonar.sources = `)
 //line sonarprojectprops.qtpl:11
 	qw422016.N().S(`
 
-
 `)
-//line sonarprojectprops.qtpl:14
+//line sonarprojectprops.qtpl:13
 }
 
-//line sonarprojectprops.qtpl:14
-func WriteSonarProps(qq422016 qtio422016.Writer, sonarOrgKey string, sonarProjectKey string, sonarRootDir string, sonarInclusions string, sonarExclusions string) {
-//line sonarprojectprops.qtpl:14
+//line sonarprojectprops.qtpl:13
+func WriteSonarProps(qq422016 qtio422016.Writer, sonarRootDir string, sonarInclusions string, sonarExclusions string) {
+//line sonarprojectprops.qtpl:13
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line sonarprojectprops.qtpl:14
-	StreamSonarProps(qw422016, sonarOrgKey, sonarProjectKey, sonarRootDir, sonarInclusions, sonarExclusions)
-//line sonarprojectprops.qtpl:14
+//line sonarprojectprops.qtpl:13
+	StreamSonarProps(qw422016, sonarRootDir, sonarInclusions, sonarExclusions)
+//line sonarprojectprops.qtpl:13
 	qt422016.ReleaseWriter(qw422016)
-//line sonarprojectprops.qtpl:14
+//line sonarprojectprops.qtpl:13
 }
 
-//line sonarprojectprops.qtpl:14
-func SonarProps(sonarOrgKey string, sonarProjectKey string, sonarRootDir string, sonarInclusions string, sonarExclusions string) string {
-//line sonarprojectprops.qtpl:14
+//line sonarprojectprops.qtpl:13
+func SonarProps(sonarRootDir string, sonarInclusions string, sonarExclusions string) string {
+//line sonarprojectprops.qtpl:13
 	qb422016 := qt422016.AcquireByteBuffer()
-//line sonarprojectprops.qtpl:14
-	WriteSonarProps(qb422016, sonarOrgKey, sonarProjectKey, sonarRootDir, sonarInclusions, sonarExclusions)
-//line sonarprojectprops.qtpl:14
+//line sonarprojectprops.qtpl:13
+	WriteSonarProps(qb422016, sonarRootDir, sonarInclusions, sonarExclusions)
+//line sonarprojectprops.qtpl:13
 	qs422016 := string(qb422016.B)
-//line sonarprojectprops.qtpl:14
+//line sonarprojectprops.qtpl:13
 	qt422016.ReleaseByteBuffer(qb422016)
-//line sonarprojectprops.qtpl:14
+//line sonarprojectprops.qtpl:13
 	return qs422016
-//line sonarprojectprops.qtpl:14
+//line sonarprojectprops.qtpl:13
 }
