@@ -34,13 +34,23 @@ mv ./thc-cli-tool /usr/local/bin
 ### Linux
 *  [amd64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.6/thc-deployment-tool_0.3.6_linux_amd64.tar.gz)
 ```
-curl -Lo ./thc-cli-tool https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.6/thc-deployment-tool_0.3.6_linux_amd64.tar.gz && \
-sudo mv ./thc-cli-tool /usr/local/bin
+curl -Lo ./thc-cli-tool https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.6/thc-deployment-tool_0.3.6_linux_amd64.tar.gz
+```
+```
+chmod +x ./thc-cli-tool
+```
+```
+mv ./thc-cli-tool /usr/local/bin
 ```
 *  [arm64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.6/thc-deployment-tool_0.3.6_linux_arm64.tar.gz)
 ```
-curl -Lo ./thc-cli-tool https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.6/thc-deployment-tool_0.3.6_linux_arm64.tar.gz && \
-sudo mv ./thc-cli-tool /usr/local/bin
+curl -Lo ./thc-cli-tool https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.6/thc-deployment-tool_0.3.6_linux_arm64.tar.gz
+```
+```
+chmod +x ./thc-cli-tool
+```
+```
+mv ./thc-cli-tool /usr/local/bin
 ```
 
 ### Windows
