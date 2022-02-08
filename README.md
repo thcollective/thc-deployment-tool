@@ -20,39 +20,39 @@ This deployment automation tool helps users to generate basic files that are req
 1. Download the binary package based on your OS and set to local path.
 
 ### Darwin
-*  [amd64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.6/thc-deployment-tool_0.3.6_darwin_amd64.tar.gz)
+*  Tap here to download for [amd64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.6/thc-deployment-tool_0.3.6_darwin_amd64.tar.gz).  Extract and save it to local path:
 ```
-curl -Lo ./thc-toolkit https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.6/thc-deployment-tool_0.3.6_darwin_amd64.tar.gz && \
-mv ./thc-toolkit /usr/local/bin
+tar -xzvf https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.6/thc-deployment-tool_0.3.6_darwin_amd64.tar.gz && \
+mv ./thc-cli-tool /usr/local/bin
 ``` 
-*  [arm64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.6/thc-deployment-tool_0.3.6_darwin_arm64.tar.gz)
+*  Tap here to download for [arm64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.6/thc-deployment-tool_0.3.6_darwin_arm64.tar.gz). Extract and save it to local path:
 ```
-curl -Lo ./thc-toolkit https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.6/thc-deployment-tool_0.3.6_darwin_arm64.tar.gz && \
-mv ./thc-toolkit /usr/local/bin
+tar -xzvf https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.6/thc-deployment-tool_0.3.6_darwin_arm64.tar.gz && \
+mv ./thc-cli-tool /usr/local/bin
 ```
 
 ### Linux
 *  [amd64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.6/thc-deployment-tool_0.3.6_linux_amd64.tar.gz)
 ```
-curl -Lo ./thc-toolkit https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.6/thc-deployment-tool_0.3.6_linux_amd64.tar.gz && \
-mv ./thc-toolkit /usr/local/bin
+curl -Lo ./thc-cli-tool https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.6/thc-deployment-tool_0.3.6_linux_amd64.tar.gz && \
+sudo mv ./thc-cli-tool /usr/local/bin
 ```
 *  [arm64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.6/thc-deployment-tool_0.3.6_linux_arm64.tar.gz)
 ```
-curl -Lo ./thc-toolkit https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.6/thc-deployment-tool_0.3.6_linux_arm64.tar.gz && \
-mv ./thc-toolkit /usr/local/bin
+curl -Lo ./thc-cli-tool https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.6/thc-deployment-tool_0.3.6_linux_arm64.tar.gz && \
+sudo mv ./thc-cli-tool /usr/local/bin
 ```
 
 ### Windows
-*  [amd64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.6/thc-deployment-tool_0.3.6_windows_amd64.tar.gz)
-*  [arm64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.6/thc-deployment-tool_0.3.6_windows_arm64.tar.gz)
+*  Tap here to download for [amd64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.6/thc-deployment-tool_0.3.6_windows_amd64.tar.gz)
+*  Tap here to download for [arm64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.6/thc-deployment-tool_0.3.6_windows_arm64.tar.gz)
 
-2. Extract the binary and save to local path (for Windows)
+2. For WINDOWS user: Extract the binary and save to local path 
 
 * Right click the file and extract preferably using `7zip`.
 * Add `thc-cli-tool.exe` to system properties `Environment Variables...`
 
-3. For Mac/Linux users, run `thc-toolkit` using `terminal` on root directory of your project, then start answering the prompt.
+3. For Mac/Linux users, run `thc-cli-tool` using `terminal` on root directory of your project, then start answering the prompt.
 
 4. For windows user, run `./thc-cli-tool.exe` on your working project root directory, preferably run it on your `terminal`, then start answering the prompt.
 
