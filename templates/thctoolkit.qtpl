@@ -48,11 +48,11 @@ jobs:
       {% endif %}
       - name: Build
         run: |
-          docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/{%s answer2 %}:latest .
+          docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/{%s answer2 %}:${{  github.sha }} .
           
       - name: Push
         run: |
-          docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/{%s answer2 %}:latest
+          docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/{%s answer2 %}:${{  github.sha }}
 
       - name: Deploy
         run: |
@@ -60,7 +60,7 @@ jobs:
           --project ${{ secrets.GCP_PROJECT_ID }} \
           --port {%s globalPort %} \
           --region {%s answer4_final %} \
-          --service-account ${{ secrets.GCP_SA_EMAIL }}
+          --service-account ${{ secrets.GCP_SA_EMAIL }} \
           --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/{%s answer2 %} \
           --platform managed \
           --{%s answer5 %} \

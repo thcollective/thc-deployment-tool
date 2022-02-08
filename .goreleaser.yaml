@@ -1,8 +1,8 @@
 #  multiple binaries
 builds:
-  - main: ./cmd/cli
-    id: "cli"
-    binary: cli
+  - main: ./cmd/thc-cli-tool
+    id: "thc-cli-tool"
+    binary: thc-cli-tool
     goos:
       - linux
       - darwin

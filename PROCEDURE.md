@@ -9,6 +9,7 @@ GCP_SA_KEY ---> GCP_SA_EMAIL secret key (.json)
 SONAR_TOKEN ---> sonar token for github action (organizations)
 SONAR_ORG ---> sonar properties
 SONAR_PROJECT_KEY --> sonar properties
+BROKER_URL1-3 --> redpanda brokers URLs
 ```
 
 `NOTE`: make sure in the GCP projects, all API services + IAM roles are set based on project requirements

@@ -90,7 +90,7 @@ jobs:
 //line thctoolkit.qtpl:51
 	qw422016.E().S(answer2)
 //line thctoolkit.qtpl:51
-	qw422016.N().S(`:latest .
+	qw422016.N().S(`:${{  github.sha }} .
           
       - name: Push
         run: |
@@ -98,7 +98,7 @@ jobs:
 //line thctoolkit.qtpl:55
 	qw422016.E().S(answer2)
 //line thctoolkit.qtpl:55
-	qw422016.N().S(`:latest
+	qw422016.N().S(`:${{  github.sha }}
 
       - name: Deploy
         run: |
@@ -118,7 +118,7 @@ jobs:
 	qw422016.E().S(answer4_final)
 //line thctoolkit.qtpl:62
 	qw422016.N().S(` \
-          --service-account ${{ secrets.GCP_SA_EMAIL }}
+          --service-account ${{ secrets.GCP_SA_EMAIL }} \
           --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/`)
 //line thctoolkit.qtpl:64
 	qw422016.E().S(answer2)

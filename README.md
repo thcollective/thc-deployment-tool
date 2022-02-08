@@ -12,40 +12,43 @@ This deployment automation tool helps users to generate basic files that are req
 
 * Dockerfile for frontend (vue, nuxt) and backend(expressJS, gofiber)
 * Sonarcloud github actions and properties file (need to seek from Admin for keys)
-* Cloud Run github actions with .env
+* Cloud Run github actions with environments
+* Pub/Sub to Redpanda Kafka 
 
 ## Download and Run 
 
 1. Tap on the options below and download the binary package based on your OS.
 
 ### Darwin
-*  [amd64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.5/thc-deployment-tool_0.3.5_darwin_amd64.tar.gz) 
-*  [arm64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.5/thc-deployment-tool_0.3.5_darwin_arm64.tar.gz)
+*  [amd64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.6/thc-deployment-tool_0.3.6_darwin_amd64.tar.gz) 
+*  [arm64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.6/thc-deployment-tool_0.3.6_darwin_arm64.tar.gz)
 
 ### Linux
-*  [amd64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.5/thc-deployment-tool_0.3.5_linux_amd64.tar.gz)
-*  [arm64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.5/thc-deployment-tool_0.3.5_linux_arm64.tar.gz)
+*  [amd64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.6/thc-deployment-tool_0.3.6_linux_amd64.tar.gz)
+*  [arm64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.6/thc-deployment-tool_0.3.6_linux_arm64.tar.gz)
 
 ### Windows
-*  [amd64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.5/thc-deployment-tool_0.3.5_windows_amd64.tar.gz)
-*  [arm64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.5/thc-deployment-tool_0.3.5_windows_arm64.tar.gz)
+*  [amd64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.6/thc-deployment-tool_0.3.6_windows_amd64.tar.gz)
+*  [arm64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.6/thc-deployment-tool_0.3.6_windows_arm64.tar.gz)
 
-2. Extract the binary
+2. Extract the binary and save to local path
 
 ### Mac
-* `tar -xvzf thc-deployment-tool_0.3.5_linux_amd64.tar.gz -C <your_root_project_directory>`
+* `tar -xvzf thc-deployment-tool_0.3.6_darwin_amd64.tar.gz`
+* `mv thc-cli-tool /usr/local/bin`
 
 ### Linux
-* `tar -xvzf thc-deployment-tool_0.3.5_linux_amd64.tar.gz -C <your_root_project_directory>`
+* `tar -xvzf thc-deployment-tool_0.3.6_linux_amd64.tar.gz`
+* `mv thc-cli-tool /usr/local/bin`
+
 
 ### Windows
-* Right click the file and extract it the folder to your root directory of your working project.
-* or use `tar -xvzf x.tar.gz -C <your_root_project_directory>` if you have git bash installed on your windows cli
+* Right click the file and extract preferably using `7zip`.
+* Add `thc-cli-tool.exe` to system properties `Environment Variables...`
 
+3. For Mac/Linux users, run `thc-cli-tool` using `terminal` on root directory of your project, then start answering the prompt.
 
-3. Remove `README.md` from the `.tar.gz` to avoid any conflicts with your project `README.md`. 
-
-4. Run `./cli.exe` on your working project root directory, preferably run it on your `cli`, then start answering the prompt.
+4. For windows user, run `./thc-cli-tool.exe` on your working project root directory, preferably run it on your `terminal`, then start answering the prompt.
 
 5. The live url will be display on github actions `tab` located under `deploy` job.
 
@@ -63,12 +66,12 @@ go mod tidy
 
 2. Run main file
 ```
-go run cmd/cli/main.go
+go run cmd/thc-cli-tool/main.go
 ```
 
 3. Build main file
 ```
-go build cmd/cli/main.go
+go build cmd/thc-cli-tool/main.go
 ```
 
 

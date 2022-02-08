@@ -1,0 +1,40 @@
+{% func RedpandaSubscribe(appName string, redpandaTopic string) %}
+const { Kafka } = require('kafkajs')
+const { v4 } = require('uuid')
+require("dotenv").config()
+
+const kafka = new Kafka({
+  clientId: '{%s appName %}',
+  brokers: [process.env.BROKER_URL1, process.env.BROKER_URL2, process.env.BROKER_URL3],
+
+})
+
+
+async function sub() {
+
+  const consumer = kafka.consumer({ groupId: '{%s appName %}' + v4() })
+
+  await consumer.connect()
+
+  await consumer.subscribe({ topic: '{%s redpandaTopic %}', fromBeginning: true })
+
+  let msgCount = 0
+
+  await consumer.run({
+    eachMessage: async ({ topic, partition, message }) => {
+      msgCount++
+      console.log({
+        topic: topic,
+        key: message.key.toString(),
+        value: message.value.toString(),
+        offset: message.offset,
+        count: msgCount
+      })
+    },
+  })
+
+}
+
+sub()
+
+{% endfunc %}

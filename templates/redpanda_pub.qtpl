@@ -1,0 +1,48 @@
+{% func RedpandaPublish(appName string, redpandaTopic string) %}
+const { Kafka } = require('kafkajs')
+require("dotenv").config()
+
+
+const kafka = new Kafka({
+  clientId: '{%s appName %}',
+  brokers: [process.env.BROKER_URL1, process.env.BROKER_URL2, process.env.BROKER_URL3],
+
+
+})
+
+
+async function pub() {
+
+
+  const producer = kafka.producer()
+
+  await producer.connect()
+
+  // write data to be publish to broker here
+  // can send msg via partition 
+  const topicMessages = [
+    {
+      topic: '{%s redpandaTopic %}',
+      messages: [
+        {
+          key: 'key1',
+          value: 'data1',
+          //partition: 0
+        },
+        {
+          key: 'key2',
+          value: 'data2',
+          //partition: 1
+        }
+      ],
+    }]
+
+
+  await producer.sendBatch({topicMessages})
+
+  await producer.disconnect()
+}
+
+pub()
+
+{% endfunc %}
