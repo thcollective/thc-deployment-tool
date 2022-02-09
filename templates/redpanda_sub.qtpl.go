@@ -60,7 +60,7 @@ async function sub() {
       console.log({
         topic: topic,
         key: message.key.toString(),
-        value: message.value.toString(),
+        value: JSON.parse(message.value.toString()),
         offset: message.offset,
         count: msgCount
       })

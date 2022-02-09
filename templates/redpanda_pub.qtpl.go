@@ -44,63 +44,58 @@ async function pub() {
 
   await producer.connect()
 
-  // write data to be publish to broker here
-  // can send msg via partition 
-  const topicMessages = [
-    {
-      topic: '`)
-//line redpanda_pub.qtpl:25
+  await producer.send({
+    topic: '`)
+//line redpanda_pub.qtpl:22
 	qw422016.E().S(redpandaTopic)
-//line redpanda_pub.qtpl:25
+//line redpanda_pub.qtpl:22
 	qw422016.N().S(`',
-      messages: [
-        {
-          key: 'key1',
-          value: 'data1',
-          //partition: 0
-        },
-        {
-          key: 'key2',
-          value: 'data2',
-          //partition: 1
-        }
-      ],
-    }]
-
-
-  await producer.sendBatch({topicMessages})
+    messages: [
+      {
+        key: 'my-key',
+        value: JSON.stringify({
+          some: 'string1',
+          some1: 0,
+          some2: 'string2,
+          some3: 0,
+        }),
+        partition: 0
+      }
+    ]
+  })
 
   await producer.disconnect()
+  
 }
 
 pub()
 
 `)
-//line redpanda_pub.qtpl:48
+//line redpanda_pub.qtpl:43
 }
 
-//line redpanda_pub.qtpl:48
+//line redpanda_pub.qtpl:43
 func WriteRedpandaPublish(qq422016 qtio422016.Writer, appName string, redpandaTopic string) {
-//line redpanda_pub.qtpl:48
+//line redpanda_pub.qtpl:43
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line redpanda_pub.qtpl:48
+//line redpanda_pub.qtpl:43
 	StreamRedpandaPublish(qw422016, appName, redpandaTopic)
-//line redpanda_pub.qtpl:48
+//line redpanda_pub.qtpl:43
 	qt422016.ReleaseWriter(qw422016)
-//line redpanda_pub.qtpl:48
+//line redpanda_pub.qtpl:43
 }
 
-//line redpanda_pub.qtpl:48
+//line redpanda_pub.qtpl:43
 func RedpandaPublish(appName string, redpandaTopic string) string {
-//line redpanda_pub.qtpl:48
+//line redpanda_pub.qtpl:43
 	qb422016 := qt422016.AcquireByteBuffer()
-//line redpanda_pub.qtpl:48
+//line redpanda_pub.qtpl:43
 	WriteRedpandaPublish(qb422016, appName, redpandaTopic)
-//line redpanda_pub.qtpl:48
+//line redpanda_pub.qtpl:43
 	qs422016 := string(qb422016.B)
-//line redpanda_pub.qtpl:48
+//line redpanda_pub.qtpl:43
 	qt422016.ReleaseByteBuffer(qb422016)
-//line redpanda_pub.qtpl:48
+//line redpanda_pub.qtpl:43
 	return qs422016
-//line redpanda_pub.qtpl:48
+//line redpanda_pub.qtpl:43
 }

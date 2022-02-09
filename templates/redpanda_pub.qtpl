@@ -18,29 +18,24 @@ async function pub() {
 
   await producer.connect()
 
-  // write data to be publish to broker here
-  // can send msg via partition 
-  const topicMessages = [
-    {
-      topic: '{%s redpandaTopic %}',
-      messages: [
-        {
-          key: 'key1',
-          value: 'data1',
-          //partition: 0
-        },
-        {
-          key: 'key2',
-          value: 'data2',
-          //partition: 1
-        }
-      ],
-    }]
-
-
-  await producer.sendBatch({topicMessages})
+  await producer.send({
+    topic: '{%s redpandaTopic %}',
+    messages: [
+      {
+        key: 'my-key',
+        value: JSON.stringify({
+          some: 'string1',
+          some1: 0,
+          some2: 'string2,
+          some3: 0,
+        }),
+        partition: 0
+      }
+    ]
+  })
 
   await producer.disconnect()
+  
 }
 
 pub()
