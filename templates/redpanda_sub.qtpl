@@ -1,6 +1,7 @@
 {% func RedpandaSubscribe(appName string, redpandaTopic string) %}
 const { Kafka } = require('kafkajs')
 const { v4 } = require('uuid')
+const { SchemaRegistry } = require('@kafkajs/confluent-schema-registry')
 require("dotenv").config()
 
 const kafka = new Kafka({
@@ -9,10 +10,11 @@ const kafka = new Kafka({
 
 })
 
+const registry = new SchemaRegistry({ host: process.env.SCHEMA_URL1 })
 
 async function sub() {
 
-  const consumer = kafka.consumer({ groupId: '{%s appName %}' + v4() })
+  const consumer = kafka.consumer({ groupId: v4() })
 
   await consumer.connect()
 
@@ -22,14 +24,18 @@ async function sub() {
 
   await consumer.run({
     eachMessage: async ({ topic, partition, message }) => {
-      msgCount++
-      console.log({
+      const decodedValue = await registry.decode(message.value)
+      const payload =
+      {
         topic: topic,
-        key: message.key.toString(),
-        value: JSON.parse(message.value.toString()),
+        payload: decodedValue,
+        partition: partition,
         offset: message.offset,
-        count: msgCount
-      })
+        timestamp: message.timestamp,
+      }
+
+      console.log(payload)
+
     },
   })
 

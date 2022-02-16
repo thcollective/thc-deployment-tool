@@ -21,12 +21,12 @@ This deployment automation tool helps users to generate basic files that are req
 
 ### Darwin
 
-* [amd64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.7/thc-deployment-tool_0.3.7_darwin_amd64.tar.gz)
+* [amd64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.8/thc-deployment-tool_0.3.8_darwin_amd64.tar.gz)
 ```
-curl -vLJO https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.7/thc-deployment-tool_0.3.7_darwin_amd64.tar.gz
+curl -vLJO https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.8/thc-deployment-tool_0.3.8_darwin_amd64.tar.gz
 ```
 ```
-tar -xzvf https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.7/thc-deployment-tool_0.3.7_darwin_amd64.tar.gz
+tar -xzvf https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.8/thc-deployment-tool_0.3.8_darwin_amd64.tar.gz
 ``` 
 ```
 chmod +x ./thc-cli-tool
@@ -34,12 +34,12 @@ chmod +x ./thc-cli-tool
 ```
 mv ./thc-cli-tool /usr/local/bin
 ```
-* [arm64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.7/thc-deployment-tool_0.3.7_darwin_arm64.tar.gz)
+* [arm64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.8/thc-deployment-tool_0.3.8_darwin_arm64.tar.gz)
 ```
-curl -vLJO https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.7/thc-deployment-tool_0.3.7_darwin_arm64.tar.gz
+curl -vLJO https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.8/thc-deployment-tool_0.3.8_darwin_arm64.tar.gz
 ```
 ```
-tar -xzvf https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.7/thc-deployment-tool_0.3.7_darwin_arm64.tar.gz 
+tar -xzvf https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.8/thc-deployment-tool_0.3.8_darwin_arm64.tar.gz 
 ```
 ```
 chmod +x ./thc-cli-tool
@@ -50,12 +50,12 @@ mv ./thc-cli-tool /usr/local/bin
 
 ### Linux
 
-* [amd64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.7/thc-deployment-tool_0.3.7_linux_amd64.tar.gz)
+* [amd64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.8/thc-deployment-tool_0.3.8_linux_amd64.tar.gz)
 ```
-curl -vLJO https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.7/thc-deployment-tool_0.3.7_linux_amd64.tar.gz
+curl -vLJO https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.8/thc-deployment-tool_0.3.8_linux_amd64.tar.gz
 ```
 ```
-tar -xzvf https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.7/thc-deployment-tool_0.3.7_linux_amd64.tar.gz 
+tar -xzvf https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.8/thc-deployment-tool_0.3.8_linux_amd64.tar.gz 
 ```
 ```
 chmod +x ./thc-cli-tool
@@ -63,12 +63,12 @@ chmod +x ./thc-cli-tool
 ```
 mv ./thc-cli-tool /usr/local/bin
 ```
-* [arm64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.7/thc-deployment-tool_0.3.7_linux_arm64.tar.gz)
+* [arm64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.8/thc-deployment-tool_0.3.8_linux_arm64.tar.gz)
 ```
-curl -vLJO https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.7/thc-deployment-tool_0.3.7_linux_arm64.tar.gz
+curl -vLJO https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.8/thc-deployment-tool_0.3.8_linux_arm64.tar.gz
 ```
 ```
-tar -xzvf https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.7/thc-deployment-tool_0.3.7_linux_arm64.tar.gz 
+tar -xzvf https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.8/thc-deployment-tool_0.3.8_linux_arm64.tar.gz 
 ```
 ```
 chmod +x ./thc-cli-tool
@@ -78,8 +78,8 @@ mv ./thc-cli-tool /usr/local/bin
 ```
 
 ### Windows
-*  Tap here to download for [amd64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.7/thc-deployment-tool_0.3.7_windows_amd64.tar.gz)
-*  Tap here to download for [arm64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.7/thc-deployment-tool_0.3.7_windows_arm64.tar.gz)
+*  Tap here to download for [amd64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.8/thc-deployment-tool_0.3.8_windows_amd64.tar.gz)
+*  Tap here to download for [arm64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.8/thc-deployment-tool_0.3.8_windows_arm64.tar.gz)
 *  Right click the file and extract preferably using `7zip`.
 *  Add `thc-cli-tool.exe` to system properties `Environment Variables...`
 
@@ -90,6 +90,37 @@ mv ./thc-cli-tool /usr/local/bin
 4. The live url will be display on github actions `tab` located under `deploy` job.
 
 5. Hit ctrl+c or ctrl+d to if you want to abort the process.
+
+6. For redpanda users, note that `appName` is a global name and developers need to keep it consistent followed by application that they using to `pub/sub` a `message/event`
+
+* create a topic from POST https://thc-redpanda-admin-d7mdbpojaa-as.a.run.app/api/v1/redpanda/createTopic
+
+payload: 
+```
+{
+	"clientId": "appName",
+	"topic": "topicName",
+	"numPartitions": 3
+}
+```
+
+* To check what topics is available on the brokers, GET https://thc-redpanda-admin-d7mdbpojaa-as.a.run.app/api/v1/redpanda/listTopic to see what topics are available on the broker
+
+* To delete a topic, DELETE https://thc-redpanda-admin-d7mdbpojaa-as.a.run.app/api/v1/redpanda/deleteTopic
+
+payload:  
+```
+{
+	"clientId": "appName",
+	"topic": "topicName"
+}
+```
+
+* Continue with thc-cli-tool prompt  
+
+* Install dependencies @ `npm i kafkajs uuid dotenv @kafkajs/confluent-schema-registry`
+
+* Get Redpanda Kafka Broker IP addresses and Redpanda Schema Registry Host URL from Adri or Ming
 
 `NOTE (for maintainers):` The procedure and deployment notes are [here](https://github.com/thcollective/thc-deployment-tool/blob/main/PROCEDURE.md)
 

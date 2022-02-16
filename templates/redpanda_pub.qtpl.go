@@ -22,46 +22,63 @@ func StreamRedpandaPublish(qw422016 *qt422016.Writer, appName string, redpandaTo
 //line redpanda_pub.qtpl:1
 	qw422016.N().S(`
 const { Kafka } = require('kafkajs')
+const { SchemaRegistry } = require('@kafkajs/confluent-schema-registry')
 require("dotenv").config()
 
 
 const kafka = new Kafka({
   clientId: '`)
-//line redpanda_pub.qtpl:7
+//line redpanda_pub.qtpl:8
 	qw422016.E().S(appName)
-//line redpanda_pub.qtpl:7
+//line redpanda_pub.qtpl:8
 	qw422016.N().S(`',
   brokers: [process.env.BROKER_URL1, process.env.BROKER_URL2, process.env.BROKER_URL3],
 
 
 })
 
+const registry = new SchemaRegistry({ host: process.env.SCHEMA_URL1 })
+
 
 async function pub() {
 
+  // schema registry will be registered under subject and can be viewed in topic
+  const schema = {
+    name: "jobs", //for subject purposes --> change this value based on your preferences
+    namespace: "human", //for subject purposes --> change this value based on your preferences
+    type: "record",
+    fields: [
+      { name: "name", type: "string" },
+      { name: "age", type: "int" },
+      { name: "job", type: "string" },
+    ],
+  };
+  // the subject name will be as such, namespace.name
+
+  // to check which schema exists, GET http://SCHEMA_URL1/subjects 
+  // view your schema at GET http://SCHEMA_URL1/subjects/human.jobs/versions/latest
+
+
+  // register & publish schema
+  const { id } = await registry.register({
+    type: SchemaType.AVRO,
+    schema: JSON.stringify(schema),
+  });
 
   const producer = kafka.producer()
 
   await producer.connect()
 
+  const payload = { name: "Dog", age: 32, job: "Skram" };
+  const encodedValue = await registry.encode(id, payload);
+
   await producer.send({
     topic: '`)
-//line redpanda_pub.qtpl:22
+//line redpanda_pub.qtpl:50
 	qw422016.E().S(redpandaTopic)
-//line redpanda_pub.qtpl:22
+//line redpanda_pub.qtpl:50
 	qw422016.N().S(`',
-    messages: [
-      {
-        key: 'my-key',
-        value: JSON.stringify({
-          some: 'string1',
-          some1: 0,
-          some2: 'string2,
-          some3: 0,
-        }),
-        partition: 0
-      }
-    ]
+    messages: [{ value: encodedValue }]
   })
 
   await producer.disconnect()
@@ -71,31 +88,31 @@ async function pub() {
 pub()
 
 `)
-//line redpanda_pub.qtpl:43
+//line redpanda_pub.qtpl:60
 }
 
-//line redpanda_pub.qtpl:43
+//line redpanda_pub.qtpl:60
 func WriteRedpandaPublish(qq422016 qtio422016.Writer, appName string, redpandaTopic string) {
-//line redpanda_pub.qtpl:43
+//line redpanda_pub.qtpl:60
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line redpanda_pub.qtpl:43
+//line redpanda_pub.qtpl:60
 	StreamRedpandaPublish(qw422016, appName, redpandaTopic)
-//line redpanda_pub.qtpl:43
+//line redpanda_pub.qtpl:60
 	qt422016.ReleaseWriter(qw422016)
-//line redpanda_pub.qtpl:43
+//line redpanda_pub.qtpl:60
 }
 
-//line redpanda_pub.qtpl:43
+//line redpanda_pub.qtpl:60
 func RedpandaPublish(appName string, redpandaTopic string) string {
-//line redpanda_pub.qtpl:43
+//line redpanda_pub.qtpl:60
 	qb422016 := qt422016.AcquireByteBuffer()
-//line redpanda_pub.qtpl:43
+//line redpanda_pub.qtpl:60
 	WriteRedpandaPublish(qb422016, appName, redpandaTopic)
-//line redpanda_pub.qtpl:43
+//line redpanda_pub.qtpl:60
 	qs422016 := string(qb422016.B)
-//line redpanda_pub.qtpl:43
+//line redpanda_pub.qtpl:60
 	qt422016.ReleaseByteBuffer(qb422016)
-//line redpanda_pub.qtpl:43
+//line redpanda_pub.qtpl:60
 	return qs422016
-//line redpanda_pub.qtpl:43
+//line redpanda_pub.qtpl:60
 }
