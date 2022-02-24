@@ -26,7 +26,7 @@ This deployment automation tool helps users to generate basic files that are req
 curl -vLJO https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.8/thc-deployment-tool_0.3.8_darwin_amd64.tar.gz
 ```
 ```
-tar -xzvf https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.8/thc-deployment-tool_0.3.8_darwin_amd64.tar.gz
+tar -xzvf thc-deployment-tool_0.3.8_darwin_amd64.tar.gz
 ``` 
 ```
 chmod +x ./thc-cli-tool
@@ -39,7 +39,7 @@ mv ./thc-cli-tool /usr/local/bin
 curl -vLJO https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.8/thc-deployment-tool_0.3.8_darwin_arm64.tar.gz
 ```
 ```
-tar -xzvf https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.8/thc-deployment-tool_0.3.8_darwin_arm64.tar.gz 
+tar -xzvf thc-deployment-tool_0.3.8_darwin_arm64.tar.gz 
 ```
 ```
 chmod +x ./thc-cli-tool
@@ -55,7 +55,7 @@ mv ./thc-cli-tool /usr/local/bin
 curl -vLJO https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.8/thc-deployment-tool_0.3.8_linux_amd64.tar.gz
 ```
 ```
-tar -xzvf https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.8/thc-deployment-tool_0.3.8_linux_amd64.tar.gz 
+tar -xzvf thc-deployment-tool_0.3.8_linux_amd64.tar.gz 
 ```
 ```
 chmod +x ./thc-cli-tool
@@ -68,7 +68,7 @@ mv ./thc-cli-tool /usr/local/bin
 curl -vLJO https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.8/thc-deployment-tool_0.3.8_linux_arm64.tar.gz
 ```
 ```
-tar -xzvf https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.8/thc-deployment-tool_0.3.8_linux_arm64.tar.gz 
+tar -xzvf thc-deployment-tool_0.3.8_linux_arm64.tar.gz 
 ```
 ```
 chmod +x ./thc-cli-tool
