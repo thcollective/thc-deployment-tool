@@ -21,12 +21,12 @@ This deployment automation tool helps users to generate basic files that are req
 
 ### Darwin
 
-* [amd64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.8/thc-deployment-tool_0.3.8_darwin_amd64.tar.gz)
+* [amd64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.9/thc-deployment-tool_0.3.9_darwin_amd64.tar.gz)
 ```
-curl -vLJO https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.8/thc-deployment-tool_0.3.8_darwin_amd64.tar.gz
+curl -vLJO https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.9/thc-deployment-tool_0.3.9_darwin_amd64.tar.gz
 ```
 ```
-tar -xzvf thc-deployment-tool_0.3.8_darwin_amd64.tar.gz
+tar -xzvf thc-deployment-tool_0.3.9_darwin_amd64.tar.gz
 ``` 
 ```
 chmod +x ./thc-cli-tool
@@ -34,12 +34,12 @@ chmod +x ./thc-cli-tool
 ```
 mv ./thc-cli-tool /usr/local/bin
 ```
-* [arm64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.8/thc-deployment-tool_0.3.8_darwin_arm64.tar.gz)
+* [arm64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.9/thc-deployment-tool_0.3.9_darwin_arm64.tar.gz)
 ```
-curl -vLJO https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.8/thc-deployment-tool_0.3.8_darwin_arm64.tar.gz
+curl -vLJO https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.9/thc-deployment-tool_0.3.9_darwin_arm64.tar.gz
 ```
 ```
-tar -xzvf thc-deployment-tool_0.3.8_darwin_arm64.tar.gz 
+tar -xzvf thc-deployment-tool_0.3.9_darwin_arm64.tar.gz 
 ```
 ```
 chmod +x ./thc-cli-tool
@@ -50,12 +50,12 @@ mv ./thc-cli-tool /usr/local/bin
 
 ### Linux
 
-* [amd64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.8/thc-deployment-tool_0.3.8_linux_amd64.tar.gz)
+* [amd64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.9/thc-deployment-tool_0.3.9_linux_amd64.tar.gz)
 ```
-curl -vLJO https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.8/thc-deployment-tool_0.3.8_linux_amd64.tar.gz
+curl -vLJO https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.9/thc-deployment-tool_0.3.9_linux_amd64.tar.gz
 ```
 ```
-tar -xzvf thc-deployment-tool_0.3.8_linux_amd64.tar.gz 
+tar -xzvf thc-deployment-tool_0.3.9_linux_amd64.tar.gz 
 ```
 ```
 chmod +x ./thc-cli-tool
@@ -63,12 +63,12 @@ chmod +x ./thc-cli-tool
 ```
 mv ./thc-cli-tool /usr/local/bin
 ```
-* [arm64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.8/thc-deployment-tool_0.3.8_linux_arm64.tar.gz)
+* [arm64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.9/thc-deployment-tool_0.3.9_linux_arm64.tar.gz)
 ```
-curl -vLJO https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.8/thc-deployment-tool_0.3.8_linux_arm64.tar.gz
+curl -vLJO https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.9/thc-deployment-tool_0.3.9_linux_arm64.tar.gz
 ```
 ```
-tar -xzvf thc-deployment-tool_0.3.8_linux_arm64.tar.gz 
+tar -xzvf thc-deployment-tool_0.3.9_linux_arm64.tar.gz 
 ```
 ```
 chmod +x ./thc-cli-tool
@@ -78,18 +78,20 @@ mv ./thc-cli-tool /usr/local/bin
 ```
 
 ### Windows
-*  Tap here to download for [amd64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.8/thc-deployment-tool_0.3.8_windows_amd64.tar.gz)
-*  Tap here to download for [arm64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.8/thc-deployment-tool_0.3.8_windows_arm64.tar.gz)
+*  Tap here to download for [amd64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.9/thc-deployment-tool_0.3.9_windows_amd64.tar.gz)
+*  Tap here to download for [arm64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.9/thc-deployment-tool_0.3.9_windows_arm64.tar.gz)
 *  Right click the file and extract preferably using `7zip`.
 *  Add `thc-cli-tool.exe` to system properties `Environment Variables...`
 
-2. For Mac/Linux users, run `thc-cli-tool` using the `terminal` on root directory of your project, then start answering the prompt.
+2. For Darwin/Linux users, run `thc-cli-tool` using the `terminal` on root directory of your project, then start answering the prompt.
 
 3. For windows user, run `./thc-cli-tool.exe` on your working project root directory, preferably run it on your `terminal`, then start answering the prompt.
 
 4. The live url will be display on github actions `tab` located under `deploy` job.
 
 5. Hit ctrl+c or ctrl+d to if you want to abort the process.
+
+### THC Redpanda Streaming Platform
 
 6. For redpanda users, note that `appName` is a global name and developers need to keep it consistent followed by application that they using to `pub/sub` a `message/event`
 
