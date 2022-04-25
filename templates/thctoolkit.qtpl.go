@@ -18,7 +18,7 @@ var (
 )
 
 //line thctoolkit.qtpl:1
-func StreamThcToolKit(qw422016 *qt422016.Writer, cloudRunBranching string, answer2 string, globalPort string, answer4_final string, answer5 string, includeEnvFile string, ansEnvFile string) {
+func StreamThcToolKit(qw422016 *qt422016.Writer, cloudRunBranching string, answer2 string, globalPort string, answer4_final string, answer5 string, includeEnvFile string, ansEnvFile string, ansEnvDeploy string) {
 //line thctoolkit.qtpl:1
 	qw422016.N().S(`
 # Copyright 2021 The Hacker Collective, LLC.
@@ -51,113 +51,124 @@ jobs:
     steps:
 
       - name: Checkout
-        uses: actions/checkout@master
+        uses: actions/checkout@v2
 
       - name: Setup GCP Service Account
-        uses: google-github-actions/setup-gcloud@master
+        uses: google-github-actions/setup-gcloud@v0.2.0
         with:
-          version: 'latest'
-          service_account_email: ${{ secrets.GCP_SA_EMAIL }}
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
           service_account_key: ${{ secrets.GCP_SA_KEY }}
-          export_default_credentials: true
 
       - name: Configure Docker
         run: |
           gcloud auth configure-docker
       
       `)
-//line thctoolkit.qtpl:42
+//line thctoolkit.qtpl:40
 	if includeEnvFile == "Yes" {
-//line thctoolkit.qtpl:42
+//line thctoolkit.qtpl:40
 		qw422016.N().S(`
       - name: Add and Write environment file
         run: |
           touch .env
             `)
-//line thctoolkit.qtpl:46
+//line thctoolkit.qtpl:44
 		qw422016.N().S(ansEnvFile)
-//line thctoolkit.qtpl:46
+//line thctoolkit.qtpl:44
 		qw422016.N().S(`
             cat .env
       `)
-//line thctoolkit.qtpl:48
+//line thctoolkit.qtpl:46
 	}
-//line thctoolkit.qtpl:48
+//line thctoolkit.qtpl:46
 	qw422016.N().S(`
       - name: Build
         run: |
           docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/`)
-//line thctoolkit.qtpl:51
+//line thctoolkit.qtpl:49
 	qw422016.E().S(answer2)
-//line thctoolkit.qtpl:51
+//line thctoolkit.qtpl:49
 	qw422016.N().S(`:${{  github.sha }} .
           
       - name: Push
         run: |
           docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/`)
-//line thctoolkit.qtpl:55
+//line thctoolkit.qtpl:53
 	qw422016.E().S(answer2)
-//line thctoolkit.qtpl:55
+//line thctoolkit.qtpl:53
 	qw422016.N().S(`:${{  github.sha }}
 
       - name: Deploy
         run: |
           gcloud run deploy `)
-//line thctoolkit.qtpl:59
+//line thctoolkit.qtpl:57
 	qw422016.E().S(answer2)
-//line thctoolkit.qtpl:59
+//line thctoolkit.qtpl:57
 	qw422016.N().S(` \
           --project ${{ secrets.GCP_PROJECT_ID }} \
           --port `)
-//line thctoolkit.qtpl:61
+//line thctoolkit.qtpl:59
 	qw422016.E().S(globalPort)
-//line thctoolkit.qtpl:61
+//line thctoolkit.qtpl:59
 	qw422016.N().S(` \
           --region `)
-//line thctoolkit.qtpl:62
+//line thctoolkit.qtpl:60
 	qw422016.E().S(answer4_final)
-//line thctoolkit.qtpl:62
+//line thctoolkit.qtpl:60
 	qw422016.N().S(` \
-          --service-account ${{ secrets.GCP_SA_EMAIL }} \
+`)
+//line thctoolkit.qtpl:61
+	if includeEnvFile == "Yes" {
+//line thctoolkit.qtpl:61
+		qw422016.N().S(`          `)
+//line thctoolkit.qtpl:62
+		qw422016.N().S(ansEnvDeploy)
+//line thctoolkit.qtpl:62
+		qw422016.N().S(`
+`)
+//line thctoolkit.qtpl:63
+	}
+//line thctoolkit.qtpl:63
+	qw422016.N().S(`          --service-account ${{ secrets.GCP_SA_EMAIL }} \
           --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/`)
-//line thctoolkit.qtpl:64
+//line thctoolkit.qtpl:65
 	qw422016.E().S(answer2)
-//line thctoolkit.qtpl:64
+//line thctoolkit.qtpl:65
 	qw422016.N().S(` \
           --platform managed \
           --`)
-//line thctoolkit.qtpl:66
+//line thctoolkit.qtpl:67
 	qw422016.E().S(answer5)
-//line thctoolkit.qtpl:66
+//line thctoolkit.qtpl:67
 	qw422016.N().S(` \
           --quiet
           
 `)
-//line thctoolkit.qtpl:69
+//line thctoolkit.qtpl:70
 }
 
-//line thctoolkit.qtpl:69
-func WriteThcToolKit(qq422016 qtio422016.Writer, cloudRunBranching string, answer2 string, globalPort string, answer4_final string, answer5 string, includeEnvFile string, ansEnvFile string) {
-//line thctoolkit.qtpl:69
+//line thctoolkit.qtpl:70
+func WriteThcToolKit(qq422016 qtio422016.Writer, cloudRunBranching string, answer2 string, globalPort string, answer4_final string, answer5 string, includeEnvFile string, ansEnvFile string, ansEnvDeploy string) {
+//line thctoolkit.qtpl:70
 	qw422016 := qt422016.AcquireWriter(qq422016)
-//line thctoolkit.qtpl:69
-	StreamThcToolKit(qw422016, cloudRunBranching, answer2, globalPort, answer4_final, answer5, includeEnvFile, ansEnvFile)
-//line thctoolkit.qtpl:69
+//line thctoolkit.qtpl:70
+	StreamThcToolKit(qw422016, cloudRunBranching, answer2, globalPort, answer4_final, answer5, includeEnvFile, ansEnvFile, ansEnvDeploy)
+//line thctoolkit.qtpl:70
 	qt422016.ReleaseWriter(qw422016)
-//line thctoolkit.qtpl:69
+//line thctoolkit.qtpl:70
 }
 
-//line thctoolkit.qtpl:69
-func ThcToolKit(cloudRunBranching string, answer2 string, globalPort string, answer4_final string, answer5 string, includeEnvFile string, ansEnvFile string) string {
-//line thctoolkit.qtpl:69
+//line thctoolkit.qtpl:70
+func ThcToolKit(cloudRunBranching string, answer2 string, globalPort string, answer4_final string, answer5 string, includeEnvFile string, ansEnvFile string, ansEnvDeploy string) string {
+//line thctoolkit.qtpl:70
 	qb422016 := qt422016.AcquireByteBuffer()
-//line thctoolkit.qtpl:69
-	WriteThcToolKit(qb422016, cloudRunBranching, answer2, globalPort, answer4_final, answer5, includeEnvFile, ansEnvFile)
-//line thctoolkit.qtpl:69
+//line thctoolkit.qtpl:70
+	WriteThcToolKit(qb422016, cloudRunBranching, answer2, globalPort, answer4_final, answer5, includeEnvFile, ansEnvFile, ansEnvDeploy)
+//line thctoolkit.qtpl:70
 	qs422016 := string(qb422016.B)
-//line thctoolkit.qtpl:69
+//line thctoolkit.qtpl:70
 	qt422016.ReleaseByteBuffer(qb422016)
-//line thctoolkit.qtpl:69
+//line thctoolkit.qtpl:70
 	return qs422016
-//line thctoolkit.qtpl:69
+//line thctoolkit.qtpl:70
 }

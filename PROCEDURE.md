@@ -39,8 +39,9 @@ The default IAM roles are as follow (iam.gserviceaccount.com):
 - [x] Semantic Releases
 - [x] Automated CI tests with Postman and Newman - applicable for BE only
 - [x] Allow user to set environment variables on Dockerfile and cloud run action yaml file (current status: onlyset one env var @ cloud run action)
-- [/] Github authentication to run the script (thc-token)
-- [/] Create new github actions file to determine which actions to run first
+- [ ] Github authentication to run the script (thc-token)
+- [ ] Create new github actions file to determine which actions to run first
+- [ ] CLI State file to check if the `files needed for production` are already exists in the project. 
 
 
 ### How To Push to Releases

@@ -1,4 +1,4 @@
-{% func ThcToolKit(cloudRunBranching string, answer2 string, globalPort string, answer4_final string, answer5 string,includeEnvFile string, ansEnvFile string) %}
+{% func ThcToolKit(cloudRunBranching string, answer2 string, globalPort string, answer4_final string, answer5 string,includeEnvFile string, ansEnvFile string, ansEnvDeploy string) %}
 # Copyright 2021 The Hacker Collective, LLC.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,15 +25,13 @@ jobs:
     steps:
 
       - name: Checkout
-        uses: actions/checkout@master
+        uses: actions/checkout@v2
 
       - name: Setup GCP Service Account
-        uses: google-github-actions/setup-gcloud@master
+        uses: google-github-actions/setup-gcloud@v0.2.0
         with:
-          version: 'latest'
-          service_account_email: ${{ secrets.GCP_SA_EMAIL }}
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
           service_account_key: ${{ secrets.GCP_SA_KEY }}
-          export_default_credentials: true
 
       - name: Configure Docker
         run: |
@@ -60,6 +58,9 @@ jobs:
           --project ${{ secrets.GCP_PROJECT_ID }} \
           --port {%s globalPort %} \
           --region {%s answer4_final %} \
+          {%- if includeEnvFile == "Yes" -%}
+          {%s= ansEnvDeploy %}
+          {%- endif -%}
           --service-account ${{ secrets.GCP_SA_EMAIL }} \
           --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/{%s answer2 %} \
           --platform managed \

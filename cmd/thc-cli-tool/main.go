@@ -26,6 +26,7 @@ var answer5 = ""
 var answer6 = ""
 var globalPort = ""
 var ansEnvFile = ""
+var ansEnvDeploy = ""
 var cloudRunBranching = ""
 
 func main() {
@@ -46,7 +47,7 @@ func main() {
 
 	cloudrunActions()
 
-	cloudrunActionsFinal(cloudRunBranching, answer2, answer4_final, answer5, ansEnvFile)
+	cloudrunActionsFinal(cloudRunBranching, answer2, answer4_final, answer5, ansEnvFile, ansEnvDeploy)
 
 	todotoissueActions()
 
@@ -458,7 +459,7 @@ func cloudrunActions() (string, string, string, string) {
 
 }
 
-func cloudrunActionsFinal(cloudRunBranching string, answer2 string, answer4_final string, answer5 string, ansEnvFile string) {
+func cloudrunActionsFinal(cloudRunBranching string, answer2 string, answer4_final string, answer5 string, ansEnvFile string, ansEnvDeploy string) {
 
 	fmt.Println(color.Bold + "PHASE: ADDING CUSTOM ENVIRONMENT VARIABLES INTO CLOUD RUN ACTION FILE" + color.Reset)
 	envFile := promptui.Select{
@@ -475,24 +476,25 @@ func cloudrunActionsFinal(cloudRunBranching string, answer2 string, answer4_fina
 
 		// create an array to store environment name and value
 		env := []string{}
+		var envNameVal string
+		var envValueVal string
 
 		// prompt user to enter the environment name and value and push to env array
 		for {
 
-			// TODO add --set-env-vars on Deploy Job with this iteration (3x echo === 3x --set-env-vars)
 			envName := promptui.Prompt{
 				Label:   "Environment key name which you used in your .env file",
 				Default: "",
 			}
 
-			envNameVal, _ := envName.Run()
+			envNameVal, _ = envName.Run()
 
 			envValue := promptui.Prompt{
-				Label:   "Environment value which you stored in github secrets for eg: ${{ secrets.ENV_VALUE }}",
+				Label:   "Environment value which you stored in github secrets for eg: ${{ secrets.ENV_KEY }}",
 				Default: "",
 			}
 
-			envValueVal, _ := envValue.Run()
+			envValueVal, _ = envValue.Run()
 
 			env = append(env, envNameVal+" = "+envValueVal)
 
@@ -514,7 +516,9 @@ func cloudrunActionsFinal(cloudRunBranching string, answer2 string, answer4_fina
 
 		for _, val := range env {
 			special := `>>`
-			ansEnvFile += "echo " + val + " " + special + " .env\n\t\t\t\t\t\t"
+			// ansEnvFile += "echo " + val + " " + special + " .env\n\t\t\t\t\t\t"
+			ansEnvFile += "echo " + val + " " + special + " .env" + "\n"
+			ansEnvDeploy += "--set-env-vars \"" + envNameVal + "=" + envValueVal + "\"" + " \\" + "\n"
 		}
 
 	}
@@ -529,7 +533,7 @@ func cloudrunActionsFinal(cloudRunBranching string, answer2 string, answer4_fina
 
 	defer fAll.Close()
 
-	valAll := templates.ThcToolKit(cloudRunBranching, answer2, globalPort, answer4_final, answer5, includeEnvFile, ansEnvFile)
+	valAll := templates.ThcToolKit(cloudRunBranching, answer2, globalPort, answer4_final, answer5, includeEnvFile, ansEnvFile, ansEnvDeploy)
 	dataAll := []byte(valAll)
 
 	_, errAll2 := fAll.Write(dataAll)

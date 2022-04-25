@@ -12,7 +12,7 @@ This deployment automation tool helps users to generate basic files that are req
 
 * Dockerfile for frontend (vue, nuxt) and backend(expressJS, gofiber)
 * Sonarcloud github actions and properties file (need to seek from Admin for keys)
-* Cloud Run github actions with environments
+* Deploying to Cloud Run github actions
 * Pub/Sub to Redpanda Kafka 
 
 ## Download and Run 
@@ -21,12 +21,12 @@ This deployment automation tool helps users to generate basic files that are req
 
 ### Darwin
 
-* [amd64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.9/thc-deployment-tool_0.3.9_darwin_amd64.tar.gz)
+* [amd64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.4.0/thc-deployment-tool_0.4.0_darwin_amd64.tar.gz)
 ```
-curl -vLJO https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.9/thc-deployment-tool_0.3.9_darwin_amd64.tar.gz
+curl -vLJO https://github.com/thcollective/thc-deployment-tool/releases/download/v0.4.0/thc-deployment-tool_0.4.0_darwin_amd64.tar.gz
 ```
 ```
-tar -xzvf thc-deployment-tool_0.3.9_darwin_amd64.tar.gz
+tar -xzvf thc-deployment-tool_0.4.0_darwin_amd64.tar.gz
 ``` 
 ```
 chmod +x ./thc-cli-tool
@@ -34,12 +34,12 @@ chmod +x ./thc-cli-tool
 ```
 mv ./thc-cli-tool /usr/local/bin
 ```
-* [arm64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.9/thc-deployment-tool_0.3.9_darwin_arm64.tar.gz)
+* [arm64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.4.0/thc-deployment-tool_0.4.0_darwin_arm64.tar.gz)
 ```
-curl -vLJO https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.9/thc-deployment-tool_0.3.9_darwin_arm64.tar.gz
+curl -vLJO https://github.com/thcollective/thc-deployment-tool/releases/download/v0.4.0/thc-deployment-tool_0.4.0_darwin_arm64.tar.gz
 ```
 ```
-tar -xzvf thc-deployment-tool_0.3.9_darwin_arm64.tar.gz 
+tar -xzvf thc-deployment-tool_0.4.0_darwin_arm64.tar.gz 
 ```
 ```
 chmod +x ./thc-cli-tool
@@ -50,12 +50,12 @@ mv ./thc-cli-tool /usr/local/bin
 
 ### Linux
 
-* [amd64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.9/thc-deployment-tool_0.3.9_linux_amd64.tar.gz)
+* [amd64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.4.0/thc-deployment-tool_0.4.0_linux_amd64.tar.gz)
 ```
-curl -vLJO https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.9/thc-deployment-tool_0.3.9_linux_amd64.tar.gz
+curl -vLJO https://github.com/thcollective/thc-deployment-tool/releases/download/v0.4.0/thc-deployment-tool_0.4.0_linux_amd64.tar.gz
 ```
 ```
-tar -xzvf thc-deployment-tool_0.3.9_linux_amd64.tar.gz 
+tar -xzvf thc-deployment-tool_0.4.0_linux_amd64.tar.gz 
 ```
 ```
 chmod +x ./thc-cli-tool
@@ -63,12 +63,12 @@ chmod +x ./thc-cli-tool
 ```
 mv ./thc-cli-tool /usr/local/bin
 ```
-* [arm64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.9/thc-deployment-tool_0.3.9_linux_arm64.tar.gz)
+* [arm64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.4.0/thc-deployment-tool_0.4.0_linux_arm64.tar.gz)
 ```
-curl -vLJO https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.9/thc-deployment-tool_0.3.9_linux_arm64.tar.gz
+curl -vLJO https://github.com/thcollective/thc-deployment-tool/releases/download/v0.4.0/thc-deployment-tool_0.4.0_linux_arm64.tar.gz
 ```
 ```
-tar -xzvf thc-deployment-tool_0.3.9_linux_arm64.tar.gz 
+tar -xzvf thc-deployment-tool_0.4.0_linux_arm64.tar.gz 
 ```
 ```
 chmod +x ./thc-cli-tool
@@ -78,8 +78,8 @@ mv ./thc-cli-tool /usr/local/bin
 ```
 
 ### Windows
-*  Tap here to download for [amd64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.9/thc-deployment-tool_0.3.9_windows_amd64.tar.gz)
-*  Tap here to download for [arm64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.3.9/thc-deployment-tool_0.3.9_windows_arm64.tar.gz)
+*  Tap here to download for [amd64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.4.0/thc-deployment-tool_0.4.0_windows_amd64.tar.gz)
+*  Tap here to download for [arm64](https://github.com/thcollective/thc-deployment-tool/releases/download/v0.4.0/thc-deployment-tool_0.4.0_windows_arm64.tar.gz)
 *  Right click the file and extract preferably using `7zip`.
 *  Add `thc-cli-tool.exe` to system properties `Environment Variables...`
 
